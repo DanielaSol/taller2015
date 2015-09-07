@@ -1,4 +1,4 @@
-15:25:07 **** Incremental Build of configuration Debug for project pruebaSDL2 ****
+17:04:17 **** Incremental Build of configuration Debug for project pruebaSDL2 ****
 make all 
 Building file: ../Game.cpp
 Invoking: Cross G++ Compiler
@@ -32,13 +32,10 @@ Invoking: Cross G++ Linker
 g++  -o "pruebaSDL2"  ./Game.o ./GameObject.o ./Player.o ./TextureManager.o ./main.o   -lSDL2 -lSDL2_image
 Finished building target: pruebaSDL2
  
-15:35:28 **** Incremental Build of configuration Debug for project pruebaSDL2 ****
+17:04:28 **** Incremental Build of configuration Debug for project pruebaSDL2 ****
 make all 
 make: No se hace nada para «all».
-15:36:16 **** Incremental Build of configuration Debug for project pruebaSDL2 ****
-make all 
-make: No se hace nada para «all».
-15:37:35 **** Incremental Build of configuration Debug for project pruebaSDL2 ****
+17:05:04 **** Incremental Build of configuration Debug for project pruebaSDL2 ****
 make all 
 Building file: ../GameObject.cpp
 Invoking: Cross G++ Compiler
@@ -50,3 +47,82 @@ Invoking: Cross G++ Linker
 g++  -o "pruebaSDL2"  ./Game.o ./GameObject.o ./Player.o ./TextureManager.o ./main.o   -lSDL2 -lSDL2_image
 Finished building target: pruebaSDL2
  
+17:05:50 **** Incremental Build of configuration Debug for project pruebaSDL2 ****
+make all 
+Building file: ../GameObject.cpp
+Invoking: Cross G++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"GameObject.d" -MT"GameObject.d" -o "GameObject.o" "../GameObject.cpp"
+Finished building: ../GameObject.cpp
+ 
+Building target: pruebaSDL2
+Invoking: Cross G++ Linker
+g++  -o "pruebaSDL2"  ./Game.o ./GameObject.o ./Player.o ./TextureManager.o ./main.o   -lSDL2 -lSDL2_image
+Finished building target: pruebaSDL2
+ 
+17:06:12 **** Incremental Build of configuration Debug for project pruebaSDL2 ****
+make all 
+make: No se hace nada para «all».
+17:08:25 **** Incremental Build of configuration Debug for project pruebaSDL2 ****
+make all 
+Building file: ../Game.cpp
+Invoking: Cross G++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"Game.d" -MT"Game.d" -o "Game.o" "../Game.cpp"
+../Game.cpp: In constructor ‘Game::Game()’:
+../Game.cpp:17:9: warning: converting to non-pointer type ‘int’ from NULL [-Wconversion-null]
+  mousex = NULL;
+         ^
+../Game.cpp:18:9: warning: converting to non-pointer type ‘int’ from NULL [-Wconversion-null]
+  mousey = NULL;
+         ^
+Finished building: ../Game.cpp
+ 
+Building file: ../GameObject.cpp
+Invoking: Cross G++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"GameObject.d" -MT"GameObject.d" -o "GameObject.o" "../GameObject.cpp"
+Finished building: ../GameObject.cpp
+ 
+Building file: ../Player.cpp
+Invoking: Cross G++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"Player.d" -MT"Player.d" -o "Player.o" "../Player.cpp"
+Finished building: ../Player.cpp
+ 
+Building file: ../main.cpp
+Invoking: Cross G++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.d" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building target: pruebaSDL2
+Invoking: Cross G++ Linker
+g++  -o "pruebaSDL2"  ./Game.o ./GameObject.o ./Player.o ./TextureManager.o ./main.o   -lSDL2 -lSDL2_image
+Finished building target: pruebaSDL2
+ 
+17:32:25 **** Build of configuration Debug for project pruebaSDL2 ****
+make all 
+make: No se hace nada para «all».
+17:38:43 **** Incremental Build of configuration Debug for project pruebaSDL2 ****
+make all 
+Building file: ../GameObject.cpp
+Invoking: Cross G++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"GameObject.d" -MT"GameObject.d" -o "GameObject.o" "../GameObject.cpp"
+Finished building: ../GameObject.cpp
+ 
+Building target: pruebaSDL2
+Invoking: Cross G++ Linker
+g++  -o "pruebaSDL2"  ./Game.o ./GameObject.o ./Player.o ./TextureManager.o ./main.o   -lSDL2 -lSDL2_image
+Finished building target: pruebaSDL2
+ 
+17:58:36 **** Incremental Build of configuration Debug for project pruebaSDL2 ****
+make all 
+Building file: ../GameObject.cpp
+Invoking: Cross G++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"GameObject.d" -MT"GameObject.d" -o "GameObject.o" "../GameObject.cpp"
+Finished building: ../GameObject.cpp
+ 
+Building target: pruebaSDL2
+Invoking: Cross G++ Linker
+g++  -o "pruebaSDL2"  ./Game.o ./GameObject.o ./Player.o ./TextureManager.o ./main.o   -lSDL2 -lSDL2_image
+Finished building target: pruebaSDL2
+ 
+18:09:10 **** Incremental Build of configuration Debug for project pruebaSDL2 ****
+make all 
+make: No se hace nada para «all».
