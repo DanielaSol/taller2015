@@ -1,0 +1,15 @@
+15:37:35 **** Incremental Build of configuration Debug for project pruebaSDL2 ****
+make all 
+Building file: ../GameObject.cpp
+Invoking: Cross G++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"GameObject.d" -MT"GameObject.d" -o "GameObject.o" "../GameObject.cpp"
+Finished building: ../GameObject.cpp
+ 
+Building target: pruebaSDL2
+Invoking: Cross G++ Linker
+g++  -o "pruebaSDL2"  ./Game.o ./GameObject.o ./Player.o ./TextureManager.o ./main.o   -lSDL2 -lSDL2_image
+Finished building target: pruebaSDL2
+ 
+
+15:37:40 Build Finished (took 4s.545ms)
+

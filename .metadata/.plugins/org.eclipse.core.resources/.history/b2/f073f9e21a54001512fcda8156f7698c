@@ -1,0 +1,17 @@
+/*
+ * GameObject.h
+ *
+ *  Created on: 05/09/2015
+ *      Author: facundo
+ */
+
+#ifndef GAMEOBJECT_H_
+#define GAMEOBJECT_H_
+
+class GameObject {
+public:
+	GameObject();
+	virtual ~GameObject();
+};
+
+#endif /* GAMEOBJECT_H_ */

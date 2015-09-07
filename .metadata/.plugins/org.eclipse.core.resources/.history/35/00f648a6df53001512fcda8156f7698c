@@ -1,0 +1,30 @@
+/*
+ * Game.h
+ *
+ *  Created on: 05/09/2015
+ *      Author: facundo
+ */
+
+#ifndef GAME_H_
+#define GAME_H_
+
+#include "SDL2/SDL.h"
+
+class Game{
+public:
+		Game();
+		~Game();
+		void init(){ m_bRunning = true;}
+		void render(){}
+		void update(){}
+		void handleEvents(){}
+		void clean(){}
+		bool running(){ return m_bRunning;}
+private:
+		bool m_bRunning;
+
+};
+
+
+
+#endif /* GAME_H_ */

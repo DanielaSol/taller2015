@@ -1,0 +1,23 @@
+/*
+ * Player.h
+ *
+ *  Created on: 05/09/2015
+ *      Author: facundo
+ */
+
+#ifndef PLAYER_H_
+#define PLAYER_H_
+
+#include "GameObject.h"
+#include <iostream>
+
+class Player: public GameObject {
+public:
+	void load(int x, int y, int width, int height, std::string
+	textureID);
+	void draw(SDL_Renderer* pRenderer);
+	void update();
+	void clean();
+};
+
+#endif /* PLAYER_H_ */

@@ -1,0 +1,17 @@
+/*
+ * Player.h
+ *
+ *  Created on: 05/09/2015
+ *      Author: facundo
+ */
+
+#ifndef PLAYER_H_
+#define PLAYER_H_
+
+class Player : public GameObject {
+public:
+	Player();
+	virtual ~Player();
+};
+
+#endif /* PLAYER_H_ */

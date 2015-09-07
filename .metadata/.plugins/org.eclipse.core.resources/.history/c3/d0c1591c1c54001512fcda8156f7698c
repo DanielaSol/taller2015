@@ -1,0 +1,18 @@
+/*
+ * GameObject.cpp
+ *
+ *  Created on: 05/09/2015
+ *      Author: facundo
+ */
+
+#include "GameObject.h"
+
+GameObject::GameObject() {
+	// TODO Auto-generated constructor stub
+
+}
+
+GameObject::~GameObject() {
+	// TODO Auto-generated destructor stub
+}
+

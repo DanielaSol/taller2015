@@ -1,0 +1,19 @@
+/*
+ * test.cpp
+ *
+ *  Created on: 04/09/2015
+ *      Author: facundo
+ */
+
+
+
+#include "SDL2/SDL.h" 
+
+int main( int argc, char* args[] ) { 
+	//Start SDL 
+	SDL_Init( SDL_INIT_EVERYTHING ); 
+	//Quit SDL
+	SDL_Quit(); 
+	
+	return 0; 
+}	

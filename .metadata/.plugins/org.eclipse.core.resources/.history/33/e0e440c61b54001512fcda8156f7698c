@@ -1,0 +1,34 @@
+/*
+ * Player.h
+ *
+ *  Created on: 05/09/2015
+ *      Author: facundo
+ */
+
+#ifndef PLAYER_H_
+#define PLAYER_H_
+
+class Player : public GameObject {
+	
+public:
+	Player();
+	virtual ~Player();
+	void draw()
+	{
+		GameObject::draw();
+		std::cout << "draw player";
+	}
+	void update()
+	{
+		std::cout << "update player";
+		m_x = 10;
+		m_y = 20;
+	}
+	void clean()
+	{
+		GameObject::clean();
+		std::cout << "clean player";
+	}
+};
+
+#endif /* PLAYER_H_ */
