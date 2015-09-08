@@ -6,22 +6,25 @@
 CPP_SRCS += \
 ../Game.cpp \
 ../GameObject.cpp \
-../Player.cpp \
+../InputHandler.cpp \
 ../TextureManager.cpp \
+../Unit.cpp \
 ../main.cpp 
 
 OBJS += \
 ./Game.o \
 ./GameObject.o \
-./Player.o \
+./InputHandler.o \
 ./TextureManager.o \
+./Unit.o \
 ./main.o 
 
 CPP_DEPS += \
 ./Game.d \
 ./GameObject.d \
-./Player.d \
+./InputHandler.d \
 ./TextureManager.d \
+./Unit.d \
 ./main.d 
 
 

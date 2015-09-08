@@ -1,41 +1,76 @@
 /*
  * Game.h
  *
- *  Created on: 05/09/2015
- *      Author: facundo
+ *  Created on: Sep 7, 2015
+ *      Author: gonzalo
  */
 
 #ifndef GAME_H_
 #define GAME_H_
 
-#include "Player.h"
+#include "GameObject.h"
+#include "Unit.h"
+#include "SDL2/SDL.h"
+#include "SDL_image.h"
 
-
-class Game{
-
+class Game
+{
 public:
-		Game();
-		~Game();
-		bool init(const char* title, int xpos, int ypos, int width, int
-				height, int flags);
-		void render();
-		void update();
-		void handleEvents();
-		void semovioelmouse();
-		void clean();
-		bool running(){ return m_bRunning;}
-private:
-		SDL_Window* m_pWindow;
-		SDL_Renderer* m_pRenderer;
-		int m_currentFrame;
-		bool m_bRunning;
-		GameObject m_go;
-		Player m_player;
-		int mousex;
-		int mousey;
 
+	//Singleton
+
+    static Game* Instance()
+    {
+        if(s_pInstance == 0)
+        {
+            s_pInstance = new Game();
+            return s_pInstance;
+        }
+
+        return s_pInstance;
+    }
+
+
+    bool init(const char* title, int xpos, int ypos, int width, int height, int SDL_WINDOW_flag);
+
+    void render();
+    void update();
+    void handleEvents();
+    void clean();
+
+    SDL_Renderer* getRenderer() const { return m_pRenderer; }
+    SDL_Window* getWindow() const { return m_pWindow; }
+
+    bool running() { return m_bRunning; }
+
+    void quit() { m_bRunning = false; }
+
+    int getGameWidth() const { return m_gameWidth; }
+    int getGameHeight() const { return m_gameHeight; }
+
+private:
+
+    //variable temporal, más avanzado en el diseño, la deberiamos mover a otra clase.
+    //Yo pense en hacer la clase Player referente al jugador físico, a la persona.
+    Unit* m_aldeano_test; // será un Unit,
+
+    SDL_Window* m_pWindow;
+    SDL_Renderer* m_pRenderer;
+
+    bool m_bRunning;
+
+    static Game* s_pInstance;
+
+    int m_gameWidth;
+    int m_gameHeight;
+
+    Game(); // Singleton --> Contructor y destructor privados
+    ~Game();
+
+    Game(const Game&);
+	Game& operator=(const Game&);
 };
 
-
+typedef Game TheGame;
 
 #endif /* GAME_H_ */

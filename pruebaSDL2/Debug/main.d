@@ -1,12 +1,12 @@
-main.d: ../main.cpp ../Game.h ../Player.h ../GameObject.h \
- ../TextureManager.h ../SDL_image.h
+main.d: ../main.cpp ../Game.h ../GameObject.h ../Vector2D.h ../Unit.h \
+ ../SDL_image.h
 
 ../Game.h:
 
-../Player.h:
-
 ../GameObject.h:
 
-../TextureManager.h:
+../Vector2D.h:
+
+../Unit.h:
 
 ../SDL_image.h:

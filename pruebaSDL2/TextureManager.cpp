@@ -26,7 +26,7 @@ bool TextureManager::load(std::string fileName, std::string id, SDL_Renderer* pR
 		m_textureMap[id] = pTexture;
 		return true;
 	}
-	// reaching here means something went wrong
+	//something went wrong
 	return false;
 }
 
@@ -41,6 +41,7 @@ void TextureManager::draw(std::string id, int x, int y, int width, int height,
 	srcRect.h = destRect.h = height;
 	destRect.x = x;
 	destRect.y = y;
+
 	SDL_RenderCopyEx(pRenderer, m_textureMap[id], &srcRect, &destRect, 0, 0, flip);
 
 }
@@ -57,6 +58,17 @@ void TextureManager::drawFrame(std::string id, int x, int y, int width,
 	srcRect.h = destRect.h = height;
 	destRect.x = x;
 	destRect.y = y;
+
 	SDL_RenderCopyEx(pRenderer, m_textureMap[id], &srcRect, &destRect, 0, 0, flip);
+}
+
+void TextureManager::clearTextureMap()
+{
+    m_textureMap.clear();
+}
+
+void TextureManager::clearFromTextureMap(std::string id)
+{
+    m_textureMap.erase(id);
 }
 
