@@ -68,7 +68,7 @@ public:
 
 protected:
 
-    //age Variables
+    // "Age" Variables
     bool m_bSelected;
 
     // movement variables

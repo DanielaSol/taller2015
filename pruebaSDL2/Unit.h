@@ -1,10 +1,3 @@
-/*
- * Unit.h
- *
- *  Created on: Sep 7, 2015
- *      Author: gonzalo
- */
-
 #ifndef UNIT_H_
 #define UNIT_H_
 
@@ -40,8 +33,9 @@ protected:
 
 private:
 
-	bool m_bChangingDestination;
 	Vector2D m_direction;
+	bool m_bChangingDestination; //variable para evitar que el personaje se mueva teniendo apretado click derecho
+
 };
 
 #endif /* UNIT_H_ */

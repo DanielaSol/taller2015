@@ -1,10 +1,3 @@
-/*
- * Unit.cpp
- *
- *  Created on: Sep 8, 2015
- *      Author: gonzalo
- */
-
 #include "Unit.h"
 #include "InputHandler.h"
 #include <iostream>
@@ -57,6 +50,7 @@ void Unit::moveTo(Vector2D position)
 	m_position.m_y += (m_direction.getY() * m_velocity.getY());
 
 	//para que no vibre
+
 	float deltaX = m_position.getX() - m_destination.getX();
 	float deltaY = m_position.getY() - m_destination.getY();
 
@@ -78,8 +72,8 @@ void Unit::handleInput()
 		{
 			cout << "moving to " <<  m_destination.getX() << "/" << m_destination.getY()<< "\n";
 			m_bChangingDestination = true; //se me ocurrio, para evitar cambiar posicion si mantiene click derecho apretado
-			m_destination.setX(TheInputHandler::Instance()->getMousePosition()->getX());
-			m_destination.setY(TheInputHandler::Instance()->getMousePosition()->getY());
+			m_destination.setX(TheInputHandler::Instance()->getMousePosition()->getX() - (getWidth() / 2.0f) );
+			m_destination.setY(TheInputHandler::Instance()->getMousePosition()->getY() - (getHeight() / 2.0f) );
 		}
 	}
 	else
