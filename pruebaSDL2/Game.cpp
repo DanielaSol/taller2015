@@ -125,6 +125,7 @@ void Game::clean()
    // delete m_pGameStateMachine;
 
     m_aldeano_test->clean();
+    delete m_aldeano_test;
 
     TheTextureManager::Instance()->clearTextureMap();
 
