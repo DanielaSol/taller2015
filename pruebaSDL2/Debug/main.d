@@ -1,12 +1,12 @@
-main.d: ../main.cpp ../Game.h ../GameObject.h ../Vector2D.h ../Unit.h \
+main.d: ../main.cpp ../Game.h ../Unit.h ../GameObject.h ../Vector2D.h \
  ../SDL_image.h
 
 ../Game.h:
 
+../Unit.h:
+
 ../GameObject.h:
 
 ../Vector2D.h:
-
-../Unit.h:
 
 ../SDL_image.h:

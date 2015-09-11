@@ -12,7 +12,7 @@
 
 void GameObject::load(int x, int y, int width, int height, int numFrames, std::string textureID)
 {
-	m_position = Vector2D(x,y);
+	m_position = Vector2D(x - width/2, y - height/2);;
 	m_width = width;
 	m_height = height;
 	m_numFrames = numFrames;
@@ -40,5 +40,9 @@ void GameObject::handleInput()
 
 void GameObject::clean()
 {
+
+}
+
+void GameObject::aumentarFrame(){
 
 }

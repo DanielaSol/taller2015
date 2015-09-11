@@ -18,9 +18,10 @@ public:
 	virtual void update();
 	virtual void handleInput();
 	virtual void clean();
+	virtual void aumentarFrame();
 
 	//funciones específicas
-	virtual void moveTo (Vector2D position);
+	virtual void moveTo (const Vector2D& position);
 
 	Vector2D& getVelocity() { return m_velocity; }
 	Vector2D& getDestination() { return m_destination; }
@@ -35,6 +36,10 @@ private:
 
 	Vector2D m_direction;
 	bool m_bChangingDestination; //variable para evitar que el personaje se mueva teniendo apretado click derecho
+	bool m_bMoving;
+	
+
+	void checkSpriteDirection();
 
 };
 

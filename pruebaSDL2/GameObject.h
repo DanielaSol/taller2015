@@ -9,15 +9,14 @@
 #define GAMEOBJECT_H_
 
 #include "Vector2D.h"
-#include <vector>
 #include <string>
 
-//Clase base de los elementos del juego
+//Clase base de los elementos del juego - VENDRIAN A SER TODAS LAS ENTIDADES MENOS LAS DE TERRENO: AGUA, TIERRA
 
 class GameObject
 {
 public:
-    // constructor with default initialisation list
+
     GameObject() :  m_bSelected(false),
     				m_position(0,0),
                     m_width(0),
@@ -31,25 +30,21 @@ public:
     {
     }
 
-	// base class needs virtual destructor
 	virtual ~GameObject() {}
 
-	// load from file - int x, int y, int width, int height, std::string textureID, int numFrames, int callbackID = 0, int animSpeed = 0
 	virtual void load(int x, int y, int width, int height, int numFrames, std::string textureID);
 
-	// draw the object
 	virtual void draw();
 
-	// do update stuff
 	virtual void update();
 
-	// handle input
 	virtual void handleInput();
 
-	// remove anything that needs to be deleted
 	virtual void clean();
 
-	// getters for common variables
+	// aumenta el frame a animar
+	virtual void aumentarFrame();
+
 	Vector2D& getPosition() { return m_position; }
 
 
@@ -82,6 +77,7 @@ protected:
     int m_currentRow;
     int m_currentFrame;
     int m_numFrames;
+
     std::string m_textureID;
 
     // common boolean variables

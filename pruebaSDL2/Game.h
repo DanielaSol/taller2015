@@ -8,9 +8,10 @@
 #ifndef GAME_H_
 #define GAME_H_
 
-#include "GameObject.h"
 #include "Unit.h"
 #include "SDL2/SDL.h"
+
+#include "GameObject.h"
 #include "SDL_image.h"
 
 class Game

@@ -6,11 +6,12 @@
  */
 
 #include "Game.h"
-#include "GameObject.h"
 #include "Unit.h"
 #include "TextureManager.h"
 #include "InputHandler.h"
 #include <iostream>
+
+#include "GameObject.h"
 
 using namespace std;
 
@@ -76,10 +77,10 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 
     //CARGA EL ALDEANO, PROBABLEMENTE SE CAMBIE DE LUGAR
 
-	if(!TheTextureManager::Instance()->load("assets/animate.png","animate", m_pRenderer))
+	if(!TheTextureManager::Instance()->load("assets/GoblinWalk.png","animate", m_pRenderer))
 		return false;
 	m_aldeano_test = new Unit();
-    m_aldeano_test->load(100, 100, 45, 48, 1, "animate");
+    m_aldeano_test->load(100, 100, 125, 168, 5, "animate");
 
     ////////////////////////////////////////////////////////////////////////////////
 
@@ -123,7 +124,6 @@ void Game::clean()
     //m_pGameStateMachine->clean();
    // m_pGameStateMachine = 0;
    // delete m_pGameStateMachine;
-
     m_aldeano_test->clean();
     delete m_aldeano_test;
 

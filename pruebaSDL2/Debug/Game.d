@@ -1,13 +1,13 @@
-Game.d: ../Game.cpp ../Game.h ../GameObject.h ../Vector2D.h ../Unit.h \
+Game.d: ../Game.cpp ../Game.h ../Unit.h ../GameObject.h ../Vector2D.h \
  ../SDL_image.h ../TextureManager.h ../InputHandler.h
 
 ../Game.h:
 
+../Unit.h:
+
 ../GameObject.h:
 
 ../Vector2D.h:
-
-../Unit.h:
 
 ../SDL_image.h:
 
