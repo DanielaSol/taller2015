@@ -12,6 +12,7 @@
 #include <iostream>
 
 #include "GameObject.h"
+#include "Map.h"
 
 using namespace std;
 
@@ -82,6 +83,9 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 	m_aldeano_test = new Unit();
     m_aldeano_test->load(100, 100, 125, 168, 5, "animate");
 
+    map = new Map();
+    map->load();
+
     ////////////////////////////////////////////////////////////////////////////////
 
     m_bRunning = true; // everything inited successfully, start the main loop
@@ -95,6 +99,7 @@ void Game::render()
     SDL_RenderClear(m_pRenderer);
 
 	//m_pGameStateMachine->render();// Dejo esto por si despues implementamos maquinaa finita de estados para los estados de jeugo: menu, etc
+    map->draw();
     m_aldeano_test->draw();
 
     SDL_RenderPresent(m_pRenderer);
@@ -126,6 +131,7 @@ void Game::clean()
    // delete m_pGameStateMachine;
     m_aldeano_test->clean();
     delete m_aldeano_test;
+    delete map;
 
     TheTextureManager::Instance()->clearTextureMap();
 

@@ -11,6 +11,7 @@
 #include "Unit.h"
 #include "SDL2/SDL.h"
 
+#include "Map.h"
 #include "GameObject.h"
 #include "SDL_image.h"
 
@@ -54,6 +55,7 @@ private:
     //variable temporal, más avanzado en el diseño, la deberiamos mover a otra clase.
     //Yo pense en hacer la clase Player referente al jugador físico, a la persona.
     GameObject* m_aldeano_test; // será un Unit,
+    Map* map;
 
     SDL_Window* m_pWindow;
     SDL_Renderer* m_pRenderer;

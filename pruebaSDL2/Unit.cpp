@@ -8,7 +8,7 @@
 using namespace std;
 
 Unit::Unit(): GameObject(),
-m_velocity(2,2),
+m_velocity(10,10),
 m_direction(0,0),
 m_bChangingDestination(false),
 m_bMoving(false)
@@ -70,7 +70,7 @@ void Unit::moveTo(const Vector2D& position)
 	float deltaX = m_position.getX() - m_destination.getX();
 	float deltaY = m_position.getY() - m_destination.getY();
 
-	if (sqrt(deltaX * deltaX + deltaY * deltaY) <= 2.1)
+	if (sqrt(deltaX * deltaX + deltaY * deltaY) <= 5)
 	{
 		m_position.setX(m_destination.getX());
 		m_position.setY(m_destination.getY());
@@ -92,7 +92,7 @@ void Unit::handleInput()
 			m_bChangingDestination = true; //se me ocurrio, para evitar cambiar posicion si mantiene click derecho apretado
 
 			m_destination.setX(TheInputHandler::Instance()->getMousePosition()->getX() - (getWidth() / 2.0f) );
-			m_destination.setY(TheInputHandler::Instance()->getMousePosition()->getY() - (getHeight() / 2.0f) );
+			m_destination.setY(TheInputHandler::Instance()->getMousePosition()->getY() - (getHeight() / 1.5f) );
 		}
 	}
 	else
@@ -109,7 +109,8 @@ void Unit::clean(){
 
 void Unit::aumentarFrame(){
 
-	 m_currentFrame = int(((SDL_GetTicks() / (100)) % m_numFrames));
+	m_currentFrame = int(((SDL_GetTicks() / (100)) % m_numFrames));
+
 	/*m_currentFrame += 1;
 
 	if(m_currentFrame > m_numFrames)

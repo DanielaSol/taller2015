@@ -74,6 +74,23 @@ public:
 		return *this;
 	}
 
+	void toIsometric()
+	{
+		float x = m_x;
+		float y = m_y;
+
+		m_x = x - y;
+		m_y = (x + y) / 2;
+	}
+
+	void toCartesian()
+	{
+		float x = m_x;
+		float y = m_y;
+
+		m_x = (2 * y + x) / 2;
+		m_y = (2 * y - x) / 2;
+	}
 
 	void normalize()
 	{
