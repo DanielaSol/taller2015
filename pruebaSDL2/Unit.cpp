@@ -8,7 +8,7 @@
 using namespace std;
 
 Unit::Unit(): GameObject(),
-m_velocity(10,10),
+m_velocity(5,5),
 m_direction(0,0),
 m_bChangingDestination(false),
 m_bMoving(false)

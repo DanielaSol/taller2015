@@ -5,12 +5,15 @@
 #include <string>
 
 #include "GameObject.h"
+#include <vector>
+#include <string>
+#include "TileHandler.h"
 
 class Map
 {
 public:
-	//Map();
-	virtual ~Map(){}
+	Map();
+	Map(std::string mapName, int mapWidth, int mapHeight);
 
 	//funciones básicas
 	void load();
@@ -22,21 +25,23 @@ public:
 	std::string getName() { return m_mapName; }
 	Vector2D& getMapSize() { return m_mapSize; }
 
-	void generateMap();
+	void drawMap();
 
 	void placeTile(int gridPosX, int gridPosY, int tileID);
 
-	//int[TileMetadata][TileMetadata] mapGrid;
+	std::vector< std::vector<int> >  mapGrid;
 
 private:
 
 	std::string m_mapName;
 	Vector2D m_mapSize;
 
-	struct TileMetadata{ // NO SE, ESTABA PROBANDO
+	TileHandler* m_tileHandler;
+
+	/*struct TileMetadata{ // NO SE, ESTABA PROBANDO
 		int tileID;
 		GameObject* point;
-	};
+	};*/
 
 };
 

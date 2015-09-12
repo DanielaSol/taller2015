@@ -54,8 +54,8 @@ private:
 
     //variable temporal, más avanzado en el diseño, la deberiamos mover a otra clase.
     //Yo pense en hacer la clase Player referente al jugador físico, a la persona.
-    GameObject* m_aldeano_test; // será un Unit,
-    Map* map;
+    GameObject* m_pAldeano_test; // será un Unit,
+    Map* m_pMap;
 
     SDL_Window* m_pWindow;
     SDL_Renderer* m_pRenderer;

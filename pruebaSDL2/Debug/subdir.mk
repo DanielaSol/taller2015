@@ -9,6 +9,7 @@ CPP_SRCS += \
 ../InputHandler.cpp \
 ../Map.cpp \
 ../TextureManager.cpp \
+../TileHandler.cpp \
 ../Unit.cpp \
 ../main.cpp 
 
@@ -18,6 +19,7 @@ OBJS += \
 ./InputHandler.o \
 ./Map.o \
 ./TextureManager.o \
+./TileHandler.o \
 ./Unit.o \
 ./main.o 
 
@@ -27,6 +29,7 @@ CPP_DEPS += \
 ./InputHandler.d \
 ./Map.d \
 ./TextureManager.d \
+./TileHandler.d \
 ./Unit.d \
 ./main.d 
 

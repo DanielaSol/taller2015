@@ -80,11 +80,11 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 
 	if(!TheTextureManager::Instance()->load("assets/GoblinWalk.png","animate", m_pRenderer))
 		return false;
-	m_aldeano_test = new Unit();
-    m_aldeano_test->load(100, 100, 125, 168, 5, "animate");
+	m_pAldeano_test = new Unit();
+	m_pAldeano_test->load(100, 100, 125, 168, 5, "animate");
 
-    map = new Map();
-    map->load();
+    m_pMap = new Map();
+    m_pMap->load();
 
     ////////////////////////////////////////////////////////////////////////////////
 
@@ -99,8 +99,8 @@ void Game::render()
     SDL_RenderClear(m_pRenderer);
 
 	//m_pGameStateMachine->render();// Dejo esto por si despues implementamos maquinaa finita de estados para los estados de jeugo: menu, etc
-    map->draw();
-    m_aldeano_test->draw();
+    m_pMap->draw();
+    m_pAldeano_test->draw();
 
     SDL_RenderPresent(m_pRenderer);
 }
@@ -108,16 +108,16 @@ void Game::render()
 void Game::update()
 {
 		//m_pGameStateMachine->update();
-	m_aldeano_test->update();
-
+	m_pAldeano_test->update();
+	m_pMap->update();
 }
 
 void Game::handleEvents()
 {
 	TheInputHandler::Instance()->update();
 
-	m_aldeano_test->handleInput();
-
+	m_pAldeano_test->handleInput();
+	m_pMap->handleInput();
 }
 
 void Game::clean()
@@ -129,9 +129,11 @@ void Game::clean()
     //m_pGameStateMachine->clean();
    // m_pGameStateMachine = 0;
    // delete m_pGameStateMachine;
-    m_aldeano_test->clean();
-    delete m_aldeano_test;
-    delete map;
+    m_pAldeano_test->clean();
+    m_pMap->clean();
+
+    delete m_pAldeano_test;
+    delete m_pMap;
 
     TheTextureManager::Instance()->clearTextureMap();
 
