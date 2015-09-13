@@ -29,14 +29,15 @@ public:
 
 	void placeTile(int gridPosX, int gridPosY, int tileID);
 
-	std::vector< std::vector<int> >  mapGrid;
 
 private:
 
 	std::string m_mapName;
 	Vector2D m_mapSize;
 
-	TileHandler* m_tileHandler;
+	std::vector< std::vector<int> >  m_mapGrid;
+
+	TileHandler* m_pTileHandler;
 
 	/*struct TileMetadata{ // NO SE, ESTABA PROBANDO
 		int tileID;

@@ -14,7 +14,7 @@ using namespace std;
 
 Map::Map():m_mapSize(20,20)
 {
-	m_tileHandler = new TileHandler();
+	m_pTileHandler = new TileHandler();
 }
 Map::Map(std::string mapName, int mapWidth, int mapHeight)
 {
@@ -22,27 +22,27 @@ Map::Map(std::string mapName, int mapWidth, int mapHeight)
 	m_mapSize.setX(mapWidth);
 	m_mapSize.setY(mapHeight);
 
-	m_tileHandler = new TileHandler();
+	m_pTileHandler = new TileHandler();
 }
 
 void Map::load()
 {
-	m_tileHandler->loadTiles();
+	m_pTileHandler->loadTiles();
 
 	int mapWidth = getMapSize().getX();
 	int mapHeight = getMapSize().getY();
 
 	//resize de los vectores del mapa
-	mapGrid.resize(mapWidth);
+	m_mapGrid.resize(mapWidth);
 	for (int i = 0; i < mapWidth; ++i)
-		mapGrid[i].resize(mapHeight);
+		m_mapGrid[i].resize(mapHeight);
 
 	//Inicializa la matriz del mapa con todos 1 (pasto desocupado)
 	for(int i = 0 ; i < mapWidth ; i++)
 	{
 		for(int j = 0 ; j < mapHeight ; j++)
 		{
-			mapGrid[i][j] = 1; //guarda todos tiles de id 1 (pasto desocupado). Al ser ocupado por un GameObject se tiene que setear el tile en 0
+			m_mapGrid[i][j] = 1; //guarda todos tiles de id 1 (pasto desocupado). Al ser ocupado por un GameObject se tiene que setear el tile en 0
 		}
 	}
 }
@@ -60,10 +60,10 @@ void Map::clean()
 	int mapWidth = getMapSize().getX();
 
 	for (int i = 0; i < mapWidth; ++i)
-		mapGrid[i].clear();
-	mapGrid.clear();
+		m_mapGrid[i].clear();
+	m_mapGrid.clear();
 
-	delete m_tileHandler;
+	delete m_pTileHandler;
 }
 
 void Map::drawMap()
@@ -76,7 +76,7 @@ void Map::drawMap()
 	{
 		for(int j = 0 ; j < mapHeight ; j++)
 		{
-			placeTile(i, j, mapGrid[i][j]);
+			placeTile(i, j, m_mapGrid[i][j]);
 		}
 	}
 
@@ -97,7 +97,7 @@ void Map::placeTile(int gridPosX, int gridPosY, int tileID)
 	Vector2D* isometricCord = new Vector2D(posX, posY);
 	isometricCord->toIsometric();
 
-	m_tileHandler->drawTile(tileID, isometricCord->getX(), isometricCord->getY());
+	m_pTileHandler->drawTile(tileID, isometricCord->getX(), isometricCord->getY());
 
 	delete isometricCord;
 
