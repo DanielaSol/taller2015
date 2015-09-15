@@ -9,21 +9,25 @@
 #define LOGGER_H_
 #include <fstream>
 
+#define LOG(message)   Logger::write(message)
+#define logfile Logger::file
+
+
+
 namespace std {
 
 class Logger {
 
 
-
 public:
 
-	ofstream file;
+	static FILE *file;
 
 	Logger();
 
 	~Logger();
 
-	void write(char * message) ;
+	static void write(std::string message) ;
 };
 
 } /* namespace std */

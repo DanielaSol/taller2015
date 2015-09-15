@@ -8,26 +8,31 @@
 #include "Logger.h"
 #include <iostream>
 #include <fstream>
+#include "time.h"
 
 using namespace std;
 
 Logger::Logger() {
-	file.open("log.txt");
+	file=fopen("log.txt","a+");
 
 }
 
 Logger::~Logger() {
-	file.close();
+	fclose(file);
 }
 
-
-void Logger::write(char * message) {
-    time_t tim;
-    time(&tim);
-
-    file << message << " - " << ctime(&tim);
+FILE *Logger::file;
 
 
+void Logger::write(string message) {
+	  time_t rawtime;
+	  struct tm * timeinfo;
+
+	  time ( &rawtime );
+	  timeinfo = localtime ( &rawtime );
+
+	  string salida = message + " - " + asctime (timeinfo);
+	  fputs(salida.c_str(),file);
 
 }
 
