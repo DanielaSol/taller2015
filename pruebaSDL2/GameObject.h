@@ -18,7 +18,7 @@ class GameObject
 public:
 
     GameObject() :  m_bSelected(false),
-    				m_position(0,0),
+    				m_screenPosition(0,0),
                     m_width(0),
                     m_height(0),
                     m_currentRow(0),
@@ -45,7 +45,8 @@ public:
 	// aumenta el frame a animar
 	virtual void aumentarFrame();
 
-	Vector2D& getPosition() { return m_position; }
+	Vector2D& getMapPosition() { return m_screenPosition; }
+	Vector2D& getScreenPosition() { return m_screenPosition; }
 
 
 	int getWidth() { return m_width; }
@@ -67,7 +68,8 @@ protected:
     bool m_bSelected;
 
     // movement variables
-    Vector2D m_position;
+    Vector2D m_mapPosition;
+    Vector2D m_screenPosition;
 
     // size variables
     int m_width;

@@ -12,6 +12,7 @@
 #include <iostream>
 
 #include "GameObject.h"
+#include "Camera.h"
 #include "Map.h"
 
 using namespace std;
@@ -86,6 +87,8 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
     m_pMap = new Map();
     m_pMap->load();
 
+    TheCamera::Instance()->init();
+
     ////////////////////////////////////////////////////////////////////////////////
 
     m_bRunning = true; // everything inited successfully, start the main loop
@@ -96,17 +99,20 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 
 void Game::render()
 {
-    SDL_RenderClear(m_pRenderer);
+
+	SDL_RenderClear(m_pRenderer);
 
 	//m_pGameStateMachine->render();// Dejo esto por si despues implementamos maquinaa finita de estados para los estados de jeugo: menu, etc
     m_pMap->draw();
     m_pAldeano_test->draw();
 
     SDL_RenderPresent(m_pRenderer);
+
 }
 
 void Game::update()
 {
+	TheCamera::Instance()->update();
 		//m_pGameStateMachine->update();
 	m_pAldeano_test->update();
 	m_pMap->update();
@@ -115,6 +121,8 @@ void Game::update()
 void Game::handleEvents()
 {
 	TheInputHandler::Instance()->update();
+
+	TheCamera::Instance()->handleInput();
 
 	m_pAldeano_test->handleInput();
 	m_pMap->handleInput();
