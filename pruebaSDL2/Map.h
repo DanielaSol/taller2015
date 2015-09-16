@@ -11,6 +11,8 @@
 
 class Map
 {
+friend class GameObject;
+
 public:
 	Map();
 	Map(std::string mapName, int mapWidth, int mapHeight);
@@ -39,10 +41,8 @@ private:
 
 	TileHandler* m_pTileHandler;
 
-	/*struct TileMetadata{ // NO SE, ESTABA PROBANDO
-		int tileID;
-		GameObject* point;
-	};*/
+	Vector2D* isometricCord; //temp buffer
+
 
 };
 

@@ -8,13 +8,16 @@
 #include "TextureManager.h"
 #include "InputHandler.h"
 #include "Vector2D.h"
+#include "Camera.h"
+#include <math.h>
 #include <iostream>
 
 using namespace std;
 
-Map::Map():m_mapSize(20,20)
+Map::Map():m_mapSize(100,100)
 {
 	m_pTileHandler = new TileHandler();
+	isometricCord = new Vector2D(0,0);
 }
 Map::Map(std::string mapName, int mapWidth, int mapHeight)
 {
@@ -23,6 +26,7 @@ Map::Map(std::string mapName, int mapWidth, int mapHeight)
 	m_mapSize.setY(mapHeight);
 
 	m_pTileHandler = new TileHandler();
+	isometricCord = new Vector2D(0,0);
 }
 
 void Map::load()
@@ -45,6 +49,7 @@ void Map::load()
 			m_mapGrid[i][j] = 1; //guarda todos tiles de id 1 (pasto desocupado). Al ser ocupado por un GameObject se tiene que setear el tile en 0
 		}
 	}
+
 }
 
 void Map::draw()
@@ -64,6 +69,7 @@ void Map::clean()
 	m_mapGrid.clear();
 
 	delete m_pTileHandler;
+	delete 	isometricCord;
 }
 
 void Map::drawMap()
@@ -71,36 +77,31 @@ void Map::drawMap()
 	int mapWidth = getMapSize().getX();
 	int mapHeight = getMapSize().getY();
 
+	/*int fromX = abs(TheCamera::Instance()->m_cameraViewport.x / 32);
+	int toX = abs(TheCamera::Instance()->m_cameraViewport.x / 32) + TheCamera::Instance()->m_cameraViewport.w;*/
+
 	//Crea el mapa. Añade el sprite del tile en cada posicion
 	for(int i = 0 ; i <  mapWidth; i++)
 	{
 		for(int j = 0 ; j < mapHeight ; j++)
 		{
-			placeTile(i, j, m_mapGrid[i][j]);
+			if (TheCamera::Instance()->isVisible(i,j))
+				placeTile(i, j, m_mapGrid[i][j]);
 		}
 	}
 
-	/*for(int i = 0 ; i < 20 ; i++)
-	{
-		for(int j = 0 ; j < 20 ; j++)
-		{
-			placeTile(i, j, 0);
-		}
-	}*/
 }
 
 void Map::placeTile(int gridPosX, int gridPosY, int tileID)
 {
-	float posX = gridPosX * 64 /2;
-	float posY = gridPosY * 32;
+	float posX = gridPosX * 64 /2 ;
+	float posY = gridPosY * 32 ;
 
-	Vector2D* isometricCord = new Vector2D(posX, posY);
+	isometricCord->setX(posX);
+	isometricCord->setY(posY);
 	isometricCord->toIsometric();
 
-	m_pTileHandler->drawTile(tileID, isometricCord->getX(), isometricCord->getY());
-
-	delete isometricCord;
-
+	m_pTileHandler->drawTile(tileID, isometricCord->getX()- TheCamera::Instance()->offsetX, isometricCord->getY()- TheCamera::Instance()->offsetY);
 
 }
 
