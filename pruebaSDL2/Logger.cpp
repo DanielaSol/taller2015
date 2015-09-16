@@ -6,7 +6,6 @@
  */
 
 #include "Logger.h"
-#include <iostream>
 #include <fstream>
 #include "time.h"
 
@@ -14,7 +13,6 @@ using namespace std;
 
 Logger::Logger() {
 	file=fopen("log.txt","a+");
-
 }
 
 Logger::~Logger() {
