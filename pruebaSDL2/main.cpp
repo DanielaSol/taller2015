@@ -8,6 +8,7 @@
 #include "Game.h"
 #include <iostream>
 #include "Logger.h"
+#include "Parser.h"
 
 using namespace std;
 
@@ -19,9 +20,7 @@ int main(int argc, char **argv)
     Uint32 frameStart, frameTime;
 
 	Logger* myLog = new Logger();
-	//myLog->write("hola");
-
-	LOG("chau");
+	Parser* myParser = new Parser();
 
 	std::cout << "game init attempt...\n";
 	if (TheGame::Instance()->init("TP of Empires", 100, 100, 640, 480, 0)) //flag por ejemplo: SDL_WINDOW_FULLSCREEN_DESKTOP
@@ -47,6 +46,7 @@ int main(int argc, char **argv)
     std::cout << "game closing...\n";
     TheGame::Instance()->clean();
     myLog->~Logger();
+    myParser->~Parser();
     return 0;
 }
 
