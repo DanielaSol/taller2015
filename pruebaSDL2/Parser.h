@@ -51,8 +51,8 @@ public:
 	struct ConfigGame {
 		Pantalla pantalla;
 		Configuracion configuracion;
-		map<string,string> Imagenes;
-		map<string,ObjetoGeneral> Objetos;
+		map<string,string> imagenes;
+		map<string,ObjetoGeneral> objetos;
 	};
 
 	ConfigGame configGame;

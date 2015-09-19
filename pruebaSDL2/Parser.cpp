@@ -58,7 +58,12 @@ Parser::~Parser() {
 
 YAML::Node Parser::getField(string field , string subField, YAML::Node nodo){
 
-	YAML::Node result = Trees[field][subField];
+	YAML::Node result;
+	if (subField.empty())
+		result = Trees[field];
+	else
+		result = Trees[field][subField];
+
 	if (result== NULL) {
 		LOG ("Se intentó acceder al campo inexistente "+field);
 		return Trees; //acá deberia buscar un valor por defecto
@@ -76,6 +81,13 @@ YAML::Node Parser::getField(string field, YAML::Node::const_iterator it){
 void Parser::Inicializar(){
 	configGame.pantalla.alto= getField("pantalla" ,"alto", Trees).as<int>();
 	configGame.pantalla.ancho=getField("pantalla" ,"ancho", Trees).as<int>();
+	configGame.configuracion.vel_personaje=getField("configuracion", "vel_personaje", Trees).as<int>();
+	configGame.configuracion.margen_scroll=getField("configuracion", "margen_scroll", Trees).as<int>();
+
+
+
+
+
 }
 
 
