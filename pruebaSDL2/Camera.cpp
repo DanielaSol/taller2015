@@ -13,31 +13,37 @@
 
 Camera* Camera::s_pCamera = new Camera();
 
-Camera::Camera() : m_scrollSpeed(3,3), m_direction(0,0), m_margin(30), offsetX(0.0f), offsetY(0.0f)
+Camera::Camera() : m_scrollSpeed(10,10), m_direction(0,0), m_scrollMargin(30), offsetX(0.0f), offsetY(0.0f)
 {
 }
 
 void Camera::init()
 {
-    m_boundY_top = 0;
-    m_boundY_bot = TheGame::Instance()->getGameHeight() * 32;//tile height
-    m_boundX_left = TheGame::Instance()->getGameWidth() * 32;
-    m_boundX_right = TheGame::Instance()->getGameWidth() * (-32);
+	//por yaml
+	MAX_SCROLLSPEED.setX(10);
+	MAX_SCROLLSPEED.setY(10);
+	SLOPE_X = MAX_SCROLLSPEED.getX() / (float)m_scrollMargin;
+	SLOPE_Y = MAX_SCROLLSPEED.getY() / (float)m_scrollMargin;
+
+    m_boundY_top = - TheGame::Instance()->TILE_HEIGHT;;
+    m_boundY_bot = (int)(TheGame::Instance()->getMapHeight() * TheGame::Instance()->TILE_HEIGHT) - TheGame::Instance()->getGameHeight() + TheGame::Instance()->TILE_HEIGHT;//tile height
+    m_boundX_left = (int)(TheGame::Instance()->getMapWidth() * -TheGame::Instance()->TILE_HEIGHT);
+    m_boundX_right = (int)(TheGame::Instance()->getMapWidth() * TheGame::Instance()->TILE_HEIGHT) - TheGame::Instance()->getGameWidth() +  TheGame::Instance()->TILE_WIDTH;
 
 	m_cameraViewport = { 0, 0, TheGame::Instance()->getGameWidth() , TheGame::Instance()->getGameHeight() }; //posX, posY, width, height
 }
 
 bool Camera::isVisible(int mapPosX, int mapPosY)
 {
-	int leftPos = mapPosX * 64/2 + 32; // *width/2
-	int topPos = mapPosY * 32 - 32; //*height
-	int botPos = mapPosY * 32 + 32;//*height + height
+	int leftPos = mapPosX * TheGame::Instance()->TILE_WIDTH/2 + TheGame::Instance()->TILE_WIDTH/2; // *width/2
+	int topPos = mapPosY * TheGame::Instance()->TILE_HEIGHT - TheGame::Instance()->TILE_HEIGHT; //*height
+	int botPos = mapPosY * TheGame::Instance()->TILE_HEIGHT + TheGame::Instance()->TILE_HEIGHT;//*height + height
 
 	int pointX = leftPos - botPos ;
 	int pointY = (leftPos + topPos) / 2;
 
 	//
-	gameObjectRect = {pointX - offsetX, pointY  - offsetY, 64, 32};
+	gameObjectRect = {pointX - offsetX, pointY  - offsetY, TheGame::Instance()->TILE_WIDTH, TheGame::Instance()->TILE_HEIGHT};
 
 	if (SDL_HasIntersection(&gameObjectRect, &m_cameraViewport))
 	{
@@ -56,23 +62,23 @@ void Camera::update()
 	offsetX += dX;
 	offsetY += dY;
 
-   /* //Ajusta cámara a los límites
-    if(m_cameraViewport.x < m_boundX_left)
+    //Ajusta cámara a los límites
+    if (offsetX < m_boundX_left)
     {
-    	m_cameraViewport.x = m_boundX_left;
+    	offsetX = m_boundX_left;
     }
-    if( m_cameraViewport.y < m_boundY_bot )
+    if (offsetY > m_boundY_bot )
     {
-    	m_cameraViewport.y = m_boundY_bot;
+    	offsetY = m_boundY_bot;
     }
-    if(m_cameraViewport.x > m_boundX_right)
+    if (offsetX > m_boundX_right)
     {
-    	m_cameraViewport.x = m_boundX_right;
+    	offsetX = m_boundX_right;
     }
-    if( m_cameraViewport.y > m_boundY_top )
+    if (offsetY < m_boundY_top )
     {
-    	m_cameraViewport.y = m_boundY_top;
-    }*/
+    	offsetY = m_boundY_top;
+    }
 }
 
 void Camera::handleInput()
@@ -82,17 +88,30 @@ void Camera::handleInput()
 
 	m_direction.setX(0.0f);
 	m_direction.setY(0.0f);
-	if (mouseX <= m_margin)
+
+	if (mouseX <= m_scrollMargin)
+	{
 		m_direction.setX(-1.0f);
+		m_scrollSpeed.setX ( MAX_SCROLLSPEED.getX() - (SLOPE_X * mouseX));
+	}
 
-	if (mouseX >= (TheGame::Instance()->getGameWidth() - m_margin))
+	if (mouseX >= (TheGame::Instance()->getGameWidth() - m_scrollMargin))
+	{
 		m_direction.setX(1.0f);
+		m_scrollSpeed.setX ( MAX_SCROLLSPEED.getX() - (SLOPE_X * (TheGame::Instance()->getGameWidth() - mouseX)));
+	}
 
-	if (mouseY <= m_margin)
+	if (mouseY <= m_scrollMargin)
+	{
 		m_direction.setY(-1.0f);
+		m_scrollSpeed.setY ( MAX_SCROLLSPEED.getY() - (SLOPE_Y * mouseY));
+	}
 
-	if (mouseY >= (TheGame::Instance()->getGameHeight() - m_margin))
+	if (mouseY >= (TheGame::Instance()->getGameHeight() - m_scrollMargin))
+	{
 		m_direction.setY(1.0f);
+		m_scrollSpeed.setY ( MAX_SCROLLSPEED.getY() - (SLOPE_Y * (TheGame::Instance()->getGameHeight() - mouseY)));
+	}
 
 	m_direction.normalize();
 }
@@ -100,5 +119,3 @@ void Camera::handleInput()
 void Camera::clean()
 {
 }
-
-
