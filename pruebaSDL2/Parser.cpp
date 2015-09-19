@@ -15,15 +15,19 @@
 namespace std {
 
 YAML::Node Trees;
+Parser* Parser::parInstance = 0;
 
 Parser::Parser() {
 	std::ifstream fileYaml( FILE_YAML );
 
 	if (fileYaml){
 
-		/*Trees=YAML::LoadFile(FILE_YAML);
+		Trees=YAML::LoadFile(FILE_YAML);
+		Inicializar();
 
-		YAML::Node prueba = getField("pantalla" , Trees);
+
+
+		/*YAML::Node prueba = getField("pantalla" , Trees);
 
 		cout << prueba << endl;
 		for (YAML::Node::const_iterator it = Trees["tipos"].begin();it !=Trees["tipos"].end(); it++){
@@ -52,9 +56,9 @@ Parser::~Parser() {
 }
 
 
-YAML::Node Parser::getField(string field , YAML::Node nodo){
+YAML::Node Parser::getField(string field , string subField, YAML::Node nodo){
 
-	YAML::Node result = Trees[field];
+	YAML::Node result = Trees[field][subField];
 	if (result== NULL) {
 		LOG ("Se intentó acceder al campo inexistente "+field);
 		return Trees; //acá deberia buscar un valor por defecto
@@ -69,7 +73,17 @@ YAML::Node Parser::getField(string field, YAML::Node::const_iterator it){
 	return (*it)[field];
 }
 
+void Parser::Inicializar(){
+	configGame.pantalla.alto= getField("pantalla" ,"alto", Trees).as<int>();
+	configGame.pantalla.ancho=getField("pantalla" ,"ancho", Trees).as<int>();
+}
+
+
+
 } /* namespace std */
+
+
+
 
 
 

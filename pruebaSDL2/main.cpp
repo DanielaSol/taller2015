@@ -20,7 +20,10 @@ int main(int argc, char **argv)
     Uint32 frameStart, frameTime;
 
 	Logger* myLog = new Logger();
-	Parser* myParser = new Parser();
+//	Parser* myParser = new Parser();
+
+	Parser::Instance();
+	cout << "viendo si anda el parser... "<< TheParser::Instance()->configGame.pantalla.alto<< endl;
 
 	std::cout << "game init attempt...\n";
 	if (TheGame::Instance()->init("TP of Empires", 100, 100, 640, 480, 0)) //flag por ejemplo: SDL_WINDOW_FULLSCREEN_DESKTOP
@@ -45,8 +48,9 @@ int main(int argc, char **argv)
 
     std::cout << "game closing...\n";
     TheGame::Instance()->clean();
+    TheParser::Instance()->~Parser();
     myLog->~Logger();
-    myParser->~Parser();
+  //  myParser->~Parser();
     return 0;
 }
 
