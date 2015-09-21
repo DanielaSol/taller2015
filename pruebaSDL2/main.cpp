@@ -54,7 +54,7 @@ int main(int argc, char **argv)
     std::cout << "game closing...\n";
     TheGame::Instance()->clean();
     delete myLog; // delete llama al destructor y libera la memoria. Valgrind se quejaba sino
-    //TheParser::Instance()->~Parser(); por ahora no tiene nada que liberar. El destructor lo puse privado por singleton
+    TheParser::Instance()->~Parser(); //por ahora no tiene nada que liberar. El destructor lo puse privado por singleton
 
     return 0;
 }
