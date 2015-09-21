@@ -19,6 +19,25 @@ namespace std {
 
 class Parser {
 public:
+	struct Protagonista {
+		string tipo;
+		int x;
+		int y;
+	};
+
+	struct Entidad {
+		int x;
+		int y;
+		string tipo;
+	};
+
+	struct Escenario {
+		string nombre;
+		int size_x;
+		int size_y;
+		list <Entidad> entidades;
+	};
+
 
 	struct Pantalla {
 		int ancho;
@@ -51,15 +70,14 @@ public:
 		string imagen;
 	};
 
-
-
-
-
 	struct ConfigGame {
 		Pantalla pantalla;
 		Configuracion configuracion;
 		map<string,string> imagenes;
 		map<string,ObjetoGeneral> objetos;
+		Escenario escenario;
+		Protagonista protagonista;
+
 	};
 
 	ConfigGame configGame;
@@ -91,7 +109,7 @@ public:
 	};
 
 
-private:
+//private:
 	Parser();
 	~Parser();
 

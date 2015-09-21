@@ -27,8 +27,8 @@ tipos:
      imagen: path/a/imagen.png
      fps: 10
 
-escenario: 
-   - nombre: orleans 
+escenario:
+     nombre: orleans 
      size_x: 100 
      size_y: 100 
      entidades:  
@@ -38,6 +38,6 @@ escenario:
         - {x: 30, y: 55, tipo: castillo} 
 
 protagonista: 
-   - tipo: juana_de_arco 
-     x: 50 
+     tipo: juana_de_arco
+     x: 50
      y: 50 

@@ -87,6 +87,9 @@ void Parser::Inicializar(){
 
 	YAML::Node tiposDeObjetos= getField("tipos","", Trees);
 
+	list <ObjetoGeneral> listaDeObjetos;
+
+
 	for (YAML::Node::const_iterator it = tiposDeObjetos.begin();it !=tiposDeObjetos.end(); it++){
 		ObjetoGeneral unObjeto;
 		unObjeto.nombre=getField("nombre",it).as<string>();
@@ -111,14 +114,32 @@ void Parser::Inicializar(){
 			unObjeto.animacion.delay=getField("delay",it).as<int>();
 		if (campoValido("fps",listaCampos))
 			unObjeto.animacion.fps=getField("fps",it).as<int>();
+
+		listaDeObjetos.push_back(unObjeto);
 	}
+
+
+	configGame.escenario.nombre=getField("escenario" ,"nombre", Trees).as<string>();
+	configGame.escenario.size_x=getField("escenario" ,"size_x", Trees).as<int>();
+	configGame.escenario.size_y=getField("escenario" ,"size_y", Trees).as<int>();
+
+	list <Entidad> listaDeEntidades;
+
+	YAML::Node entidades= getField("escenario","entidades", Trees);
+	for (YAML::Node::const_iterator it = entidades.begin();it !=entidades.end(); it++){
+		Entidad unaEntidad;
+
+		unaEntidad.tipo=getField("tipo",it).as<string>();
+		unaEntidad.x=getField("x",it).as<int>();
+		unaEntidad.y=getField("y",it).as<int>();
+
+		listaDeEntidades.push_back(unaEntidad);
+	}
+
+	configGame.protagonista.tipo= getField("protagonista" ,"tipo", Trees).as<string>();
+	configGame.protagonista.x= getField("protagonista" ,"x", Trees).as<int>();
+	configGame.protagonista.y= getField("protagonista" ,"y", Trees).as<int>();
 
 }
 
 } /* namespace std */
-
-
-
-
-
-
