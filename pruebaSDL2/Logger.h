@@ -28,6 +28,7 @@ public:
 	~Logger();
 
 	static void write(std::string message) ;
+
 };
 
 } /* namespace std */
