@@ -92,7 +92,7 @@ void Parser::Inicializar(){
 		unObjeto.nombre=getField("nombre",it).as<string>();
 
 		std::list<std::string> listaCampos;
-		cout << unObjeto.nombre << endl;
+
 		try{
 			listaCampos = (camposObjetos.at(unObjeto.nombre));
 		}
@@ -100,7 +100,6 @@ void Parser::Inicializar(){
 			LOG ("Se intentó cargar un objeto inválido");
 			break; // no cargo el elemento
 		}
-
 
 		if (campoValido("imagen",listaCampos))
 			unObjeto.imagen=getField("imagen",it).as<string>();
@@ -115,8 +114,6 @@ void Parser::Inicializar(){
 	}
 
 }
-
-
 
 } /* namespace std */
 

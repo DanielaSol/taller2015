@@ -21,10 +21,8 @@ int main(int argc, char **argv)
     Uint32 frameStart, frameTime;
 
 	Logger* myLog = new Logger();
-//	Parser* myParser = new Parser();
-	//Parser::Instance();
 
-	cout << "viendo si anda el parser... "<< TheParser::Instance()->configGame.pantalla.alto<< endl;
+	Parser::Instance();
 
 	std::cout << "game init attempt...\n";
 
@@ -58,6 +56,5 @@ int main(int argc, char **argv)
     delete myLog; // delete llama al destructor y libera la memoria. Valgrind se quejaba sino
     //TheParser::Instance()->~Parser(); por ahora no tiene nada que liberar. El destructor lo puse privado por singleton
 
-    //myParser->~Parser();
     return 0;
 }
