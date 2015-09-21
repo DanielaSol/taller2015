@@ -36,6 +36,7 @@ public:
 
     const Vector2D getScrollSpeed() const {return m_scrollSpeed;}
     const Vector2D getDirection() const {return m_direction;}
+    const Vector2D TranslateToWorldCoordinates(int screenX, int screenY);//NO USAR, ME ESTABA DANDO MAL Y LA ABANDONE
 
     float offsetX;
     float offsetY;
@@ -47,6 +48,8 @@ private:
 
     Vector2D m_direction;
     Vector2D m_scrollSpeed;
+
+    Vector2D buffer;
 
     //determinado por yaml
     Vector2D MAX_SCROLLSPEED;
@@ -64,6 +67,8 @@ private:
     SDL_Rect gameObjectRect; //buffer
 
     static Camera* s_pCamera;
+
+
 };
 
 typedef Camera TheCamera;

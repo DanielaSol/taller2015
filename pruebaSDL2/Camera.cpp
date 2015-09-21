@@ -13,15 +13,15 @@
 
 Camera* Camera::s_pCamera = new Camera();
 
-Camera::Camera() : m_scrollSpeed(10,10), m_direction(0,0), m_scrollMargin(30), offsetX(0.0f), offsetY(0.0f)
+Camera::Camera() : m_scrollSpeed(30,30), m_direction(0,0), m_scrollMargin(30), offsetX(0.0f), offsetY(0.0f)
 {
 }
 
 void Camera::init()
 {
 	//por yaml
-	MAX_SCROLLSPEED.setX(10);
-	MAX_SCROLLSPEED.setY(10);
+	MAX_SCROLLSPEED.setX(30);
+	MAX_SCROLLSPEED.setY(30);
 	SLOPE_X = MAX_SCROLLSPEED.getX() / (float)m_scrollMargin;
 	SLOPE_Y = MAX_SCROLLSPEED.getY() / (float)m_scrollMargin;
 
@@ -60,9 +60,33 @@ void Camera::update()
 	float dX = m_scrollSpeed.getX() * m_direction.getX();
 	float dY = m_scrollSpeed.getY() * m_direction.getY();
 	offsetX += dX;
+	/*if ((offsetY + dY < offsetX) && (dY <= 0.0f))
+	{
+		dY = offsetX/2 - offsetY;
+	}*/
 	offsetY += dY;
 
+
     //Ajusta cámara a los límites
+	/*if (offsetY < offsetX){
+		offsetY = offsetX - offsetY/2;
+	}*/
+   /* if (offsetY < (offsetX - offsetY)/ 2)//limite diagonal superior derecho
+    {
+    	offsetY = (offsetX - offsetY)/ 2;
+    }
+    if (offsetY < (-offsetX - offsetY)/ 2  - TheGame::Instance()->getGameHeight()) //limite diagonal superior izquierdo
+    {
+    	offsetY = (-offsetX - offsetY)/ 2  - TheGame::Instance()->getGameHeight();
+    }
+    if (offsetY < (offsetX - offsetY)/ 2)//limite diagonal inferior derecho
+    {
+    	offsetY = (offsetX - offsetY)/ 2;
+    }
+    if (offsetY < (offsetX - offsetY)/ 2)
+    {
+    	offsetY = (offsetX - offsetY)/ 2;
+    }*/
     if (offsetX < m_boundX_left)
     {
     	offsetX = m_boundX_left;
@@ -79,6 +103,7 @@ void Camera::update()
     {
     	offsetY = m_boundY_top;
     }
+
 }
 
 void Camera::handleInput()
@@ -114,6 +139,19 @@ void Camera::handleInput()
 	}
 
 	m_direction.normalize();
+}
+
+const Vector2D Camera::TranslateToWorldCoordinates(int screenX, int screenY) //NO USAR, ME ESTABA DANDO MAL Y LA ABANDONE
+{
+	buffer.setX(screenX);
+	buffer.setY(screenY);
+	buffer.setX(screenX  - TheGame::Instance()->TILE_WIDTH/4);
+	buffer.setY(screenY  - TheGame::Instance()->TILE_HEIGHT/4);
+	buffer.toCartesian();
+	buffer.setX((int)(buffer.getX() / TheGame::Instance()->TILE_WIDTH*2));
+	buffer.setY((int)(buffer.getY() / TheGame::Instance()->TILE_HEIGHT));
+
+	return buffer;
 }
 
 void Camera::clean()

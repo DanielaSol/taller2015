@@ -35,6 +35,9 @@ protected:
 private:
 
 	Vector2D m_direction;
+	Vector2D m_screenCoordDestination;
+	//Vector2D buffer;
+
 	bool m_bChangingDestination; //variable para evitar que el personaje se mueva teniendo apretado click derecho
 	bool m_bMoving;
 
