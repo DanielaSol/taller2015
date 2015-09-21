@@ -21,6 +21,7 @@ int main(int argc, char **argv)
 
 	Logger* myLog = new Logger();
 //	Parser* myParser = new Parser();
+<<<<<<< HEAD
 
 	Parser::Instance();
 	cout << "viendo si anda el parser... "<< TheParser::Instance()->configGame.pantalla.alto<< endl;
@@ -35,6 +36,28 @@ int main(int argc, char **argv)
 			TheGame::Instance()->update();
 			TheGame::Instance()->render();
 			frameTime = SDL_GetTicks() - frameStart;
+=======
+	//Parser::Instance();
+
+	cout << "viendo si anda el parser... "<< TheParser::Instance()->configGame.pantalla.alto<< endl;
+
+	std::cout << "game init attempt...\n";
+
+	if (TheGame::Instance()->init("TP of Empires", 400, 150, 640, 480, 0)) //flag por ejemplo: SDL_WINDOW_FULLSCREEN_DESKTOP
+			{
+		std::cout << "game init success!\n";
+		while (TheGame::Instance()->running()) {
+		
+			frameStart = SDL_GetTicks();
+			
+			TheGame::Instance()->handleEvents();
+			TheGame::Instance()->update();
+			TheGame::Instance()->render();
+			
+			frameTime = SDL_GetTicks() - frameStart;
+			
+			//std::cout << "FPS = " << 1/ (frameTime/1000.0f) << "\n";
+>>>>>>> 88e1ab52d787b081368f57e24c0232b88d97f459
 			if (frameTime < DELAY_TIME) {
 				SDL_Delay((int) ((DELAY_TIME - frameTime)));
             }
@@ -48,10 +71,15 @@ int main(int argc, char **argv)
 
     std::cout << "game closing...\n";
     TheGame::Instance()->clean();
+<<<<<<< HEAD
     TheParser::Instance()->~Parser();
     myLog->~Logger();
   //  myParser->~Parser();
+=======
+    delete myLog; // delete llama al destructor y libera la memoria. Valgrind se quejaba sino
+    //TheParser::Instance()->~Parser(); por ahora no tiene nada que liberar. El destructor lo puse privado por singleton
+
+    //myParser->~Parser();
+>>>>>>> 88e1ab52d787b081368f57e24c0232b88d97f459
     return 0;
 }
-
-

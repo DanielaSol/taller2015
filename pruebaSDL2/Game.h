@@ -18,9 +18,11 @@
 class Game
 {
 public:
+	//constantes globales
+	const int TILE_WIDTH = 64;
+	const int TILE_HEIGHT = 32;
 
 	//Singleton
-
     static Game* Instance()
     {
         if(s_pInstance == 0)
@@ -49,6 +51,9 @@ public:
 
     int getGameWidth() const { return m_gameWidth; }
     int getGameHeight() const { return m_gameHeight; }
+
+    float getMapWidth() const;
+    float getMapHeight() const;
 
 private:
 

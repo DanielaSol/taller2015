@@ -34,7 +34,7 @@ public:
     void setDirection(const Vector2D& direction) { m_direction = direction; }
     void setVelocity(const Vector2D& velocity) { m_scrollSpeed = velocity; }
 
-    const Vector2D getVelocity() const {return m_scrollSpeed;}
+    const Vector2D getScrollSpeed() const {return m_scrollSpeed;}
     const Vector2D getDirection() const {return m_direction;}
 
     float offsetX;
@@ -45,12 +45,15 @@ private:
     Camera();
     ~Camera();
 
-
-
     Vector2D m_direction;
     Vector2D m_scrollSpeed;
 
-    int m_margin; // margen
+    //determinado por yaml
+    Vector2D MAX_SCROLLSPEED;
+    float SLOPE_X; // pendiente de la recta para calcular la velocidad. Uso interno, pero en principio constante
+    float SLOPE_Y;
+
+    int m_scrollMargin; // margen
 
     //límites
     int m_boundY_top;

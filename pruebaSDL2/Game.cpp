@@ -46,6 +46,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
     if(SDL_Init(SDL_INIT_EVERYTHING) == 0)
     {
         cout << "SDL init success\n";
+
         // init the window
         m_pWindow = SDL_CreateWindow(title, xpos, ypos, width, height, SDL_WINDOW_flag);
 
@@ -148,6 +149,15 @@ void Game::clean()
     SDL_DestroyWindow(m_pWindow);
     SDL_DestroyRenderer(m_pRenderer);
     SDL_Quit();
+}
+
+float Game::getMapWidth() const
+{
+	return m_pMap->getMapSize().getX();
+}
+float Game::getMapHeight() const
+{
+	return m_pMap->getMapSize().getY();
 }
 
 

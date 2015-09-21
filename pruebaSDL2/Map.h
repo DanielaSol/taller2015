@@ -11,7 +11,6 @@
 
 class Map
 {
-friend class GameObject;
 
 public:
 	Map();
