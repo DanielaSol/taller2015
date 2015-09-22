@@ -105,3 +105,14 @@ void Map::placeTile(int gridPosX, int gridPosY, int tileID)
 
 }
 
+void Map::setValue(int x, int y,int valor){
+
+	m_mapGrid[x][y] = valor;
+}
+
+int Map::getValue(int x, int y){
+
+	return m_mapGrid[x][y];
+
+}
+

@@ -98,15 +98,16 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
     for (int i=0;i<5;i++){
     	for(int j=0;j<5;j++){
     		if((i+j)<5)
-    		 cargarEntidad(i,j,65,128,65,128,1,8,2,0,128,"arbol");
+    		 cargarEntidad(i,j,65,128,65,128,1,8,2,0,128,1,1,"arbol");
     		else
-    		{cargarEntidad(i,j,65,128,65,128,1,8,1,0,128,"arbol");}
+    		{cargarEntidad(i,j,65,128,65,128,1,8,1,0,128,1,1,"arbol");}
     	}
     }
 
-    cargarEntidad(2,9,192,224,130,151.66f,1,1,0,130/4,151,"casa");
-    cargarEntidad(5,6,192,224,130,151.66f,1,1,0,130/4,151,"casa");
-    cargarEntidad(5,9,192,224,130,151.66f,1,1,0,130/4,151,"casa");
+    cargarEntidad(2,9,192,224,130,151.66f,1,1,0,130/4,151,2,2,"casa");
+    cargarEntidad(5,6,192,224,130,151.66f,1,1,0,130/4,151,2,2,"casa");
+    cargarEntidad(5,9,192,224,130,151.66f,1,1,0,130/4,151,2,2,"casa");
+    cargarEntidad(5,10,192,224,130,151.66f,1,1,0,130/4,151,2,2,"casa");
 
 
     TheCamera::Instance()->init();
@@ -191,8 +192,19 @@ float Game::getMapHeight() const
 }
 
 void Game::cargarEntidad(int posx,int posy,int width,int height,int destWidth,
-				int destHeight,int numFrames,int row,int frame,int offsetX,int offsetY,std::string nombre)
+				int destHeight,int numFrames,int row,int frame,int offsetX,int offsetY,
+				int longBase,int longAlt,std::string nombre)
 {
+	for(int i=posx;i<posx +longBase;i++){
+			for(int j=posy;j<posy+longAlt;j++){
+				if(m_pMap->getValue(i,j) == 0)
+					{
+						printf("TILE OCUPADO, NO ES POSIBLE UBICAR \n");
+						return;
+					}
+				else{m_pMap->setValue(i,j,0);}
+		}
+	}
 
 	cantDeEntidades += 1;
 	entidades.resize(cantDeEntidades);
@@ -210,6 +222,9 @@ void Game::cargarEntidad(int posx,int posy,int width,int height,int destWidth,
 	entidades[cantDeEntidades -1]->setRow(row);
 	entidades[cantDeEntidades -1]->setFrame(frame);
 	entidades[cantDeEntidades -1]->setOffset(offsetX,offsetY);
+
+
+
 	delete vec;
 
 }

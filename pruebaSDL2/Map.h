@@ -22,6 +22,8 @@ public:
 	void update();
 	void handleInput();
 	void clean();
+	void setValue(int,int,int);
+	int getValue(int,int);
 
 	std::string getName() { return m_mapName; }
 	Vector2D& getMapSize() { return m_mapSize; }

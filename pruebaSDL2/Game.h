@@ -42,7 +42,8 @@ public:
     void handleEvents();
     void clean();
     void cargarEntidad(int posx,int posy,int width,int height,int destWidth,int destHeight,
-    				int numFrames,int row,int frame,int offsetX,int offsetY,std::string nombre);
+    				int numFrames,int row,int frame,int offsetX,int offsetY,int longBase,
+    				int longAlt, std::string nombre);
 
     SDL_Renderer* getRenderer() const { return m_pRenderer; }
     SDL_Window* getWindow() const { return m_pWindow; }
