@@ -140,6 +140,8 @@ void Parser::Inicializar(){
 	configGame.protagonista.x= getField("protagonista" ,"x", Trees).as<int>();
 	configGame.protagonista.y= getField("protagonista" ,"y", Trees).as<int>();
 
+
+
 }
 
 } /* namespace std */

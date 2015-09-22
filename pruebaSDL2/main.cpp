@@ -22,7 +22,7 @@ int main(int argc, char **argv)
 
 	Logger* myLog = new Logger();
 
-	Parser::Instance();
+	TheParser::Instance();
 
 	std::cout << "game init attempt...\n";
 
