@@ -16,9 +16,9 @@ m_bMoving(false)
 {
 }
 
-void Unit::load(int x, int y, int width, int height, int numFrames, std::string textureID)
+void Unit::load(int x, int y, int width, int height,int destWidth, int destHeight, int numFrames, std::string textureID)
 {
-    GameObject::load(x, y, width, height, numFrames, textureID);
+    GameObject::load(x, y, width, height, destWidth, destHeight, numFrames, textureID);
 
     //
 	//m_destination.setX(m_screenPosition.getX());
@@ -35,8 +35,10 @@ void Unit::draw()
 		aumentarFrame();
 		checkSpriteDirection();
 	}
+	TheTextureManager::Instance()->drawFrame(m_textureID, m_screenPosition.getX() - TheCamera::Instance()->offsetX - m_destWidth/2,
+												m_screenPosition.getY()  - TheCamera::Instance()->offsetY - m_destHeight/1.5f,
+												m_width, m_height,m_destWidth,m_destHeight, m_currentRow, m_currentFrame, TheGame::Instance()->getRenderer());
 
-	GameObject::draw();
 }
 
 void Unit::update(){

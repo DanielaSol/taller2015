@@ -11,13 +11,15 @@
 #include "Game.h"
 #include "Camera.h"
 
-void GameObject::load(int x, int y, int width, int height, int numFrames, std::string textureID)
+void GameObject::load(int x, int y, int width, int height,int destWidth, int destHeight, int numFrames, std::string textureID)
 {
-	m_mapPosition = Vector2D(0,0);
+	m_mapPosition = Vector2D(x,y);
 	m_screenPosition = Vector2D(m_mapPosition.m_x * TheGame::Instance()->TILE_WIDTH/2 - TheGame::Instance()->TILE_WIDTH/2 - width/2,
 								m_mapPosition.m_y * TheGame::Instance()->TILE_HEIGHT - TheGame::Instance()->TILE_HEIGHT/2 - height/2);
 	m_width = width;
 	m_height = height;
+	m_destWidth = destWidth;
+	m_destHeight = destHeight;
 	m_numFrames = numFrames;
 	m_textureID = textureID;
 
@@ -27,10 +29,11 @@ void GameObject::load(int x, int y, int width, int height, int numFrames, std::s
 
 void GameObject::draw()
 {
-	//Agrega offset de camera
-	TheTextureManager::Instance()->drawFrame(m_textureID, m_screenPosition.getX() - TheCamera::Instance()->offsetX - m_width/2,
-											m_screenPosition.getY()  - TheCamera::Instance()->offsetY - m_height/1.5f,
-											m_width, m_height, m_currentRow, m_currentFrame, TheGame::Instance()->getRenderer());
+	//Agrega offset de camera y offset de objeto a dibujar
+
+	TheTextureManager::Instance()->drawFrame(m_textureID, m_mapPosition.getX() - TheCamera::Instance()->offsetX - offsetX,
+			m_mapPosition.getY()  - TheCamera::Instance()->offsetY - offsetY,
+			m_width, m_height,m_destWidth,m_destHeight, m_currentRow, m_currentFrame, TheGame::Instance()->getRenderer());
 }
 
 void GameObject::update()
@@ -49,4 +52,17 @@ void GameObject::clean()
 
 void GameObject::aumentarFrame(){
 
+}
+
+void GameObject::setRow(int row){
+	m_currentRow = row;
+}
+
+void GameObject::setFrame(int frame){
+	m_currentFrame = frame;
+}
+
+void GameObject::setOffset(int x, int y){
+	offsetX = x;
+	offsetY = y;
 }

@@ -32,7 +32,7 @@ public:
 
 	virtual ~GameObject() {}
 
-	virtual void load(int x, int y, int width, int height, int numFrames, std::string textureID);
+	virtual void load(int x, int y, int width, int height,int destWidth, int destHeight, int numFrames, std::string textureID);
 
 	virtual void draw();
 
@@ -41,6 +41,12 @@ public:
 	virtual void handleInput();
 
 	virtual void clean();
+
+	virtual void setRow(int row);
+
+	virtual void setFrame(int frame);
+
+	virtual void setOffset(int x, int y);
 
 	// aumenta el frame a animar
 	virtual void aumentarFrame();
@@ -74,6 +80,14 @@ protected:
     // size variables
     int m_width;
     int m_height;
+
+    // destiny size
+    int m_destWidth;
+    int m_destHeight;
+
+    // punto desde donde se dibuja
+    int offsetX;
+    int offsetY;
 
     // animation variables
     int m_currentRow;

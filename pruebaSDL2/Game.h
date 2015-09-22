@@ -41,6 +41,8 @@ public:
     void update();
     void handleEvents();
     void clean();
+    void cargarEntidad(int posx,int posy,int width,int height,int destWidth,int destHeight,
+    				int numFrames,int row,int frame,int offsetX,int offsetY,std::string nombre);
 
     SDL_Renderer* getRenderer() const { return m_pRenderer; }
     SDL_Window* getWindow() const { return m_pWindow; }
@@ -61,6 +63,7 @@ private:
     //Yo pense en hacer la clase Player referente al jugador físico, a la persona.
     GameObject* m_pAldeano_test; // será un Unit,
     Map* m_pMap;
+    std::vector<GameObject*> entidades;
 
     SDL_Window* m_pWindow;
     SDL_Renderer* m_pRenderer;
@@ -71,6 +74,7 @@ private:
 
     int m_gameWidth;
     int m_gameHeight;
+    int cantDeEntidades;
 
     Game(); // Singleton --> Contructor y destructor privados
     ~Game();

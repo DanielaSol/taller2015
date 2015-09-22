@@ -13,7 +13,7 @@ public:
 	virtual ~Unit(){}
 
 	//funciones básicas
-	virtual void load(int x, int y, int width, int height, int numFrames, std::string textureID);
+	virtual void load(int x, int y, int width, int height,int destWidth,int destHeight, int numFrames, std::string textureID);
 	virtual void draw();
 	virtual void update();
 	virtual void handleInput();
