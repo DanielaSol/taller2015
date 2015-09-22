@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 
 	std::cout << "game init attempt...\n";
 
-	if (TheGame::Instance()->init("TP of Empires", 400, 150, 640, 480, 0)) //flag por ejemplo: SDL_WINDOW_FULLSCREEN_DESKTOP
+	if (TheGame::Instance()->init("TP of Empires", 400, 150, TheParser::Instance()->configGame.pantalla.ancho, TheParser::Instance()->configGame.pantalla.alto, 0)) //flag por ejemplo: SDL_WINDOW_FULLSCREEN_DESKTOP
 			{
 		std::cout << "game init success!\n";
 		while (TheGame::Instance()->running()) {

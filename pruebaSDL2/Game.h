@@ -13,6 +13,7 @@
 
 #include "Map.h"
 #include "GameObject.h"
+#include "Logger.h"
 #include "SDL_image.h"
 
 class Game

@@ -86,10 +86,11 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 	TheTextureManager::Instance()->load("assets/Terrain_tileset.png","arbol",m_pRenderer);
 	TheTextureManager::Instance()->load("assets/casa3.png","casa",m_pRenderer);
 	m_pAldeano_test = new Unit();
-	m_pAldeano_test->load(10, 10, 125, 168, 70, 84.08, 5, "animate");
+	m_pAldeano_test->load(10, 10, 125, 168, 40, 53.76f, 5, "animate");
 
     m_pMap = new Map();
     m_pMap->load();
+
 
     //Estos datos 'hardcodeados' se deben ingresar por el archivo yaml (posicion en el mapa,
     // y string que indique que es, una ves que se sabe el string, es decir el nombre del objeto
@@ -109,6 +110,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
     cargarEntidad(5,9,192,224,130,151.66f,1,1,0,130/4,151,2,2,"casa");
     cargarEntidad(5,10,192,224,130,151.66f,1,1,0,130/4,151,2,2,"casa");
 
+    cargarEntidad(10,10,192,224,130,151.66f,1,1,0,130/4,151,2,2,"casa");
 
     TheCamera::Instance()->init();
 
@@ -199,7 +201,7 @@ void Game::cargarEntidad(int posx,int posy,int width,int height,int destWidth,
 			for(int j=posy;j<posy+longAlt;j++){
 				if(m_pMap->getValue(i,j) == 0)
 					{
-						printf("TILE OCUPADO, NO ES POSIBLE UBICAR \n");
+						LOG("TILE OCUPADO, NO ES POSIBLE UBICAR \n");
 						return;
 					}
 				else{m_pMap->setValue(i,j,0);}
