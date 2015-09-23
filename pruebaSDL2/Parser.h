@@ -96,7 +96,10 @@ public:
 
 	YAML::Node getField(std::string field, std::string subField, YAML::Node nodo);
 	YAML::Node getField(string field, YAML::Node::const_iterator it);
-
+	void setField(std::string field, std::string subField,  YAML::Node nodo, int& aSetear);
+	void setField(std::string field, std::string subField,  YAML::Node nodo, string& aSetear);
+	void setField(std::string field, YAML::Node::const_iterator it, string& aSetear);
+	void setField(string field, YAML::Node::const_iterator it, int& aSetear);
 
 	std::map<std::string, std::list<std::string>> const camposObjetos {
 	   { "arbol", {"imagen"}},

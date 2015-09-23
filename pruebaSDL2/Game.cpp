@@ -40,8 +40,11 @@ Game::~Game()
 bool Game::init(const char* title, int xpos, int ypos, int width, int height, int SDL_WINDOW_flag)
 {
     // store the game width and height
-    m_gameWidth = width;
-    m_gameHeight = height;
+   // m_gameWidth = width;
+   // m_gameHeight = height;
+
+	 m_gameWidth = 800;
+	 m_gameHeight = 800;
 
     // attempt to initialise SDL
     if(SDL_Init(SDL_INIT_EVERYTHING) == 0)
@@ -201,7 +204,7 @@ void Game::cargarEntidad(int posx,int posy,int width,int height,int destWidth,
 			for(int j=posy;j<posy+longAlt;j++){
 				if(m_pMap->getValue(i,j) == 0)
 					{
-						LOG("TILE OCUPADO, NO ES POSIBLE UBICAR \n");
+						LOG("TILE OCUPADO, NO ES POSIBLE UBICAR");
 						return;
 					}
 				else{m_pMap->setValue(i,j,0);}

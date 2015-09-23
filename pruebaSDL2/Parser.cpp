@@ -10,29 +10,39 @@
 #include <iostream>
 #include "yaml-cpp/yaml.h"
 #include "Logger.h"
+#include "yaml-cpp/exceptions.h"
 
 
 namespace std {
 
 YAML::Node Trees;
+YAML::Node DefaultTrees;
 Parser* Parser::parInstance = 0;
 
 Parser::Parser() {
-	std::ifstream fileYaml( FILE_YAML );
 
-	if (fileYaml){
-
+	try{
 		Trees=YAML::LoadFile(FILE_YAML);
-		Inicializar();
-
 	}
-	else
-		LOG("No puede abrirse el archivo " FILE_YAML " se cargará el archivo de configuración por defecto");
+	catch (YAML::BadFile& e){
+		 LOG("NO PUEDE ABRIRSE EL ARCHIVO " FILE_YAML ", SE CARGARÁ EL ARCHIVO DE CONFIGURACIÓN POR DEFECTO");
+		 try{
+		 		Trees=YAML::LoadFile(FILE_YAML_DEFAULT);
+		 	}
+		 	catch (YAML::BadFile& e){
+		 		LOG("NO PUDO ABRIRSE EL ARCHIVO " FILE_YAML_DEFAULT " EL PROGRAMA SE INTERRUMPIRÁ");
+		 		exit (1);
+		 	}
+	}
+
+	DefaultTrees=YAML::LoadFile(FILE_YAML_DEFAULT);
+
+	Inicializar();
 
 }
 
 Parser::~Parser() {
-	// TODO Auto-generated destructor stub
+
 }
 
 
@@ -40,30 +50,84 @@ YAML::Node Parser::getField(string field , string subField, YAML::Node nodo){
 
 	YAML::Node result;
 	if (subField.empty())
-		result = Trees[field];
+		result = nodo[field];
 	else
-		result = Trees[field][subField];
+		result = nodo[field][subField];
 
 	if (result== NULL) {
-		LOG ("Se intentó acceder al campo inexistente "+field);
-		return Trees; //acá deberia buscar un valor por defecto
+		LOG ("SE INTENTÓ ACCEDER AL CAMPO INEXISTENTE "+field);
+		return nodo; //acá deberia buscar un valor por defecto
 	}
 	else
 		return result;
 
 }
+
+
+void Parser::setField(std::string field, std::string subField, YAML::Node nodo, int& aSetear){
+
+	try{
+		aSetear=getField(field ,subField, nodo).as<int>();
+	}
+	catch (YAML::TypedBadConversion<int>& e){
+		LOG ("ERROR DE TIPO EN CAMPO " + field + " " + subField + ", SE CARGARÁ VALOR POR DEFECTO PARA EL MISMO");
+		aSetear=getField(field ,subField, DefaultTrees).as<int>();
+	}
+}
+
+void Parser::setField(std::string field, std::string subField, YAML::Node nodo, string& aSetear){
+
+	try{
+		aSetear=getField(field ,subField, nodo).as<string>();
+	}
+	catch (YAML::TypedBadConversion<string>& e){
+		LOG ("ERROR DE TIPO EN CAMPO " + field + " " + subField + ", SE CARGARÁ VALOR POR DEFECTO PARA EL MISMO");
+		aSetear=getField(field ,subField, DefaultTrees).as<string>();
+	}
+}
+
+
+void Parser::setField(string field, YAML::Node::const_iterator it, string& aSetear){
+
+	try{
+		aSetear=getField(field, it).as<string>();
+	}
+	catch (YAML::TypedBadConversion<string>& e){
+		LOG ("ERROR DE TIPO EN CAMPO " + field +", SE CARGARÁ VALOR POR DEFECTO PARA EL MISMO");
+		aSetear=getField(field , "", DefaultTrees).as<string>();
+	}
+}
+
+
+void Parser::setField(string field, YAML::Node::const_iterator it, int& aSetear){
+
+	try{
+		aSetear=getField(field, it).as<int>();
+	}
+	catch (YAML::TypedBadConversion<int>& e){
+		LOG ("ERROR DE TIPO EN CAMPO " + field +", SE CARGARÁ VALOR POR DEFECTO PARA EL MISMO");
+		aSetear=getField(field , "", DefaultTrees).as<int>();
+	}
+}
+
+
+
+
+
 
 YAML::Node Parser::getField(string field, YAML::Node::const_iterator it){
 	YAML::Node result;
 	result = (*it)[field];
 	if (result== NULL) {
-		LOG ("Se intentó acceder al campo inexistente "+field);
+		LOG ("SE INTENTÓ ACCEDER AL CAMPO INEXISTENTE "+field);
 		return Trees; //acá deberia buscar un valor por defecto
 	}
 	else
 		return result;
 
+
 }
+
 
 bool campoValido (string field,list<string> listaCampos ){
 
@@ -80,10 +144,12 @@ bool campoValido (string field,list<string> listaCampos ){
 }
 
 void Parser::Inicializar(){
-	configGame.pantalla.alto= getField("pantalla" ,"alto", Trees).as<int>();
-	configGame.pantalla.ancho=getField("pantalla" ,"ancho", Trees).as<int>();
-	configGame.configuracion.vel_personaje=getField("configuracion", "vel_personaje", Trees).as<int>();
-	configGame.configuracion.margen_scroll=getField("configuracion", "margen_scroll", Trees).as<int>();
+
+	setField("pantalla" ,"alto", Trees,configGame.pantalla.alto);
+	setField("pantalla" ,"ancho", Trees,configGame.pantalla.ancho);
+	setField("configuracion" ,"vel_personaje", Trees,configGame.configuracion.vel_personaje);
+	setField("configuracion" ,"margen_scroll", Trees,configGame.configuracion.margen_scroll);
+
 
 	YAML::Node tiposDeObjetos= getField("tipos","", Trees);
 
@@ -92,36 +158,36 @@ void Parser::Inicializar(){
 
 	for (YAML::Node::const_iterator it = tiposDeObjetos.begin();it !=tiposDeObjetos.end(); it++){
 		ObjetoGeneral unObjeto;
-		unObjeto.nombre=getField("nombre",it).as<string>();
+
+		setField("nombre",it,unObjeto.nombre);
 
 		std::list<std::string> listaCampos;
 
 		try{
 			listaCampos = (camposObjetos.at(unObjeto.nombre));
 		}
-		catch(int e){
-			LOG ("Se intentó cargar un objeto inválido");
+		catch(std::out_of_range& e){
+			LOG ("SE INTENTÓ CARGAR UN OBJETO INVÁLIDO "+unObjeto.nombre);
 			break; // no cargo el elemento
 		}
 
 		if (campoValido("imagen",listaCampos))
-			unObjeto.imagen=getField("imagen",it).as<string>();
+			setField("imagen",it,unObjeto.imagen);
 		if (campoValido("alto",listaCampos))
-			unObjeto.alto=getField("alto",it).as<int>();
+			setField("alto",it,unObjeto.alto);
 		if (campoValido("ancho",listaCampos))
-			unObjeto.ancho=getField("ancho",it).as<int>();
+			setField("ancho",it,unObjeto.ancho);
 		if (campoValido("delay",listaCampos))
-			unObjeto.animacion.delay=getField("delay",it).as<int>();
+			setField("delay",it,unObjeto.animacion.delay);
 		if (campoValido("fps",listaCampos))
-			unObjeto.animacion.fps=getField("fps",it).as<int>();
+			setField("fps",it,unObjeto.animacion.fps);
 
 		listaDeObjetos.push_back(unObjeto);
 	}
 
-
-	configGame.escenario.nombre=getField("escenario" ,"nombre", Trees).as<string>();
-	configGame.escenario.size_x=getField("escenario" ,"size_x", Trees).as<int>();
-	configGame.escenario.size_y=getField("escenario" ,"size_y", Trees).as<int>();
+	setField("escenario" ,"nombre", Trees,configGame.escenario.nombre);
+	setField("escenario" ,"size_x", Trees,configGame.escenario.size_x);
+	setField("escenario" ,"size_y", Trees,configGame.escenario.size_y);
 
 	list <Entidad> listaDeEntidades;
 
@@ -139,7 +205,6 @@ void Parser::Inicializar(){
 	configGame.protagonista.tipo= getField("protagonista" ,"tipo", Trees).as<string>();
 	configGame.protagonista.x= getField("protagonista" ,"x", Trees).as<int>();
 	configGame.protagonista.y= getField("protagonista" ,"y", Trees).as<int>();
-
 
 
 }
