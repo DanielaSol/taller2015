@@ -15,6 +15,8 @@
 #include "GameObject.h"
 #include "Logger.h"
 #include "SDL_image.h"
+#include <iostream>
+using namespace std;
 
 class Game
 {
@@ -51,6 +53,9 @@ public:
 
     bool running() { return m_bRunning; }
 
+    void restart(); //Al presionar Q
+    bool m_bQuiting;
+
     void quit() { m_bRunning = false; }
 
     int getGameWidth() const { return m_gameWidth; }
@@ -77,6 +82,33 @@ private:
     int m_gameWidth;
     int m_gameHeight;
     int cantDeEntidades;
+
+	bool initGame();
+	void orderGameObjects();
+
+	struct CompareGameObject
+	{
+		inline bool operator()(const GameObject* obj1, const GameObject* obj2)
+		{
+			int obj1_value = obj1->m_mapPosition.m_x + obj1->m_mapPosition.m_y;
+			int obj2_value = obj2->m_mapPosition.m_x + obj2->m_mapPosition.m_y;
+			cout << obj2_value << "\n";
+			if ( obj1_value < obj2_value)
+				return true;
+
+			if (obj1_value > obj2_value)
+				return false;
+
+			if (obj1_value == obj2_value)
+			{
+				if (obj1->m_mapPosition.m_y <= obj2->m_mapPosition.m_y)
+					return true;
+				else
+					return false;
+			}
+			return true;
+		}
+	};
 
     Game(); // Singleton --> Contructor y destructor privados
     ~Game();

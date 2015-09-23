@@ -14,6 +14,7 @@
 #include "GameObject.h"
 #include "Camera.h"
 #include "Map.h"
+#include<algorithm>
 
 using namespace std;
 
@@ -25,6 +26,7 @@ Game::Game():
 m_pWindow(0),
 m_pRenderer(0),
 m_bRunning(false),
+m_bQuiting(false),
 cantDeEntidades(0)
 {
 }
@@ -40,9 +42,6 @@ Game::~Game()
 bool Game::init(const char* title, int xpos, int ypos, int width, int height, int SDL_WINDOW_flag)
 {
     // store the game width and height
-   // m_gameWidth = width;
-   // m_gameHeight = height;
-
 	 m_gameWidth = 800;
 	 m_gameHeight = 800;
 
@@ -82,12 +81,28 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
         return false; // SDL init fail
     }
 
+    if (!initGame())
+    	return false;
+
+    TheCamera::Instance()->init();
+
+    m_bRunning = true; // everything inited successfully, start the main loop
+
+    return true;
+}
+
+//init Game inicializa el estado del juego. Lo deberia hacer desde el archivo yaml
+bool Game::initGame()
+{
     //CARGA EL ALDEANO, PROBABLEMENTE SE CAMBIE DE LUGAR
 
 	if(!TheTextureManager::Instance()->load("assets/GoblinWalk.png","animate", m_pRenderer))
 		return false;
-	TheTextureManager::Instance()->load("assets/Terrain_tileset.png","arbol",m_pRenderer);
-	TheTextureManager::Instance()->load("assets/casa3.png","casa",m_pRenderer);
+	if (!TheTextureManager::Instance()->load("assets/Terrain_tileset.png","arbol",m_pRenderer))
+		return false;
+	if (!TheTextureManager::Instance()->load("assets/casa3.png","casa",m_pRenderer))
+		return false; // PODRIA HACER QUE CUANDO NO ENCUANTRA UNA DE ESTAS IMAGENES CARGUE ALGUNA POR DEFECTO
+
 	m_pAldeano_test = new Unit();
 	m_pAldeano_test->load(10, 10, 125, 168, 40, 53.76f, 5, "animate");
 
@@ -115,11 +130,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 
     cargarEntidad(10,10,192,224,130,151.66f,1,1,0,130/4,151,2,2,"casa");
 
-    TheCamera::Instance()->init();
-
-    ////////////////////////////////////////////////////////////////////////////////
-
-    m_bRunning = true; // everything inited successfully, start the main loop
+   entidades.push_back(m_pAldeano_test);
 
     return true;
 }
@@ -127,16 +138,16 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 
 void Game::render()
 {
-
 	SDL_RenderClear(m_pRenderer);
 
 	//m_pGameStateMachine->render();// Dejo esto por si despues implementamos maquinaa finita de estados para los estados de jeugo: menu, etc
     m_pMap->draw();
     //primero dibuja entidades, luego el personaje (siempre aparece por arriba de las cosas
-    for (int i=0;i<cantDeEntidades;i++){
-    	entidades[i]->draw();
+    for (int i=0;i<entidades.size();i++){
+    	if (entidades[i])
+    		entidades[i]->draw();
     }
-    m_pAldeano_test->draw();
+   // m_pAldeano_test->draw();
 
     SDL_RenderPresent(m_pRenderer);
 
@@ -146,6 +157,8 @@ void Game::update()
 {
 	TheCamera::Instance()->update();
 		//m_pGameStateMachine->update();
+	//sort(entidades.begin(), entidades.end(), CompareGameObject());
+
 	m_pAldeano_test->update();
 	m_pMap->update();
 }
@@ -153,6 +166,15 @@ void Game::update()
 void Game::handleEvents()
 {
 	TheInputHandler::Instance()->update();
+
+    if(!m_bQuiting)
+    {
+        if(TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_Q))
+        {
+            restart();
+            return;
+        }
+    }
 
 	TheCamera::Instance()->handleInput();
 
@@ -171,11 +193,12 @@ void Game::clean()
    // delete m_pGameStateMachine;
     m_pAldeano_test->clean();
     m_pMap->clean();
-    for(int i=0;i<cantDeEntidades;i++){
-    	entidades[i]->clean();
+    for(int i = 0; i < entidades.size(); i++){
+    	if (entidades [i])
+    		entidades[i]->clean();
     	delete entidades[i];
     }
-
+    entidades.clear();
 
     delete m_pAldeano_test;
     delete m_pMap;
@@ -214,8 +237,8 @@ void Game::cargarEntidad(int posx,int posy,int width,int height,int destWidth,
 	cantDeEntidades += 1;
 	entidades.resize(cantDeEntidades);
 	posx += 1;posy +=1; //por alguna razon esta corrida un espacio (chequear)
-	float possx = posx * 32;
-	float possy = posy * 32;
+	float possx = posx * TILE_WIDTH/2;
+	float possy = posy * TILE_HEIGHT;
 	Vector2D* vec = new Vector2D(0,0);
 	vec->setX(possx);
 	vec->setY(possy);
@@ -228,10 +251,33 @@ void Game::cargarEntidad(int posx,int posy,int width,int height,int destWidth,
 	entidades[cantDeEntidades -1]->setFrame(frame);
 	entidades[cantDeEntidades -1]->setOffset(offsetX,offsetY);
 
-
-
 	delete vec;
+}
 
+void Game::restart() //Con Q
+{
+	m_bQuiting = true;
+	//LIMPIA EL ESTADO DEL JUEGO
+   m_pAldeano_test->clean();
+   m_pMap->clean();
+   for(int i=0;i < cantDeEntidades ;i++){
+	   if (entidades[i])
+	   {
+			entidades[i]->clean();
+			delete entidades[i];
+	   }
+	}
+   entidades.clear();
+	delete m_pAldeano_test;
+	delete m_pMap;
+
+	TheTextureManager::Instance()->clearTextureMap();
+	TheInputHandler::Instance()->reset();
+	TheCamera::Instance()->reset();
+
+	//Reinicializa el juego
+	initGame();
+	m_bQuiting = false;
 }
 
 
