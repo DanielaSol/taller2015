@@ -150,6 +150,12 @@ const Vector2D Camera::TranslateToWorldCoordinates(int screenX, int screenY) //N
 	return buffer;
 }
 
+void Camera::reset()
+{
+	offsetX = 0;
+	offsetY = 0;
+}
+
 void Camera::clean()
 {
 }

@@ -66,3 +66,25 @@ void GameObject::setOffset(int x, int y){
 	offsetX = x;
 	offsetY = y;
 }
+
+
+bool GameObject::operator< (const  GameObject &obj2)
+{
+	int obj1_value = (int)(*this).m_mapPosition.m_x + (int)(*this).m_mapPosition.m_y;
+	int obj2_value = (int)obj2.m_mapPosition.m_x + (int)obj2.m_mapPosition.m_y;
+
+	if ( obj1_value < obj2_value)
+		return true;
+
+	if (obj1_value > obj2_value)
+		return false;
+
+	if (obj1_value == obj2_value)
+	{
+		if ((*this).m_mapPosition.m_y <= obj2.m_mapPosition.m_y)
+			return true;
+		else
+			return false;
+	}
+	return true;
+}

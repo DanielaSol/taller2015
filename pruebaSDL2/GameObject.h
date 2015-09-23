@@ -68,13 +68,16 @@ public:
 
     void setSelected(bool selected) { m_bSelected = selected; }
 
+    Vector2D m_mapPosition;
+
+    bool operator< (const GameObject &obj2);
+
 protected:
 
     // "Age" Variables
     bool m_bSelected;
 
     // movement variables
-    Vector2D m_mapPosition;
     Vector2D m_screenPosition;
 
     // size variables

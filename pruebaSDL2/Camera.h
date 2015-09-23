@@ -29,6 +29,8 @@ public:
     void handleInput();
     void clean();
 
+    void reset();
+
     bool isVisible(int mapPosX, int mapPosY);
 
     void setDirection(const Vector2D& direction) { m_direction = direction; }
