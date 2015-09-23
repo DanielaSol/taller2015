@@ -106,13 +106,18 @@ void Parser::setField(string field, YAML::Node::const_iterator it, int& aSetear)
 	}
 	catch (YAML::TypedBadConversion<int>& e){
 		LOG ("ERROR DE TIPO EN CAMPO " + field +", SE CARGARÁ VALOR POR DEFECTO PARA EL MISMO");
-		aSetear=getField(field , "", DefaultTrees).as<int>();
+		if (field == "x" ){
+			srand (time(NULL));
+			aSetear = rand() % configGame.escenario.size_x + 1;
+		}
+		else if (field == "y"){
+			srand (time(NULL));
+			aSetear = rand() % configGame.escenario.size_y + 1;
+		}
+		else
+			aSetear=getField(field , "", DefaultTrees).as<int>();
 	}
 }
-
-
-
-
 
 
 YAML::Node Parser::getField(string field, YAML::Node::const_iterator it){
@@ -195,17 +200,24 @@ void Parser::Inicializar(){
 	for (YAML::Node::const_iterator it = entidades.begin();it !=entidades.end(); it++){
 		Entidad unaEntidad;
 
-		unaEntidad.tipo=getField("tipo",it).as<string>();
-		unaEntidad.x=getField("x",it).as<int>();
-		unaEntidad.y=getField("y",it).as<int>();
+		setField("tipo",it,unaEntidad.tipo);
+		try{
+			(camposObjetos.at(unaEntidad.tipo));
+		}
+		catch(std::out_of_range& e){
+			LOG ("SE INTENTÓ CARGAR UN OBJETO INVÁLIDO "+unaEntidad.tipo);
+			break; // no cargo el elemento
+		}
+
+		setField("x",it,unaEntidad.x);
+		setField("y",it,unaEntidad.y);
 
 		listaDeEntidades.push_back(unaEntidad);
 	}
 
-	configGame.protagonista.tipo= getField("protagonista" ,"tipo", Trees).as<string>();
-	configGame.protagonista.x= getField("protagonista" ,"x", Trees).as<int>();
-	configGame.protagonista.y= getField("protagonista" ,"y", Trees).as<int>();
-
+	setField("protagonista" ,"tipo", Trees,configGame.protagonista.tipo);
+	setField("protagonista" ,"x", Trees,configGame.protagonista.x);
+	setField("protagonista" ,"y", Trees,configGame.protagonista.y);
 
 }
 
