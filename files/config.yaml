@@ -10,7 +10,7 @@ tipos:
    - nombre: arbol
      imagen: path/a/imagen.png
    - nombre: castillo
-     imagen: path/a/imagen.png 
+     imagen: casa3.png
      ancho_base: 2 
      alto_base: 2 
      pixel_ref_x: 30 

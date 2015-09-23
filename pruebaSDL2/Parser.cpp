@@ -189,11 +189,11 @@ void Parser::Inicializar(){
 			setField("fps",it,unObjeto.animacion.fps);
 
 	//	listaDeObjetos.push_back(unObjeto);
-		listaDeObjetos.insert(std::pair<string,ObjetoGeneral>("arbol",unObjeto));
+		listaDeObjetos.insert(std::pair<string,ObjetoGeneral>(unObjeto.nombre,unObjeto));
 	}
 
 	configGame.objetos=listaDeObjetos;
-	//cout << configGame.objetos.at("arbol").imagen << endl;
+	//cout << configGame.objetos.at("castillo").imagen << endl;
 
 	setField("escenario" ,"nombre", Trees,configGame.escenario.nombre);
 	setField("escenario" ,"size_x", Trees,configGame.escenario.size_x);
