@@ -11,6 +11,7 @@
 #include "yaml-cpp/yaml.h"
 #include "Logger.h"
 #include "yaml-cpp/exceptions.h"
+#include <map>
 
 
 namespace std {
@@ -158,8 +159,8 @@ void Parser::Inicializar(){
 
 	YAML::Node tiposDeObjetos= getField("tipos","", Trees);
 
-	list <ObjetoGeneral> listaDeObjetos;
-
+	//list <ObjetoGeneral> listaDeObjetos;
+	map<string,ObjetoGeneral> listaDeObjetos;
 
 	for (YAML::Node::const_iterator it = tiposDeObjetos.begin();it !=tiposDeObjetos.end(); it++){
 		ObjetoGeneral unObjeto;
@@ -187,8 +188,12 @@ void Parser::Inicializar(){
 		if (campoValido("fps",listaCampos))
 			setField("fps",it,unObjeto.animacion.fps);
 
-		listaDeObjetos.push_back(unObjeto);
+	//	listaDeObjetos.push_back(unObjeto);
+		listaDeObjetos.insert(std::pair<string,ObjetoGeneral>("arbol",unObjeto));
 	}
+
+	configGame.objetos=listaDeObjetos;
+	//cout << configGame.objetos.at("arbol").imagen << endl;
 
 	setField("escenario" ,"nombre", Trees,configGame.escenario.nombre);
 	setField("escenario" ,"size_x", Trees,configGame.escenario.size_x);
@@ -215,9 +220,14 @@ void Parser::Inicializar(){
 		listaDeEntidades.push_back(unaEntidad);
 	}
 
+	configGame.escenario.entidades=listaDeEntidades;
+
 	setField("protagonista" ,"tipo", Trees,configGame.protagonista.tipo);
 	setField("protagonista" ,"x", Trees,configGame.protagonista.x);
 	setField("protagonista" ,"y", Trees,configGame.protagonista.y);
+
+
+
 
 }
 
