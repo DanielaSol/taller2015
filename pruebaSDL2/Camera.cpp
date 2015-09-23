@@ -20,8 +20,8 @@ Camera::Camera() : m_scrollSpeed(30,30), m_direction(0,0), m_scrollMargin(30), o
 void Camera::init()
 {
 	//por yaml
-	MAX_SCROLLSPEED.setX(30);
-	MAX_SCROLLSPEED.setY(30);
+	MAX_SCROLLSPEED.setX(15);
+	MAX_SCROLLSPEED.setY(15);
 	SLOPE_X = MAX_SCROLLSPEED.getX() / (float)m_scrollMargin;
 	SLOPE_Y = MAX_SCROLLSPEED.getY() / (float)m_scrollMargin;
 
@@ -60,33 +60,29 @@ void Camera::update()
 	float dX = m_scrollSpeed.getX() * m_direction.getX();
 	float dY = m_scrollSpeed.getY() * m_direction.getY();
 	offsetX += dX;
-	/*if ((offsetY + dY < offsetX) && (dY <= 0.0f))
+	//dY la calcula como una una f(x)
+
+	//límites diagonales
+	//límite superior derecho
+	if (offsetY + dY < offsetX/2)
 	{
 		dY = offsetX/2 - offsetY;
-	}*/
+	}
+
+	//limite superior izquierdo
+	if (offsetY + dY < -(offsetX + TheGame::Instance()->getGameWidth())/2)
+		dY = -(offsetX + TheGame::Instance()->getGameWidth())/2 - offsetY;
+
+	//limite inferior izquierdo
+	if (offsetY + dY > offsetX/2  + (100 * TheGame::Instance()->TILE_HEIGHT) - TheGame::Instance()->getGameWidth()/4)
+		dY = offsetX/2  + (100 * TheGame::Instance()->TILE_HEIGHT) - TheGame::Instance()->getGameWidth()/4 - offsetY;
+
+	//limite inferior derecho
+	if (offsetY + dY > -(offsetX + TheGame::Instance()->getGameWidth())/2 + (TheGame::Instance()->getMapHeight() * TheGame::Instance()->TILE_HEIGHT) - TheGame::Instance()->getGameHeight()/4)
+		dY = -(offsetX + TheGame::Instance()->getGameWidth())/2 - offsetY + (TheGame::Instance()->getMapHeight() * TheGame::Instance()->TILE_HEIGHT) - TheGame::Instance()->getGameHeight()/4;
+
 	offsetY += dY;
-
-
-    //Ajusta cámara a los límites
-	/*if (offsetY < offsetX){
-		offsetY = offsetX - offsetY/2;
-	}*/
-   /* if (offsetY < (offsetX - offsetY)/ 2)//limite diagonal superior derecho
-    {
-    	offsetY = (offsetX - offsetY)/ 2;
-    }
-    if (offsetY < (-offsetX - offsetY)/ 2  - TheGame::Instance()->getGameHeight()) //limite diagonal superior izquierdo
-    {
-    	offsetY = (-offsetX - offsetY)/ 2  - TheGame::Instance()->getGameHeight();
-    }
-    if (offsetY < (offsetX - offsetY)/ 2)//limite diagonal inferior derecho
-    {
-    	offsetY = (offsetX - offsetY)/ 2;
-    }
-    if (offsetY < (offsetX - offsetY)/ 2)
-    {
-    	offsetY = (offsetX - offsetY)/ 2;
-    }*/
+    //Ajusta cámara a los otros límites
     if (offsetX < m_boundX_left)
     {
     	offsetX = m_boundX_left;
