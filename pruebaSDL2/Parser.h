@@ -35,7 +35,7 @@ public:
 		string nombre;
 		int size_x;
 		int size_y;
-		list <Entidad> entidades;
+		std::vector<Entidad> entidades;
 	};
 
 
@@ -65,6 +65,8 @@ public:
 		int alto;
 		int x;
 		int y;
+		int pixelrefx;
+		int pixelrefy;
 
 		Animacion animacion;
 		string imagen;
@@ -102,12 +104,12 @@ public:
 	void setField(string field, YAML::Node::const_iterator it, int& aSetear);
 
 	std::map<std::string, std::list<std::string>> const camposObjetos {
-	   { "arbol", {"imagen"}},
-	   { "castillo", {"imagen","ancho_base","alto_base","pixel_ref_x","pixel_ref_y" }},
-	   { "soldado", {"imagen","fps","delay"}},
-	   { "juana_de_arco", {"imagen","fps"}},
-	   { "tierra", {"imagen"}},
-	   { "agua", {"imagen"}},
+	   { "arbol", {"imagen",  "ancho", "alto", "pixel_ref_x","pixel_ref_y" }},
+	   { "castillo", {"imagen", "ancho", "alto", "pixel_ref_x","pixel_ref_y" }},
+	   { "soldado", {"imagen","delay", "fps", "ancho", "alto", "pixel_ref_x","pixel_ref_y" }},
+	   { "juana_de_arco", {"imagen", "ancho", "fps", "alto", "pixel_ref_x","pixel_ref_y" }},
+	   { "tierra", {"imagen",  "ancho", "alto", "pixel_ref_x","pixel_ref_y" }},
+	   { "agua", {"imagen",  "ancho", "alto", "pixel_ref_x","pixel_ref_y" }},
 
 	};
 

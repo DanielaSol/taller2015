@@ -70,6 +70,8 @@ public:
 
     Vector2D m_mapPosition;
 
+    Vector2D m_mapPosition2;
+
     bool operator< (const GameObject &obj2);
 
 protected:

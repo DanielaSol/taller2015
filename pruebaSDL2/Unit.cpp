@@ -9,7 +9,7 @@
 using namespace std;
 
 Unit::Unit(): GameObject(),
-m_velocity(5,5),
+m_velocity(2,2),
 m_direction(0,0),
 m_bChangingDestination(false),
 m_bMoving(false)
@@ -63,6 +63,11 @@ void Unit::moveTo(const Vector2D& position)
 	m_mapPosition.toCartesian();
 	m_mapPosition.setX((int)(m_mapPosition.getX() / TheGame::Instance()->TILE_WIDTH*2));
 	m_mapPosition.setY((int)(m_mapPosition.getY() / TheGame::Instance()->TILE_HEIGHT));
+	m_mapPosition2.setX(m_screenPosition.getX() - TheGame::Instance()->TILE_WIDTH/4);
+		m_mapPosition2.setY(m_screenPosition.getY() - TheGame::Instance()->TILE_HEIGHT/4);
+		m_mapPosition2.toCartesian();
+		m_mapPosition2.setX((int)(m_mapPosition.getX() / TheGame::Instance()->TILE_WIDTH*2));
+		m_mapPosition2.setY((int)(m_mapPosition.getY() / TheGame::Instance()->TILE_HEIGHT));
 
 
 	//calcula el vector direccion y lo normaliza (solo lo queremos para indicar dirección de movimiento, no velocidad)

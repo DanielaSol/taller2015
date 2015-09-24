@@ -1,0 +1,50 @@
+pantalla: 
+ ancho: hola
+ alto: 600 
+
+configuracion: 
+ vel_personaje : 3 
+ margen_scroll : 120
+
+tipos: 
+   - nombre: arbol
+     ancho: 1
+     alto: 1
+     imagen: assets/Terrain_tileset.png
+   - nombre: castillo
+     imagen: hgfhgfh 
+     ancho: 2 
+     alto: 2 
+     delay: 0
+   - nombre: soldado
+     imagen: path/a/imagen.png 
+     fps: 10 
+     delay: 5
+   - nombre: tierra
+     imagen: assets/Tiles/tierra.png
+     delay: 0
+   - nombre: agua
+     imagen: assets/Tiles/agua.png
+     delay: 0
+   - nombre: juana_de_arco
+     imagen: assets/GoblinWalk.png
+     fps: 10
+     delay: 0
+
+escenario:
+     nombre: orleans 
+     size_x: 100 
+     size_y: 100 
+     entidades:  
+        - {x: 20, y: 15, tipo: arbol} 
+        - {x: 15, y: 20, tipo: arbol} 
+        - {x: 10, y: 15, tipo: arbol} 
+        - {x: 10, y: 10, tipo: tierra} 
+        - {x:  5, y:  5, tipo: castillo}
+        - {x: 20, y: 19, tipo: castillo}
+        - {x:  0, y:  0, tipo: agua}
+
+protagonista: 
+     tipo: juana_de_arco
+     x: 5
+     y: 5

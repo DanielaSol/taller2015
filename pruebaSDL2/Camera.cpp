@@ -10,10 +10,11 @@
 #include "Vector2D.h"
 #include "SDL2/SDL.h"
 #include "InputHandler.h"
+#include "Parser.h"
 
 Camera* Camera::s_pCamera = new Camera();
 
-Camera::Camera() : m_scrollSpeed(30,30), m_direction(0,0), m_scrollMargin(30), offsetX(0.0f), offsetY(0.0f)
+Camera::Camera() : m_scrollSpeed(30,30),m_scrollMargin(30), m_direction(0,0), offsetX(0.0f), offsetY(0.0f)
 {
 }
 

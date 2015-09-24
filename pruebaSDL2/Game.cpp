@@ -11,6 +11,7 @@
 #include "InputHandler.h"
 #include <iostream>
 
+#include "Parser.h"
 #include "GameObject.h"
 #include "Camera.h"
 #include "Map.h"
@@ -42,8 +43,8 @@ Game::~Game()
 bool Game::init(const char* title, int xpos, int ypos, int width, int height, int SDL_WINDOW_flag)
 {
     // store the game width and height
-	 m_gameWidth = 800;
-	 m_gameHeight = 800;
+	 m_gameWidth = width;
+	 m_gameHeight = height;
 
     // attempt to initialise SDL
     if(SDL_Init(SDL_INIT_EVERYTHING) == 0)
@@ -56,7 +57,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
         if(m_pWindow != 0) // window init success
         {
             cout << "window creation success\n";
-            m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_SOFTWARE);
+            m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_ACCELERATED);
 
             if(m_pRenderer != 0) // renderer init success
             {
@@ -96,16 +97,36 @@ bool Game::initGame()
 {
     //CARGA EL ALDEANO, PROBABLEMENTE SE CAMBIE DE LUGAR
 
-	if(!TheTextureManager::Instance()->load("assets/GoblinWalk.png","animate", m_pRenderer))
+	if(!TheTextureManager::Instance()->load(TheParser::Instance()->configGame.objetos.at("juana_de_arco").imagen,"animate", m_pRenderer))
 		return false;
-	if (!TheTextureManager::Instance()->load("assets/Terrain_tileset.png","arbol",m_pRenderer))
-		return false;
-	if (!TheTextureManager::Instance()->load("assets/casa3.png","casa",m_pRenderer))
-		return false; // PODRIA HACER QUE CUANDO NO ENCUANTRA UNA DE ESTAS IMAGENES CARGUE ALGUNA POR DEFECTO
+	if (TheParser::Instance()->configGame.objetos.at("arbol").imagen == " "){
+		TheTextureManager::Instance()->load("assets/Terrain_tileset2.png","arbol",m_pRenderer);
+	}else{
+		TheTextureManager::Instance()->load(TheParser::Instance()->configGame.objetos.at("arbol").imagen,"arbol",m_pRenderer);
+	}
+	if (TheParser::Instance()->configGame.objetos.at("castillo").imagen == " "){
+		TheTextureManager::Instance()->load("assets/cubo.png","casa",m_pRenderer);
+	}else{
+		TheTextureManager::Instance()->load(TheParser::Instance()->configGame.objetos.at("castillo").imagen,"casa",m_pRenderer);
+	}
+	if (TheParser::Instance()->configGame.objetos.at("agua").imagen == " "){
+		TheTextureManager::Instance()->load("assets/Tiles/No-tile.png","agua",m_pRenderer);
+	}else{
+	TheTextureManager::Instance()->load(TheParser::Instance()->configGame.objetos.at("agua").imagen,"agua",m_pRenderer);
+	}
+	if (TheParser::Instance()->configGame.objetos.at("tierra").imagen == " "){
+		TheTextureManager::Instance()->load("assets/Tiles/No-tile.png","tierra",m_pRenderer);
+	}else{
+	TheTextureManager::Instance()->load(TheParser::Instance()->configGame.objetos.at("tierra").imagen,"tierra",m_pRenderer);
+	}
+	// PODRIA HACER QUE CUANDO NO ENCUANTRA UNA DE ESTAS IMAGENES CARGUE ALGUNA POR DEFECTO
 
 	m_pAldeano_test = new Unit();
-	m_pAldeano_test->load(10, 10, 125, 168, 40, 53.76f, 5, "animate");
-
+	m_pAldeano_test->load(TheParser::Instance()->configGame.protagonista.x,
+					TheParser::Instance()->configGame.protagonista.y,
+						125, 168, 		 //125 y 168 son el ancho y alto de la imagen a cortar
+						40,	54.76f,			// 40 y 54.76 son el ancho y alto de la imagen a dibujar
+						5, "animate");   // y el 5 corresponde a la cantidad de Frames
     m_pMap = new Map();
     m_pMap->load();
 
@@ -114,23 +135,37 @@ bool Game::initGame()
     // y string que indique que es, una ves que se sabe el string, es decir el nombre del objeto
     //se puede averiguar cual es el alto y ancho de la imagen fuente y destino y tambien a que frame
     // y row pertenece asi como el offset con el cual se lo debe dibujar)
-    for (int i=0;i<5;i++){
-    	for(int j=0;j<5;j++){
-    		if((i+j)<5)
-    		 cargarEntidad(i,j,65,128,65,128,1,8,2,0,128,1,1,"arbol");
-    		else
-    		{cargarEntidad(i,j,65,128,65,128,1,8,1,0,128,1,1,"arbol");}
+
+    for(int i =0; i< TheParser::Instance()->configGame.escenario.entidades.size();i++){
+
+    	if(TheParser::Instance()->configGame.escenario.entidades[i].tipo == "arbol")
+    	{
+    		cargarEntidad(TheParser::Instance()->configGame.escenario.entidades[i].x,
+    					  TheParser::Instance()->configGame.escenario.entidades[i].y,
+    					  65,128,65,128,1,8,2,0,128,TheParser::Instance()->configGame.objetos.at("arbol").ancho,
+    					  TheParser::Instance()->configGame.objetos.at("arbol").alto,"arbol");
+
+    	}else if(TheParser::Instance()->configGame.escenario.entidades[i].tipo == "castillo"){
+    		cargarEntidad(TheParser::Instance()->configGame.escenario.entidades[i].x,
+    		    		  TheParser::Instance()->configGame.escenario.entidades[i].y,
+    		    		  192,224,130,151.66f,1,1,0,130/4,151,TheParser::Instance()->configGame.objetos.at("castillo").ancho,
+    		    		  TheParser::Instance()->configGame.objetos.at("castillo").alto,"casa");
+
+    	}else if(TheParser::Instance()->configGame.escenario.entidades[i].tipo == "agua"){
+    		cargarEntidad(TheParser::Instance()->configGame.escenario.entidades[i].x,
+    		    		  TheParser::Instance()->configGame.escenario.entidades[i].y,
+    		    		   64,32,64,32,1,1,0,0,0,TheParser::Instance()->configGame.objetos.at("agua").ancho,
+    		    		   TheParser::Instance()->configGame.objetos.at("agua").alto,"agua");
+
+    	}else if(TheParser::Instance()->configGame.escenario.entidades[i].tipo == "tierra"){
+    		cargarEntidad(TheParser::Instance()->configGame.escenario.entidades[i].x,
+    		    		  TheParser::Instance()->configGame.escenario.entidades[i].y,
+    		    		   64,32,64,32,1,1,0,0,0,TheParser::Instance()->configGame.objetos.at("tierra").ancho,
+    		    		   TheParser::Instance()->configGame.objetos.at("tierra").alto,"tierra");
     	}
+
     }
-
-    cargarEntidad(2,9,192,224,130,151.66f,1,1,0,130/4,151,2,2,"casa");
-    cargarEntidad(5,6,192,224,130,151.66f,1,1,0,130/4,151,2,2,"casa");
-    cargarEntidad(5,9,192,224,130,151.66f,1,1,0,130/4,151,2,2,"casa");
-    cargarEntidad(5,10,192,224,130,151.66f,1,1,0,130/4,151,2,2,"casa");
-
-    cargarEntidad(10,10,192,224,130,151.66f,1,1,0,130/4,151,2,2,"casa");
-
-   entidades.push_back(m_pAldeano_test);
+  // entidades.push_back(m_pAldeano_test);
 
     return true;
 }
@@ -143,11 +178,11 @@ void Game::render()
 	//m_pGameStateMachine->render();// Dejo esto por si despues implementamos maquinaa finita de estados para los estados de jeugo: menu, etc
     m_pMap->draw();
     //primero dibuja entidades, luego el personaje (siempre aparece por arriba de las cosas
-    for (int i=0;i<entidades.size();i++){
+    for (int i=0;i<cantDeEntidades;i++){
     	if (entidades[i])
     		entidades[i]->draw();
     }
-   // m_pAldeano_test->draw();
+    m_pAldeano_test->draw();
 
     SDL_RenderPresent(m_pRenderer);
 
@@ -169,7 +204,7 @@ void Game::handleEvents()
 
     if(!m_bQuiting)
     {
-        if(TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_Q))
+        if(TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_R))
         {
             restart();
             return;
@@ -248,6 +283,8 @@ void Game::cargarEntidad(int posx,int posy,int width,int height,int destWidth,
 	entidades[cantDeEntidades -1] = new GameObject();
 	entidades[cantDeEntidades -1]->load(vec->getX(),vec->getY(),width,height,destWidth,destHeight,numFrames,nombre);
 	entidades[cantDeEntidades -1]->setRow(row);
+	entidades[cantDeEntidades -1]->m_mapPosition2.setX(posx);
+	entidades[cantDeEntidades -1]->m_mapPosition2.setY(posy);
 	entidades[cantDeEntidades -1]->setFrame(frame);
 	entidades[cantDeEntidades -1]->setOffset(offsetX,offsetY);
 
@@ -260,14 +297,14 @@ void Game::restart() //Con Q
 	//LIMPIA EL ESTADO DEL JUEGO
    m_pAldeano_test->clean();
    m_pMap->clean();
-   for(int i=0;i < cantDeEntidades ;i++){
+   /*for(int i=0;i < cantDeEntidades ;i++){
 	   if (entidades[i])
 	   {
 			entidades[i]->clean();
 			delete entidades[i];
 	   }
-	}
-   entidades.clear();
+	}*/
+   //entidades.clear();
 	delete m_pAldeano_test;
 	delete m_pMap;
 

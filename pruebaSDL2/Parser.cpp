@@ -57,7 +57,13 @@ YAML::Node Parser::getField(string field , string subField, YAML::Node nodo){
 
 	if (result== NULL) {
 		LOG ("SE INTENTÓ ACCEDER AL CAMPO INEXISTENTE "+field);
-		return nodo; //acá deberia buscar un valor por defecto
+		//return nodo; //acá deberia buscar un valor por defecto
+		if (subField.empty())
+				result = DefaultTrees[field];
+			else
+				result = DefaultTrees[field][subField];
+		return result;
+
 	}
 	else
 		return result;
@@ -126,7 +132,10 @@ YAML::Node Parser::getField(string field, YAML::Node::const_iterator it){
 	result = (*it)[field];
 	if (result== NULL) {
 		LOG ("SE INTENTÓ ACCEDER AL CAMPO INEXISTENTE "+field);
-		return Trees; //acá deberia buscar un valor por defecto
+		//return result; //acá deberia buscar un valor por defecto, tengo que agarrar la lista de este iterador en el defaulTrees
+		return result;
+
+
 	}
 	else
 		return result;
@@ -177,16 +186,31 @@ void Parser::Inicializar(){
 			break; // no cargo el elemento
 		}
 
-		if (campoValido("imagen",listaCampos))
-			setField("imagen",it,unObjeto.imagen);
+		if (campoValido("imagen",listaCampos)){
+			//setField("imagen",it,unObjeto.imagen);
+			if(!getField("imagen",it)){
+				unObjeto.imagen = " ";
+			}
+			else{setField("imagen",it,unObjeto.imagen);}
+		}
 		if (campoValido("alto",listaCampos))
-			setField("alto",it,unObjeto.alto);
+			if(!getField("alto",it)){} //setear default
+			else{setField("alto",it,unObjeto.alto);}
 		if (campoValido("ancho",listaCampos))
-			setField("ancho",it,unObjeto.ancho);
+			if(!getField("ancho",it)){} //setear default
+			else{setField("ancho",it,unObjeto.ancho);}
 		if (campoValido("delay",listaCampos))
-			setField("delay",it,unObjeto.animacion.delay);
+			if(!getField("delay",it)){} //setear default
+			else{setField("delay",it,unObjeto.animacion.delay);}
 		if (campoValido("fps",listaCampos))
-			setField("fps",it,unObjeto.animacion.fps);
+			if(!getField("fps",it)){} //setear default
+			else{setField("fps",it,unObjeto.animacion.fps);}
+		if (campoValido("pixel_ref_x",listaCampos))
+			if(!getField("pixel_ref_x",it)){}
+			else{setField("pixel_ref_x",it,unObjeto.pixelrefx);}
+		if (campoValido("pixel_ref_y",listaCampos))
+			if(!getField("pixel_ref_y",it)){}
+			else{setField("pixel_ref_y",it,unObjeto.pixelrefx);}
 
 	//	listaDeObjetos.push_back(unObjeto);
 		listaDeObjetos.insert(std::pair<string,ObjetoGeneral>(unObjeto.nombre,unObjeto));
@@ -199,7 +223,7 @@ void Parser::Inicializar(){
 	setField("escenario" ,"size_x", Trees,configGame.escenario.size_x);
 	setField("escenario" ,"size_y", Trees,configGame.escenario.size_y);
 
-	list <Entidad> listaDeEntidades;
+	std::vector<Entidad> listaDeEntidades;
 
 	YAML::Node entidades= getField("escenario","entidades", Trees);
 	for (YAML::Node::const_iterator it = entidades.begin();it !=entidades.end(); it++){
