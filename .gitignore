@@ -3,4 +3,9 @@
 Debug/
 Release/
 log.txt
+log.txt~
+.gitignore~
+file/config.yaml~
+file/configDefault.yaml~
+
 
