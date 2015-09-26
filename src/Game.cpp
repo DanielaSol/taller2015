@@ -99,7 +99,7 @@ bool Game::initGame()
 
 	if(!TheTextureManager::Instance()->load(TheParser::Instance()->configGame.objetos.at("juana_de_arco").imagen,"animate", m_pRenderer))
 		return false;
-	if (TheParser::Instance()->configGame.objetos.at("arbol").imagen == " "){
+	/*if (TheParser::Instance()->configGame.objetos.at("arbol").imagen == " "){
 		TheTextureManager::Instance()->load("assets/Terrain_tileset2.png","arbol",m_pRenderer);
 	}else{
 		TheTextureManager::Instance()->load(TheParser::Instance()->configGame.objetos.at("arbol").imagen,"arbol",m_pRenderer);
@@ -120,6 +120,18 @@ bool Game::initGame()
 	TheTextureManager::Instance()->load(TheParser::Instance()->configGame.objetos.at("tierra").imagen,"tierra",m_pRenderer);
 	}
 	// PODRIA HACER QUE CUANDO NO ENCUANTRA UNA DE ESTAS IMAGENES CARGUE ALGUNA POR DEFECTO
+
+*/
+	std::vector<string> vectorTipos={"arbol","castillo","juana_de_arco","tierra","agua"};
+
+	for (string tipo: vectorTipos){
+
+		TheTextureManager::Instance()->load(TheParser::Instance()->configGame.objetos.at(tipo).imagen,tipo, m_pRenderer);
+
+
+	}
+
+
 
 	m_pAldeano_test = new Unit();
 	m_pAldeano_test->load(TheParser::Instance()->configGame.protagonista.x,
@@ -149,7 +161,7 @@ bool Game::initGame()
     		cargarEntidad(TheParser::Instance()->configGame.escenario.entidades[i].x,
     		    		  TheParser::Instance()->configGame.escenario.entidades[i].y,
     		    		  192,224,130,151.66f,1,1,0,130/4,151,TheParser::Instance()->configGame.objetos.at("castillo").ancho,
-    		    		  TheParser::Instance()->configGame.objetos.at("castillo").alto,"casa");
+    		    		  TheParser::Instance()->configGame.objetos.at("castillo").alto,"castillo");
 
     	}else if(TheParser::Instance()->configGame.escenario.entidades[i].tipo == "agua"){
     		cargarEntidad(TheParser::Instance()->configGame.escenario.entidades[i].x,
