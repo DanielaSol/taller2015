@@ -1,43 +1,67 @@
 pantalla: 
- ancho: 800 
- alto: 600 
+ ancho: 800
+ alto: 400
 
 configuracion: 
  vel_personaje : 3 
- margen_scroll : 30
+ margen_scroll : 120
 
 tipos: 
    - nombre: arbol
-     imagen: path/a/imagen.png
+     imagen: assets/terrain.png
+     ancho: 1
+     alto: 1
+     pixel_ref_x: 0
+     pixel_ref_y: 0
    - nombre: castillo
-     imagen: casa3.png
-     ancho_base: 2 
-     alto_base: 2 
-     pixel_ref_x: 30 
-     pixel_ref_y: 40 
+     imagen: assets/castillo.png 
+     ancho: 2 
+     alto: 2 
+     pixel_ref_x: 0
+     pixel_ref_y: 0
    - nombre: soldado
      imagen: path/a/imagen.png 
+     ancho: 1
+     alto: 1
+     pixel_ref_x: 0
+     pixel_ref_y: 0
      fps: 10 
      delay: 5
    - nombre: tierra
-     imagen: path/a/imagen.png
+     imagen: assets/Tiles/tierra.png
+     ancho: 1
+     alto: 1
+     pixel_ref_x: 0
+     pixel_ref_y: 0
    - nombre: agua
-     imagen: path/a/imagen.png
+     imagen: assets/Tiles/agua.png
+     ancho: 1
+     alto: 1
+     pixel_ref_x: 0
+     pixel_ref_y: 0
    - nombre: juana_de_arco
-     imagen: path/a/imagen.png
+     imagen: assets/GoblinWalk.png
+     ancho: 1
+     alto: 1
+     pixel_ref_x: 0
+     pixel_ref_y: 0
      fps: 10
+     delay: 0
 
 escenario:
      nombre: orleans 
      size_x: 100 
      size_y: 100 
      entidades:  
-        - {x: 10, y: 15, tipo: tierra} 
-        - {x: 15, y: 20, tipo: tierra} 
-        - {x: 10, y: 15, tipo: agua} 
-        - {x: 30, y: 55, tipo: castillo} 
+        - {x: 20, y: 15, tipo: arbol} 
+        - {x: 15, y: 20, tipo: arbol} 
+        - {x: 10, y: 15, tipo: arbol} 
+        - {x: 10, y: 10, tipo: tierra} 
+        - {x:  5, y:  5, tipo: castillo}
+        - {x: 20, y: 19, tipo: castillo}
+        - {x: 0, y: 0, tipo: agua}
 
 protagonista: 
      tipo: juana_de_arco
-     x: 50
-     y: 50 
+     x: 5
+     y: 5

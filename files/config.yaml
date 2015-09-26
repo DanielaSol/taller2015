@@ -1,6 +1,6 @@
 pantalla: 
  ancho: 800
- alto: 600 
+ alto: 400
 
 configuracion: 
  vel_personaje : 3 
@@ -8,26 +8,43 @@ configuracion:
 
 tipos: 
    - nombre: arbol
+     imagen: assets/terrain.png
      ancho: 1
      alto: 1
-     imagen: assets/Terrain_tileset.png
+     pixel_ref_x: 0
+     pixel_ref_y: 0
    - nombre: castillo
-     imagen: hgfhgfh 
+     imagen: assets/castillo.png 
      ancho: 2 
      alto: 2 
-     delay: 0
+     pixel_ref_x: 0
+     pixel_ref_y: 0
    - nombre: soldado
      imagen: path/a/imagen.png 
+     ancho: 1
+     alto: 1
+     pixel_ref_x: 0
+     pixel_ref_y: 0
      fps: 10 
      delay: 5
    - nombre: tierra
      imagen: assets/Tiles/tierra.png
-     delay: 0
+     ancho: 1
+     alto: 1
+     pixel_ref_x: 0
+     pixel_ref_y: 0
    - nombre: agua
      imagen: assets/Tiles/agua.png
-     delay: 0
+     ancho: 1
+     alto: 1
+     pixel_ref_x: 0
+     pixel_ref_y: 0
    - nombre: juana_de_arco
      imagen: assets/GoblinWalk.png
+     ancho: 1
+     alto: 1
+     pixel_ref_x: 0
+     pixel_ref_y: 0
      fps: 10
      delay: 0
 
@@ -42,7 +59,7 @@ escenario:
         - {x: 10, y: 10, tipo: tierra} 
         - {x:  5, y:  5, tipo: castillo}
         - {x: 20, y: 19, tipo: castillo}
-        - {x:  0, y:  0, tipo: agua}
+        - {x: 0, y: 0, tipo: agua}
 
 protagonista: 
      tipo: juana_de_arco

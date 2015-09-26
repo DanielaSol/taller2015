@@ -25,20 +25,18 @@ Parser::Parser() {
 	try{
 		Trees=YAML::LoadFile(FILE_YAML);
 	}
-	catch (YAML::BadFile& e){
+	catch (YAML::ParserException& e){
 		 LOG("NO PUEDE ABRIRSE EL ARCHIVO " FILE_YAML ", SE CARGARÁ EL ARCHIVO DE CONFIGURACIÓN POR DEFECTO");
 		 try{
 		 		Trees=YAML::LoadFile(FILE_YAML_DEFAULT);
 		 	}
 		 	catch (YAML::BadFile& e){
 		 		LOG("NO PUDO ABRIRSE EL ARCHIVO " FILE_YAML_DEFAULT " EL PROGRAMA SE INTERRUMPIRÁ");
-		 		exit (1);
+		 		exit (1); //acá debería hacer un exit lindo
 		 	}
 	}
 
-	DefaultTrees=YAML::LoadFile(FILE_YAML_DEFAULT);
-
-	Inicializar();
+	Inicializar(Trees);
 
 }
 
@@ -58,11 +56,12 @@ YAML::Node Parser::getField(string field , string subField, YAML::Node nodo){
 	if (result== NULL) {
 		LOG ("SE INTENTÓ ACCEDER AL CAMPO INEXISTENTE "+field);
 		//return nodo; //acá deberia buscar un valor por defecto
-		if (subField.empty())
+		/*if (subField.empty())
 				result = DefaultTrees[field];
 			else
 				result = DefaultTrees[field][subField];
-		return result;
+		return result;*/
+		throw 0;
 
 	}
 	else
@@ -71,44 +70,74 @@ YAML::Node Parser::getField(string field , string subField, YAML::Node nodo){
 }
 
 
-void Parser::setField(std::string field, std::string subField, YAML::Node nodo, int& aSetear){
+YAML::Node Parser::getField(string field, YAML::Node::const_iterator it){
+	YAML::Node result;
+	result = (*it)[field];
+	if (result== NULL) {
+		LOG ("SE INTENTÓ ACCEDER AL CAMPO INEXISTENTE "+field);
+		throw 0;
+		//return result; //acá deberia buscar un valor por defecto, tengo que agarrar la lista de este iterador en el defaulTrees
+		//return result;
 
-	try{
+
+	}
+	else
+		return result;
+
+
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Parser::setField( std::string field, std::string subField,  YAML::Node nodo, int& aSetear){
+
+/*	try{
 		aSetear=getField(field ,subField, nodo).as<int>();
 	}
 	catch (YAML::TypedBadConversion<int>& e){
 		LOG ("ERROR DE TIPO EN CAMPO " + field + " " + subField + ", SE CARGARÁ VALOR POR DEFECTO PARA EL MISMO");
 		aSetear=getField(field ,subField, DefaultTrees).as<int>();
-	}
+	}*/
+
+	aSetear=getField(field ,subField, nodo).as<int>();
+
+
 }
 
 void Parser::setField(std::string field, std::string subField, YAML::Node nodo, string& aSetear){
 
-	try{
+/*	try{
 		aSetear=getField(field ,subField, nodo).as<string>();
 	}
 	catch (YAML::TypedBadConversion<string>& e){
 		LOG ("ERROR DE TIPO EN CAMPO " + field + " " + subField + ", SE CARGARÁ VALOR POR DEFECTO PARA EL MISMO");
 		aSetear=getField(field ,subField, DefaultTrees).as<string>();
-	}
+	}*/
+
+	aSetear=getField(field ,subField, nodo).as<string>();
+
 }
 
 
 void Parser::setField(string field, YAML::Node::const_iterator it, string& aSetear){
 
-	try{
-		aSetear=getField(field, it).as<string>();
-	}
+	/*try{
+		aSetear=getField(categoria, field, it).as<string>();
+    	}
 	catch (YAML::TypedBadConversion<string>& e){
 		LOG ("ERROR DE TIPO EN CAMPO " + field +", SE CARGARÁ VALOR POR DEFECTO PARA EL MISMO");
-		aSetear=getField(field , "", DefaultTrees).as<string>();
-	}
+		cout << (*it);
+		}*/
+
+	aSetear=getField(field, it).as<string>();
+
+
 }
 
 
 void Parser::setField(string field, YAML::Node::const_iterator it, int& aSetear){
 
-	try{
+/*	try{
 		aSetear=getField(field, it).as<int>();
 	}
 	catch (YAML::TypedBadConversion<int>& e){
@@ -124,24 +153,18 @@ void Parser::setField(string field, YAML::Node::const_iterator it, int& aSetear)
 		else
 			aSetear=getField(field , "", DefaultTrees).as<int>();
 	}
-}
 
 
-YAML::Node Parser::getField(string field, YAML::Node::const_iterator it){
-	YAML::Node result;
-	result = (*it)[field];
-	if (result== NULL) {
-		LOG ("SE INTENTÓ ACCEDER AL CAMPO INEXISTENTE "+field);
-		//return result; //acá deberia buscar un valor por defecto, tengo que agarrar la lista de este iterador en el defaulTrees
-		return result;
+	*/
 
-
-	}
-	else
-		return result;
+	aSetear=getField(field, it).as<int>();
 
 
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 
 bool campoValido (string field,list<string> listaCampos ){
@@ -158,101 +181,102 @@ bool campoValido (string field,list<string> listaCampos ){
 
 }
 
-void Parser::Inicializar(){
 
-	setField("pantalla" ,"alto", Trees,configGame.pantalla.alto);
-	setField("pantalla" ,"ancho", Trees,configGame.pantalla.ancho);
-	setField("configuracion" ,"vel_personaje", Trees,configGame.configuracion.vel_personaje);
-	setField("configuracion" ,"margen_scroll", Trees,configGame.configuracion.margen_scroll);
+void Parser::Inicializar(YAML::Node Arbol){
+	bool huboErrores = false;
 
+	try{
+		setField("pantalla" ,"alto", Arbol,configGame.pantalla.alto);
+		setField("pantalla" ,"ancho", Arbol,configGame.pantalla.ancho);
+		setField("configuracion" ,"vel_personaje", Arbol,configGame.configuracion.vel_personaje);
+		setField("configuracion" ,"margen_scroll", Trees,configGame.configuracion.margen_scroll);
 
-	YAML::Node tiposDeObjetos= getField("tipos","", Trees);
+		YAML::Node tiposDeObjetos= getField("tipos","", Trees);
 
-	//list <ObjetoGeneral> listaDeObjetos;
-	map<string,ObjetoGeneral> listaDeObjetos;
+		map<string,ObjetoGeneral> listaDeObjetos;
 
-	for (YAML::Node::const_iterator it = tiposDeObjetos.begin();it !=tiposDeObjetos.end(); it++){
-		ObjetoGeneral unObjeto;
+		for (YAML::Node::const_iterator it = tiposDeObjetos.begin();it !=tiposDeObjetos.end(); it++){
+			ObjetoGeneral unObjeto;
 
-		setField("nombre",it,unObjeto.nombre);
+			setField("nombre",it,unObjeto.nombre);
 
-		std::list<std::string> listaCampos;
+			std::list<std::string> listaCampos;
 
-		try{
-			listaCampos = (camposObjetos.at(unObjeto.nombre));
-		}
-		catch(std::out_of_range& e){
-			LOG ("SE INTENTÓ CARGAR UN OBJETO INVÁLIDO "+unObjeto.nombre);
-			break; // no cargo el elemento
-		}
-
-		if (campoValido("imagen",listaCampos)){
-			//setField("imagen",it,unObjeto.imagen);
-			if(!getField("imagen",it)){
-				unObjeto.imagen = " ";
+			try{
+				listaCampos = (camposObjetos.at(unObjeto.nombre));
 			}
-			else{setField("imagen",it,unObjeto.imagen);}
-		}
-		if (campoValido("alto",listaCampos))
-			if(!getField("alto",it)){} //setear default
-			else{setField("alto",it,unObjeto.alto);}
-		if (campoValido("ancho",listaCampos))
-			if(!getField("ancho",it)){} //setear default
-			else{setField("ancho",it,unObjeto.ancho);}
-		if (campoValido("delay",listaCampos))
-			if(!getField("delay",it)){} //setear default
-			else{setField("delay",it,unObjeto.animacion.delay);}
-		if (campoValido("fps",listaCampos))
-			if(!getField("fps",it)){} //setear default
-			else{setField("fps",it,unObjeto.animacion.fps);}
-		if (campoValido("pixel_ref_x",listaCampos))
-			if(!getField("pixel_ref_x",it)){}
-			else{setField("pixel_ref_x",it,unObjeto.pixelrefx);}
-		if (campoValido("pixel_ref_y",listaCampos))
-			if(!getField("pixel_ref_y",it)){}
-			else{setField("pixel_ref_y",it,unObjeto.pixelrefx);}
+			catch(std::out_of_range& e){
+				LOG ("SE INTENTÓ CARGAR UN OBJETO INVÁLIDO "+unObjeto.nombre);
+				break; // no cargo el elemento
+			}
 
-	//	listaDeObjetos.push_back(unObjeto);
-		listaDeObjetos.insert(std::pair<string,ObjetoGeneral>(unObjeto.nombre,unObjeto));
+			if (campoValido("imagen",listaCampos))
+				setField("imagen",it,unObjeto.imagen);
+			if (campoValido("alto",listaCampos))
+				setField("alto",it,unObjeto.alto);
+			if (campoValido("ancho",listaCampos))
+				setField("ancho",it,unObjeto.ancho);
+			if (campoValido("delay",listaCampos))
+				setField("delay",it,unObjeto.animacion.delay);
+			if (campoValido("fps",listaCampos))
+				setField("fps",it,unObjeto.animacion.fps);
+			if (campoValido("pixel_ref_x",listaCampos))
+				setField("pixel_ref_x",it,unObjeto.pixelrefx);
+			if (campoValido("pixel_ref_y",listaCampos))
+				setField("pixel_ref_y",it,unObjeto.pixelrefx);
+
+			listaDeObjetos.insert(std::pair<string,ObjetoGeneral>(unObjeto.nombre,unObjeto));
+		}
+
+		configGame.objetos=listaDeObjetos;
+
+		setField("escenario" ,"nombre", Trees,configGame.escenario.nombre);
+		setField("escenario" ,"size_x", Trees,configGame.escenario.size_x);
+		setField("escenario" ,"size_y", Trees,configGame.escenario.size_y);
+
+		std::vector<Entidad> listaDeEntidades;
+
+		YAML::Node entidades= getField("escenario","entidades", Trees);
+		for (YAML::Node::const_iterator it = entidades.begin();it !=entidades.end(); it++){
+			Entidad unaEntidad;
+
+			setField("tipo",it,unaEntidad.tipo);
+			try{
+				(camposObjetos.at(unaEntidad.tipo));
+			}
+			catch(std::out_of_range& e){
+				LOG ("SE INTENTÓ CARGAR UN OBJETO INVÁLIDO "+unaEntidad.tipo);
+				break; // no cargo el elemento
+			}
+
+			setField("x",it,unaEntidad.x);
+			setField("y",it,unaEntidad.y);
+
+			listaDeEntidades.push_back(unaEntidad);
+		}
+
+		configGame.escenario.entidades=listaDeEntidades;
+
+		setField("protagonista" ,"tipo", Trees,configGame.protagonista.tipo);
+		setField("protagonista" ,"x", Trees,configGame.protagonista.x);
+		setField("protagonista" ,"y", Trees,configGame.protagonista.y);
+
+	}
+	catch (YAML::TypedBadConversion<int>& e){
+		LOG("Hubo un error de conversión, se cargará el archivo YAML por defecto");
+		huboErrores = true;
 	}
 
-	configGame.objetos=listaDeObjetos;
-	//cout << configGame.objetos.at("castillo").imagen << endl;
-
-	setField("escenario" ,"nombre", Trees,configGame.escenario.nombre);
-	setField("escenario" ,"size_x", Trees,configGame.escenario.size_x);
-	setField("escenario" ,"size_y", Trees,configGame.escenario.size_y);
-
-	std::vector<Entidad> listaDeEntidades;
-
-	YAML::Node entidades= getField("escenario","entidades", Trees);
-	for (YAML::Node::const_iterator it = entidades.begin();it !=entidades.end(); it++){
-		Entidad unaEntidad;
-
-		setField("tipo",it,unaEntidad.tipo);
-		try{
-			(camposObjetos.at(unaEntidad.tipo));
-		}
-		catch(std::out_of_range& e){
-			LOG ("SE INTENTÓ CARGAR UN OBJETO INVÁLIDO "+unaEntidad.tipo);
-			break; // no cargo el elemento
-		}
-
-		setField("x",it,unaEntidad.x);
-		setField("y",it,unaEntidad.y);
-
-		listaDeEntidades.push_back(unaEntidad);
+	catch (int e){
+		huboErrores = true;
 	}
 
-	configGame.escenario.entidades=listaDeEntidades;
 
-	setField("protagonista" ,"tipo", Trees,configGame.protagonista.tipo);
-	setField("protagonista" ,"x", Trees,configGame.protagonista.x);
-	setField("protagonista" ,"y", Trees,configGame.protagonista.y);
-
-
-
-
+	if (huboErrores){
+		cout << "hay que agarrar todo el árbol por defecto"<< endl;
+		Trees=YAML::LoadFile(FILE_YAML_DEFAULT);
+		Inicializar(Trees);
+	}
 }
 
 } /* namespace std */
