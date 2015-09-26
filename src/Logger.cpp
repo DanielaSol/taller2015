@@ -12,7 +12,7 @@
 using namespace std;
 
 Logger::Logger() {
-	file=fopen("log.txt","a+");
+	file=fopen("log.txt","w+");
 }
 
 Logger::~Logger() {
