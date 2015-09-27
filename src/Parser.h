@@ -87,6 +87,7 @@ public:
 
 
 	void Inicializar(YAML::Node);
+	void reset();
 
 	static Parser* Instance(){
 		if (parInstance == 0)

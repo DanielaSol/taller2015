@@ -44,6 +44,10 @@ Parser::~Parser() {
 
 }
 
+void Parser::reset(){
+	delete parInstance;
+	parInstance = new Parser();
+}
 
 YAML::Node Parser::getField(string field , string subField, YAML::Node nodo){
 

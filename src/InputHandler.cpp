@@ -21,6 +21,7 @@ InputHandler::InputHandler() :m_keystates(0), m_mousePosition(new Vector2D(0,0))
 
 InputHandler::~InputHandler()
 {
+
     // delete anything we created dynamically
     delete m_keystates;
     delete m_mousePosition;

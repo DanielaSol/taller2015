@@ -57,7 +57,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
         if(m_pWindow != 0) // window init success
         {
             cout << "window creation success\n";
-            m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_ACCELERATED);
+            m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_SOFTWARE);
 
             if(m_pRenderer != 0) // renderer init success
             {
@@ -221,7 +221,7 @@ void Game::handleEvents()
             restart();
             return;
         }
-    }
+	}
 
 	TheCamera::Instance()->handleInput();
 
@@ -283,7 +283,7 @@ void Game::cargarEntidad(int posx,int posy,int width,int height,int destWidth,
 
 	cantDeEntidades += 1;
 	entidades.resize(cantDeEntidades);
-	posx += 1;posy +=1; //por alguna razon esta corrida un espacio (chequear)
+	//rposx += 1;posy +=1; //por alguna razon esta corrida un espacio (chequear)
 	float possx = posx * TILE_WIDTH/2;
 	float possy = posy * TILE_HEIGHT;
 	Vector2D* vec = new Vector2D(0,0);
@@ -309,23 +309,27 @@ void Game::restart() //Con Q
 	//LIMPIA EL ESTADO DEL JUEGO
    m_pAldeano_test->clean();
    m_pMap->clean();
-   /*for(int i=0;i < cantDeEntidades ;i++){
+   for(int i=0;i < cantDeEntidades ;i++){
 	   if (entidades[i])
 	   {
 			entidades[i]->clean();
 			delete entidades[i];
 	   }
-	}*/
-   //entidades.clear();
+	}
+    entidades.clear();
 	delete m_pAldeano_test;
 	delete m_pMap;
+	SDL_DestroyWindow(m_pWindow);
+	SDL_DestroyRenderer(m_pRenderer);
+
 
 	TheTextureManager::Instance()->clearTextureMap();
-	TheInputHandler::Instance()->reset();
-	TheCamera::Instance()->reset();
+	TheParser::Instance()->reset();
 
 	//Reinicializa el juego
-	initGame();
+	init("TP of Empires", 400, 150, TheParser::Instance()->configGame.pantalla.ancho, TheParser::Instance()->configGame.pantalla.alto, 0);
+	TheInputHandler::Instance()->reset();
+	TheCamera::Instance()->reset();
 	m_bQuiting = false;
 }
 
