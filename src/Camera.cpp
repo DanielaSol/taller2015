@@ -24,6 +24,7 @@ Camera::Camera() : m_scrollSpeed(30,30),m_scrollMargin(TheParser::Instance()->co
 
 void Camera::init()
 {
+	m_scrollMargin = TheParser::Instance()->configGame.configuracion.margen_scroll;
 	//por yaml
 	MAX_SCROLLSPEED.setX(15);
 	MAX_SCROLLSPEED.setY(15);
