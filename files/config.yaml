@@ -4,7 +4,7 @@ pantalla:
 
 configuracion: 
  vel_personaje : 3 
- margen_scroll : 120
+ margen_scroll : 30
 
 tipos: 
    - nombre: arbol

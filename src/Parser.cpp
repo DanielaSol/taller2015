@@ -281,6 +281,9 @@ void Parser::Inicializar(YAML::Node Arbol){
 		Trees=YAML::LoadFile(FILE_YAML_DEFAULT);
 		Inicializar(Trees);
 	}
+
+
+
 }
 
 } /* namespace std */

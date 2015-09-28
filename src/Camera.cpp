@@ -12,11 +12,14 @@
 #include "InputHandler.h"
 #include "Parser.h"
 
-Camera* Camera::s_pCamera = new Camera();
+//Camera* Camera::s_pCamera = new Camera();
+Camera* Camera::s_pCamera;
 
-Camera::Camera() : m_scrollSpeed(30,30),m_scrollMargin(30), m_direction(0,0), offsetX(0.0f), offsetY(0.0f)
+Camera::Camera() : m_scrollSpeed(30,30),m_scrollMargin(TheParser::Instance()->configGame.configuracion.margen_scroll), m_direction(0,0), offsetX(0.0f), offsetY(0.0f)
 {
 	// CAMBIAR TMB EN RESET m_scrollMargin = TheParser::Instance()->configGame.configuracion.margen_scroll;
+  //  cout << TheParser::Instance()->configGame.configuracion.margen_scroll << endl;
+
 }
 
 void Camera::init()
