@@ -193,9 +193,9 @@ void Parser::Inicializar(YAML::Node Arbol){
 		setField("pantalla" ,"alto", Arbol,configGame.pantalla.alto);
 		setField("pantalla" ,"ancho", Arbol,configGame.pantalla.ancho);
 		setField("configuracion" ,"vel_personaje", Arbol,configGame.configuracion.vel_personaje);
-		setField("configuracion" ,"margen_scroll", Trees,configGame.configuracion.margen_scroll);
+		setField("configuracion" ,"margen_scroll", Arbol,configGame.configuracion.margen_scroll);
 
-		YAML::Node tiposDeObjetos= getField("tipos","", Trees);
+		YAML::Node tiposDeObjetos= getField("tipos","", Arbol);
 
 		map<string,ObjetoGeneral> listaDeObjetos;
 
@@ -234,13 +234,13 @@ void Parser::Inicializar(YAML::Node Arbol){
 
 		configGame.objetos=listaDeObjetos;
 
-		setField("escenario" ,"nombre", Trees,configGame.escenario.nombre);
-		setField("escenario" ,"size_x", Trees,configGame.escenario.size_x);
-		setField("escenario" ,"size_y", Trees,configGame.escenario.size_y);
+		setField("escenario" ,"nombre", Arbol,configGame.escenario.nombre);
+		setField("escenario" ,"size_x", Arbol,configGame.escenario.size_x);
+		setField("escenario" ,"size_y", Arbol,configGame.escenario.size_y);
 
 		std::vector<Entidad> listaDeEntidades;
 
-		YAML::Node entidades= getField("escenario","entidades", Trees);
+		YAML::Node entidades= getField("escenario","entidades", Arbol);
 		for (YAML::Node::const_iterator it = entidades.begin();it !=entidades.end(); it++){
 			Entidad unaEntidad;
 
@@ -261,9 +261,9 @@ void Parser::Inicializar(YAML::Node Arbol){
 
 		configGame.escenario.entidades=listaDeEntidades;
 
-		setField("protagonista" ,"tipo", Trees,configGame.protagonista.tipo);
-		setField("protagonista" ,"x", Trees,configGame.protagonista.x);
-		setField("protagonista" ,"y", Trees,configGame.protagonista.y);
+		setField("protagonista" ,"tipo", Arbol,configGame.protagonista.tipo);
+		setField("protagonista" ,"x", Arbol,configGame.protagonista.x);
+		setField("protagonista" ,"y", Arbol,configGame.protagonista.y);
 
 	}
 	catch (YAML::TypedBadConversion<int>& e){
