@@ -1,6 +1,7 @@
 #include "Unit.h"
 #include "InputHandler.h"
 #include "TextureManager.h"
+#include "Parser.h"
 #include "Game.h"
 #include "Camera.h"
 #include <iostream>
@@ -9,7 +10,8 @@
 using namespace std;
 
 Unit::Unit(): GameObject(),
-m_velocity(2,2),
+m_velocity(TheParser::Instance()->configGame.configuracion.vel_personaje,
+			TheParser::Instance()->configGame.configuracion.vel_personaje),
 m_direction(0,0),
 m_bChangingDestination(false),
 m_bMoving(false)

@@ -21,6 +21,8 @@ public:
     				m_screenPosition(0,0),
                     m_width(0),
                     m_height(0),
+                    m_alto(0),
+                    m_ancho(0),
                     m_currentRow(0),
                     m_currentFrame(0),
 					m_numFrames(0),
@@ -41,6 +43,18 @@ public:
 	virtual void handleInput();
 
 	virtual void clean();
+
+	//virtual int getFrame();
+
+	//virtual int getRow();
+
+	virtual int getAncho();
+
+	virtual int getAlto();
+
+	virtual void setAncho(int ancho);
+
+	virtual void setAlto(int alto);
 
 	virtual void setRow(int row);
 
@@ -85,6 +99,10 @@ protected:
     // size variables
     int m_width;
     int m_height;
+
+    // espacio que ocupa el objeto
+    int m_ancho;
+    int m_alto;
 
     // destiny size
     int m_destWidth;

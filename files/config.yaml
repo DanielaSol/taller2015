@@ -47,6 +47,14 @@ tipos:
      pixel_ref_y: 0
      fps: 10
      delay: 0
+   - nombre: molino
+     imagen: assets/windmill.png
+     ancho: 2
+     alto: 1
+     pixel_ref_x: 15
+     pixel_ref_y: 0
+     fps: 10
+     delay: 0
 
 escenario:
      nombre: orleans 
@@ -58,7 +66,7 @@ escenario:
         - {x: 10, y: 15, tipo: arbol} 
         - {x: 10, y: 10, tipo: tierra} 
         - {x:  5, y:  5, tipo: castillo}
-        - {x: 20, y: 19, tipo: castillo}
+        - {x: 1, y: 5, tipo: molino}
         - {x: 0, y: 0, tipo: agua}
 
 protagonista: 

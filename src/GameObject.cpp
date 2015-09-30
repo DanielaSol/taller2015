@@ -42,7 +42,6 @@ void GameObject::update()
 
 void GameObject::handleInput()
 {
-
 }
 
 void GameObject::clean()
@@ -67,6 +66,22 @@ void GameObject::setOffset(int x, int y){
 	offsetY = y;
 }
 
+int GameObject::getAlto(){
+	return m_alto;
+}
+
+int GameObject::getAncho(){
+	return m_ancho;
+}
+
+void GameObject::setAlto(int alto){
+	m_alto = alto;
+}
+
+void GameObject::setAncho(int ancho){
+	m_ancho = ancho;
+}
+
 
 bool GameObject::operator< (const  GameObject &obj2)
 {
@@ -88,3 +103,4 @@ bool GameObject::operator< (const  GameObject &obj2)
 	}
 	return true;
 }
+

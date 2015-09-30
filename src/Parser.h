@@ -104,15 +104,16 @@ public:
 	void setField(std::string field, YAML::Node::const_iterator it, string& aSetear);
 	void setField(string field, YAML::Node::const_iterator it, int& aSetear);
 
-	std::map<std::string, std::list<std::string>> const camposObjetos {
-	   { "arbol", {"imagen",  "ancho", "alto", "pixel_ref_x","pixel_ref_y" }},
-	   { "castillo", {"imagen", "ancho", "alto", "pixel_ref_x","pixel_ref_y" }},
-	   { "soldado", {"imagen","delay", "fps", "ancho", "alto", "pixel_ref_x","pixel_ref_y" }},
-	   { "juana_de_arco", {"imagen", "ancho", "fps", "alto", "pixel_ref_x","pixel_ref_y" }},
-	   { "tierra", {"imagen",  "ancho", "alto", "pixel_ref_x","pixel_ref_y" }},
-	   { "agua", {"imagen",  "ancho", "alto", "pixel_ref_x","pixel_ref_y" }},
+	 std::map<std::string, std::list<std::string>> const camposObjetos {
+	       { "arbol", {"imagen",  "ancho", "alto", "pixel_ref_x","pixel_ref_y" }},
+	       { "castillo", {"imagen", "ancho", "alto", "pixel_ref_x","pixel_ref_y" }},
+	       { "soldado", {"imagen","delay", "fps", "ancho", "alto", "pixel_ref_x","pixel_ref_y" }},
+	       { "juana_de_arco", {"imagen", "ancho", "fps", "delay", "alto", "pixel_ref_x","pixel_ref_y" }},
+	       { "tierra", {"imagen",  "ancho", "alto", "pixel_ref_x","pixel_ref_y" }},
+	       { "agua", {"imagen",  "ancho", "alto", "pixel_ref_x","pixel_ref_y" }},
+	       { "molino", {"imagen",  "ancho", "alto", "pixel_ref_x","pixel_ref_y" }}
 
-	};
+	    };
 
 
 //private:

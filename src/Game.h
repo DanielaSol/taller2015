@@ -22,8 +22,8 @@ class Game
 {
 public:
 	//constantes globales
-	const int TILE_WIDTH = 64;
-	const int TILE_HEIGHT = 32;
+	static const int TILE_WIDTH = 64;
+	static const int TILE_HEIGHT = 32;
 
 	//Singleton
     static Game* Instance()
@@ -47,6 +47,7 @@ public:
     void cargarEntidad(int posx,int posy,int width,int height,int destWidth,int destHeight,
     				int numFrames,int row,int frame,int offsetX,int offsetY,int longBase,
     				int longAlt, std::string nombre);
+    void cargarEntidadd(GameObject*);
 
     SDL_Renderer* getRenderer() const { return m_pRenderer; }
     SDL_Window* getWindow() const { return m_pWindow; }

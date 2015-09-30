@@ -15,6 +15,10 @@
 #include "GameObject.h"
 #include "Camera.h"
 #include "Map.h"
+#include "Molino.h"
+#include "Arbolit.h"
+#include "Castillo.h"
+#include "Suelo.h"
 #include<algorithm>
 
 using namespace std;
@@ -57,7 +61,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
         if(m_pWindow != 0) // window init success
         {
             cout << "window creation success\n";
-            m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_SOFTWARE);
+            m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_ACCELERATED);
 
             if(m_pRenderer != 0) // renderer init success
             {
@@ -122,15 +126,13 @@ bool Game::initGame()
 	// PODRIA HACER QUE CUANDO NO ENCUANTRA UNA DE ESTAS IMAGENES CARGUE ALGUNA POR DEFECTO
 
 */
-	std::vector<string> vectorTipos={"arbol","castillo","juana_de_arco","tierra","agua"};
+	std::vector<string> vectorTipos={"arbol","castillo","juana_de_arco","tierra","agua","molino"};
 
 	for (string tipo: vectorTipos){
 
 		TheTextureManager::Instance()->load(TheParser::Instance()->configGame.objetos.at(tipo).imagen,tipo, m_pRenderer);
 
-
 	}
-
 
 
 	m_pAldeano_test = new Unit();
@@ -142,40 +144,38 @@ bool Game::initGame()
     m_pMap = new Map();
     m_pMap->load();
 
-
-    //Estos datos 'hardcodeados' se deben ingresar por el archivo yaml (posicion en el mapa,
-    // y string que indique que es, una ves que se sabe el string, es decir el nombre del objeto
-    //se puede averiguar cual es el alto y ancho de la imagen fuente y destino y tambien a que frame
-    // y row pertenece asi como el offset con el cual se lo debe dibujar)
+    GameObject* objetoACargar;
 
     for(int i =0; i< TheParser::Instance()->configGame.escenario.entidades.size();i++){
 
     	if(TheParser::Instance()->configGame.escenario.entidades[i].tipo == "arbol")
     	{
-    		cargarEntidad(TheParser::Instance()->configGame.escenario.entidades[i].x,
-    					  TheParser::Instance()->configGame.escenario.entidades[i].y,
-    					  65,128,65,128,1,8,2,0,128,TheParser::Instance()->configGame.objetos.at("arbol").ancho,
-    					  TheParser::Instance()->configGame.objetos.at("arbol").alto,"arbol");
+    		objetoACargar = new Arbolit(TheParser::Instance()->configGame.escenario.entidades[i].x,
+    									TheParser::Instance()->configGame.escenario.entidades[i].y);
 
     	}else if(TheParser::Instance()->configGame.escenario.entidades[i].tipo == "castillo"){
-    		cargarEntidad(TheParser::Instance()->configGame.escenario.entidades[i].x,
-    		    		  TheParser::Instance()->configGame.escenario.entidades[i].y,
-    		    		  192,224,130,151.66f,1,1,0,130/4,151,TheParser::Instance()->configGame.objetos.at("castillo").ancho,
-    		    		  TheParser::Instance()->configGame.objetos.at("castillo").alto,"castillo");
+
+    		objetoACargar = new Castillo(TheParser::Instance()->configGame.escenario.entidades[i].x,
+										 TheParser::Instance()->configGame.escenario.entidades[i].y);
 
     	}else if(TheParser::Instance()->configGame.escenario.entidades[i].tipo == "agua"){
-    		cargarEntidad(TheParser::Instance()->configGame.escenario.entidades[i].x,
-    		    		  TheParser::Instance()->configGame.escenario.entidades[i].y,
-    		    		   64,32,64,32,1,1,0,0,0,TheParser::Instance()->configGame.objetos.at("agua").ancho,
-    		    		   TheParser::Instance()->configGame.objetos.at("agua").alto,"agua");
+
+    		objetoACargar = new Suelo(TheParser::Instance()->configGame.escenario.entidades[i].x,
+    	    						  TheParser::Instance()->configGame.escenario.entidades[i].y,"agua");
+
 
     	}else if(TheParser::Instance()->configGame.escenario.entidades[i].tipo == "tierra"){
-    		cargarEntidad(TheParser::Instance()->configGame.escenario.entidades[i].x,
-    		    		  TheParser::Instance()->configGame.escenario.entidades[i].y,
-    		    		   64,32,64,32,1,1,0,0,0,TheParser::Instance()->configGame.objetos.at("tierra").ancho,
-    		    		   TheParser::Instance()->configGame.objetos.at("tierra").alto,"tierra");
-    	}
 
+    		objetoACargar = new Suelo(TheParser::Instance()->configGame.escenario.entidades[i].x,
+    	    						  TheParser::Instance()->configGame.escenario.entidades[i].y,"tierra");
+
+    	}else if(TheParser::Instance()->configGame.escenario.entidades[i].tipo == "molino"){
+
+    		objetoACargar = new Molino(TheParser::Instance()->configGame.escenario.entidades[i].x,
+    								   TheParser::Instance()->configGame.escenario.entidades[i].y);
+
+    	}
+    	cargarEntidadd(objetoACargar);
     }
   // entidades.push_back(m_pAldeano_test);
 
@@ -205,7 +205,10 @@ void Game::update()
 	TheCamera::Instance()->update();
 		//m_pGameStateMachine->update();
 	//sort(entidades.begin(), entidades.end(), CompareGameObject());
-
+	 for (int i=0;i<cantDeEntidades;i++){
+	    	if (entidades[i])
+	    		entidades[i]->update();
+	}
 	m_pAldeano_test->update();
 	m_pMap->update();
 }
@@ -266,41 +269,26 @@ float Game::getMapHeight() const
 	return m_pMap->getMapSize().getY();
 }
 
-void Game::cargarEntidad(int posx,int posy,int width,int height,int destWidth,
-				int destHeight,int numFrames,int row,int frame,int offsetX,int offsetY,
-				int longBase,int longAlt,std::string nombre)
-{
-	for(int i=posx;i<posx +longBase;i++){
-			for(int j=posy;j<posy+longAlt;j++){
-				if(m_pMap->getValue(i,j) == 0)
-					{
-						LOG("TILE OCUPADO, NO ES POSIBLE UBICAR");
-						return;
-					}
-				else{m_pMap->setValue(i,j,0);}
+
+void Game::cargarEntidadd(GameObject* entidad){
+
+	for(int i=entidad->m_mapPosition2.getX();i<entidad->m_mapPosition2.getX() + entidad->getAncho();i++){
+				for(int j=entidad->m_mapPosition2.getY();j<entidad->m_mapPosition2.getY()+ entidad->getAlto();j++){
+					if(m_pMap->getValue(i,j) == 0)
+						{
+							LOG("TILE OCUPADO, NO ES POSIBLE UBICAR");
+							return;
+						}
+					else{m_pMap->setValue(i,j,0);}
+			}
 		}
-	}
 
 	cantDeEntidades += 1;
 	entidades.resize(cantDeEntidades);
-	//rposx += 1;posy +=1; //por alguna razon esta corrida un espacio (chequear)
-	float possx = posx * TILE_WIDTH/2;
-	float possy = posy * TILE_HEIGHT;
-	Vector2D* vec = new Vector2D(0,0);
-	vec->setX(possx);
-	vec->setY(possy);
-	vec->toIsometric();
-	// Cuando cargo la imagen, en la posicion y le resto la mitad de la altura para que dibuje desde abajo del sprite
 
-	entidades[cantDeEntidades -1] = new GameObject();
-	entidades[cantDeEntidades -1]->load(vec->getX(),vec->getY(),width,height,destWidth,destHeight,numFrames,nombre);
-	entidades[cantDeEntidades -1]->setRow(row);
-	entidades[cantDeEntidades -1]->m_mapPosition2.setX(posx);
-	entidades[cantDeEntidades -1]->m_mapPosition2.setY(posy);
-	entidades[cantDeEntidades -1]->setFrame(frame);
-	entidades[cantDeEntidades -1]->setOffset(offsetX,offsetY);
+	entidades[cantDeEntidades -1] = entidad;
 
-	delete vec;
+
 }
 
 void Game::restart() //Con Q
