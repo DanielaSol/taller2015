@@ -19,7 +19,8 @@
 #include "Arbolit.h"
 #include "Castillo.h"
 #include "Suelo.h"
-#include<algorithm>
+#include <algorithm>
+#include <string>
 
 using namespace std;
 
@@ -103,34 +104,33 @@ bool Game::initGame()
 
 	if(!TheTextureManager::Instance()->load(TheParser::Instance()->configGame.objetos.at("juana_de_arco").imagen,"animate", m_pRenderer))
 		return false;
-	/*if (TheParser::Instance()->configGame.objetos.at("arbol").imagen == " "){
-		TheTextureManager::Instance()->load("assets/Terrain_tileset2.png","arbol",m_pRenderer);
-	}else{
-		TheTextureManager::Instance()->load(TheParser::Instance()->configGame.objetos.at("arbol").imagen,"arbol",m_pRenderer);
-	}
-	if (TheParser::Instance()->configGame.objetos.at("castillo").imagen == " "){
-		TheTextureManager::Instance()->load("assets/cubo.png","casa",m_pRenderer);
-	}else{
-		TheTextureManager::Instance()->load(TheParser::Instance()->configGame.objetos.at("castillo").imagen,"casa",m_pRenderer);
-	}
-	if (TheParser::Instance()->configGame.objetos.at("agua").imagen == " "){
-		TheTextureManager::Instance()->load("assets/Tiles/No-tile.png","agua",m_pRenderer);
-	}else{
-	TheTextureManager::Instance()->load(TheParser::Instance()->configGame.objetos.at("agua").imagen,"agua",m_pRenderer);
-	}
-	if (TheParser::Instance()->configGame.objetos.at("tierra").imagen == " "){
-		TheTextureManager::Instance()->load("assets/Tiles/No-tile.png","tierra",m_pRenderer);
-	}else{
-	TheTextureManager::Instance()->load(TheParser::Instance()->configGame.objetos.at("tierra").imagen,"tierra",m_pRenderer);
-	}
-	// PODRIA HACER QUE CUANDO NO ENCUANTRA UNA DE ESTAS IMAGENES CARGUE ALGUNA POR DEFECTO
 
-*/
 	std::vector<string> vectorTipos={"arbol","castillo","juana_de_arco","tierra","agua","molino"};
-
+	string imgAux;
 	for (string tipo: vectorTipos){
+		try {
+			if (!TheTextureManager::Instance()->load(TheParser::Instance()->configGame.objetos.at(tipo).imagen,tipo, m_pRenderer)){
 
-		TheTextureManager::Instance()->load(TheParser::Instance()->configGame.objetos.at(tipo).imagen,tipo, m_pRenderer);
+				if (tipo=="arbol")
+					imgAux="assets/no-terrain.png";
+				else if (tipo=="castillo")
+					imgAux="assets/no-castillo.png";
+				else if (tipo=="juana_de_arco")
+					imgAux="assets/no-GoblinWalk.png";
+				else if (tipo=="tierra")
+					imgAux="assets/Tiles/no-tierra.png";
+				else if (tipo=="agua")
+					imgAux="assets/Tiles/no-agua.png";
+				else if (tipo=="molino")
+					imgAux="assets/no-windmill.png";
+
+				TheTextureManager::Instance()->load(imgAux,tipo, m_pRenderer);
+			}
+		}
+
+		catch (std::out_of_range& e){
+			continue;
+		}
 
 	}
 

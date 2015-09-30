@@ -17,11 +17,10 @@ bool TextureManager::load(std::string fileName, std::string id, SDL_Renderer* pR
 	SDL_Surface* pTempSurface = IMG_Load(fileName.c_str());
 	if(pTempSurface == 0)
 	{
-		//acá hay que acomodar bien el nombre para ir a las imágenes por defecto (daniela)
-		std::string  nombre= "no-"+fileName;
-		pTempSurface = IMG_Load(nombre.c_str());
+		//std::string  nombre= "no-"+fileName;
+		//pTempSurface = IMG_Load(nombre.c_str());
 		LOG("NO SE ENCONTRO LA IMAGEN "+fileName+", SE CARGARA UNA IMAGEN POR DEFECTO");
-		//return false; //en realidad cuando cargue la imagen por defecto, esto ya no importaria el return creo (daniela)
+		return false;
 	}
 	SDL_Texture* pTexture = SDL_CreateTextureFromSurface(pRenderer, pTempSurface);
 	SDL_FreeSurface(pTempSurface);

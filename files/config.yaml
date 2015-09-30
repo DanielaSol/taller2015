@@ -67,7 +67,7 @@ escenario:
         - {x: 10, y: 10, tipo: tierra} 
         - {x:  5, y:  5, tipo: castillo}
         - {x: 1, y: 5, tipo: molino}
-        - {x: 0, y: 0, tipo: agua}
+
 
 protagonista: 
      tipo: juana_de_arco
