@@ -267,7 +267,7 @@ void Parser::Inicializar(YAML::Node Arbol){
 
 	}
 	catch (YAML::TypedBadConversion<int>& e){
-		LOG("Hubo un error de conversión, se cargará el archivo YAML por defecto");
+		LOG("ERROR DE CONVERSIÓN");
 		huboErrores = true;
 	}
 
