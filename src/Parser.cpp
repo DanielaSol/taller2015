@@ -277,7 +277,7 @@ void Parser::Inicializar(YAML::Node Arbol){
 
 
 	if (huboErrores){
-		cout << "hay que agarrar todo el árbol por defecto"<< endl;
+		LOG("HUBO UN ERROR EN EL YAML USADO, SE CARGARÁ EL ARCHIVO YAML POR DEFECTO");
 		Trees=YAML::LoadFile(FILE_YAML_DEFAULT);
 		Inicializar(Trees);
 	}
