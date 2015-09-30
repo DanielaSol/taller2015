@@ -59,14 +59,7 @@ YAML::Node Parser::getField(string field , string subField, YAML::Node nodo){
 
 	if (result== NULL) {
 		LOG ("SE INTENTÓ ACCEDER AL CAMPO INEXISTENTE "+field+" "+subField);
-		//return nodo; //acá deberia buscar un valor por defecto
-		/*if (subField.empty())
-				result = DefaultTrees[field];
-			else
-				result = DefaultTrees[field][subField];
-		return result;*/
 		throw 0;
-
 	}
 	else
 		return result;
@@ -80,43 +73,19 @@ YAML::Node Parser::getField(string field, YAML::Node::const_iterator it){
 	if (result== NULL) {
 		LOG ("SE INTENTÓ ACCEDER AL CAMPO INEXISTENTE "+field);
 		throw 0;
-		//return result; //acá deberia buscar un valor por defecto, tengo que agarrar la lista de este iterador en el defaulTrees
-		//return result;
-
-
 	}
 	else
 		return result;
-
-
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Parser::setField( std::string field, std::string subField,  YAML::Node nodo, int& aSetear){
 
-/*	try{
-		aSetear=getField(field ,subField, nodo).as<int>();
-	}
-	catch (YAML::TypedBadConversion<int>& e){
-		LOG ("ERROR DE TIPO EN CAMPO " + field + " " + subField + ", SE CARGARÁ VALOR POR DEFECTO PARA EL MISMO");
-		aSetear=getField(field ,subField, DefaultTrees).as<int>();
-	}*/
-
 	aSetear=getField(field ,subField, nodo).as<int>();
-
-
 }
 
 void Parser::setField(std::string field, std::string subField, YAML::Node nodo, string& aSetear){
-
-/*	try{
-		aSetear=getField(field ,subField, nodo).as<string>();
-	}
-	catch (YAML::TypedBadConversion<string>& e){
-		LOG ("ERROR DE TIPO EN CAMPO " + field + " " + subField + ", SE CARGARÁ VALOR POR DEFECTO PARA EL MISMO");
-		aSetear=getField(field ,subField, DefaultTrees).as<string>();
-	}*/
 
 	aSetear=getField(field ,subField, nodo).as<string>();
 
@@ -125,51 +94,17 @@ void Parser::setField(std::string field, std::string subField, YAML::Node nodo, 
 
 void Parser::setField(string field, YAML::Node::const_iterator it, string& aSetear){
 
-	/*try{
-		aSetear=getField(categoria, field, it).as<string>();
-    	}
-	catch (YAML::TypedBadConversion<string>& e){
-		LOG ("ERROR DE TIPO EN CAMPO " + field +", SE CARGARÁ VALOR POR DEFECTO PARA EL MISMO");
-		cout << (*it);
-		}*/
-
 	aSetear=getField(field, it).as<string>();
-
 
 }
 
 
 void Parser::setField(string field, YAML::Node::const_iterator it, int& aSetear){
 
-/*	try{
-		aSetear=getField(field, it).as<int>();
-	}
-	catch (YAML::TypedBadConversion<int>& e){
-		LOG ("ERROR DE TIPO EN CAMPO " + field +", SE CARGARÁ VALOR POR DEFECTO PARA EL MISMO");
-		if (field == "x" ){
-			srand (time(NULL));
-			aSetear = rand() % configGame.escenario.size_x + 1;
-		}
-		else if (field == "y"){
-			srand (time(NULL));
-			aSetear = rand() % configGame.escenario.size_y + 1;
-		}
-		else
-			aSetear=getField(field , "", DefaultTrees).as<int>();
-	}
-
-
-	*/
-
 	aSetear=getField(field, it).as<int>();
-
-
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
 
 bool campoValido (string field,list<string> listaCampos ){
 
@@ -180,9 +115,7 @@ bool campoValido (string field,list<string> listaCampos ){
 			break;
 		}
 	}
-
 	return encontrado;
-
 }
 
 
@@ -275,15 +208,11 @@ void Parser::Inicializar(YAML::Node Arbol){
 		huboErrores = true;
 	}
 
-
 	if (huboErrores){
 		LOG("HUBO UN ERROR EN EL YAML USADO, SE CARGARÁ EL ARCHIVO YAML POR DEFECTO");
 		Trees=YAML::LoadFile(FILE_YAML_DEFAULT);
 		Inicializar(Trees);
 	}
-
-
-
 }
 
 } /* namespace std */
