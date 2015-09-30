@@ -58,7 +58,7 @@ YAML::Node Parser::getField(string field , string subField, YAML::Node nodo){
 		result = nodo[field][subField];
 
 	if (result== NULL) {
-		LOG ("SE INTENTÓ ACCEDER AL CAMPO INEXISTENTE "+field);
+		LOG ("SE INTENTÓ ACCEDER AL CAMPO INEXISTENTE "+field+" "+subField);
 		//return nodo; //acá deberia buscar un valor por defecto
 		/*if (subField.empty())
 				result = DefaultTrees[field];
