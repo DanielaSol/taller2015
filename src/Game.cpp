@@ -130,15 +130,17 @@ bool Game::initGame()
 
 
 	}
-
-
-
+	Vector2D* vec = new Vector2D(0,0);
+	vec->setX(TheParser::Instance()->configGame.protagonista.x);
+	vec->setY(TheParser::Instance()->configGame.protagonista.y);
+	vec->toIsometric();
 	m_pAldeano_test = new Unit();
-	m_pAldeano_test->load(TheParser::Instance()->configGame.protagonista.x,
-					TheParser::Instance()->configGame.protagonista.y,
+	m_pAldeano_test->load(vec->getX(),
+						vec->getY(),
 						125, 168, 		 //125 y 168 son el ancho y alto de la imagen a cortar
 						40,	54.76f,			// 40 y 54.76 son el ancho y alto de la imagen a dibujar
 						5, "animate");   // y el 5 corresponde a la cantidad de Frames
+	delete vec;
     m_pMap = new Map();
     m_pMap->load();
 
@@ -177,7 +179,7 @@ bool Game::initGame()
     	}
 
     }
-  // entidades.push_back(m_pAldeano_test);
+   entidades.push_back(m_pAldeano_test);
 
     return true;
 }
@@ -190,11 +192,11 @@ void Game::render()
 	//m_pGameStateMachine->render();// Dejo esto por si despues implementamos maquinaa finita de estados para los estados de jeugo: menu, etc
     m_pMap->draw();
     //primero dibuja entidades, luego el personaje (siempre aparece por arriba de las cosas
-    for (int i=0;i<cantDeEntidades;i++){
+    for (uint i=0;i<entidades.size();i++){
     	if (entidades[i])
     		entidades[i]->draw();
     }
-    m_pAldeano_test->draw();
+   // m_pAldeano_test->draw();
 
     SDL_RenderPresent(m_pRenderer);
 
@@ -204,8 +206,9 @@ void Game::update()
 {
 	TheCamera::Instance()->update();
 		//m_pGameStateMachine->update();
-	//sort(entidades.begin(), entidades.end(), CompareGameObject());
 
+	//if (!entidades.empty())
+		//sort(entidades.begin(), entidades.end(), CompareGameObject());
 	m_pAldeano_test->update();
 	m_pMap->update();
 }
@@ -240,9 +243,11 @@ void Game::clean()
    // delete m_pGameStateMachine;
     m_pAldeano_test->clean();
     m_pMap->clean();
-    for(int i = 0; i < entidades.size(); i++){
+    for(uint i = 0; i < entidades.size(); i++){
     	if (entidades [i])
+    	{
     		entidades[i]->clean();
+    	}
     	delete entidades[i];
     }
     entidades.clear();
@@ -281,8 +286,8 @@ void Game::cargarEntidad(int posx,int posy,int width,int height,int destWidth,
 		}
 	}
 
-	cantDeEntidades += 1;
-	entidades.resize(cantDeEntidades);
+	//cantDeEntidades += 1;
+	//entidades.resize(cantDeEntidades);
 	//rposx += 1;posy +=1; //por alguna razon esta corrida un espacio (chequear)
 	float possx = posx * TILE_WIDTH/2;
 	float possy = posy * TILE_HEIGHT;
@@ -292,13 +297,21 @@ void Game::cargarEntidad(int posx,int posy,int width,int height,int destWidth,
 	vec->toIsometric();
 	// Cuando cargo la imagen, en la posicion y le resto la mitad de la altura para que dibuje desde abajo del sprite
 
-	entidades[cantDeEntidades -1] = new GameObject();
+	GameObject* temp = new GameObject();
+	temp->load(vec->getX(),vec->getY(),width,height,destWidth,destHeight,numFrames,nombre);
+	temp->setRow(row);
+	temp->m_mapPosition2.setX(posx);
+	temp->m_mapPosition2.setY(posy);
+	temp->setFrame(frame);
+	temp->setOffset(offsetX,offsetY);
+	entidades.push_back(temp);
+	/*entidades[cantDeEntidades -1] = new GameObject();
 	entidades[cantDeEntidades -1]->load(vec->getX(),vec->getY(),width,height,destWidth,destHeight,numFrames,nombre);
 	entidades[cantDeEntidades -1]->setRow(row);
 	entidades[cantDeEntidades -1]->m_mapPosition2.setX(posx);
 	entidades[cantDeEntidades -1]->m_mapPosition2.setY(posy);
 	entidades[cantDeEntidades -1]->setFrame(frame);
-	entidades[cantDeEntidades -1]->setOffset(offsetX,offsetY);
+	entidades[cantDeEntidades -1]->setOffset(offsetX,offsetY);*/
 
 	delete vec;
 }
@@ -307,17 +320,19 @@ void Game::restart() //Con Q
 {
 	m_bQuiting = true;
 	//LIMPIA EL ESTADO DEL JUEGO
+
    m_pAldeano_test->clean();
    m_pMap->clean();
-   for(int i=0;i < cantDeEntidades ;i++){
+   for(int i=0;i < entidades.size() ;i++){
 	   if (entidades[i])
 	   {
 			entidades[i]->clean();
 			delete entidades[i];
 	   }
 	}
-    entidades.clear();
-	delete m_pAldeano_test;
+	entidades.clear();
+
+	//delete m_pAldeano_test;
 	delete m_pMap;
 	SDL_DestroyWindow(m_pWindow);
 	SDL_DestroyRenderer(m_pRenderer);

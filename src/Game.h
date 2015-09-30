@@ -90,6 +90,7 @@ private:
 	{
 		inline bool operator()(const GameObject* obj1, const GameObject* obj2)
 		{
+
 			int obj1_value = obj1->m_mapPosition2.m_x + obj1->m_mapPosition2.m_y;
 			int obj2_value = obj2->m_mapPosition2.m_x + obj2->m_mapPosition2.m_y;
 
@@ -101,10 +102,10 @@ private:
 
 			if (obj1_value == obj2_value)
 			{
-				if (obj1->m_mapPosition2.m_y >= obj2->m_mapPosition2.m_y)
-					return true;
-				else
+				if (obj1->m_mapPosition2.m_y <= obj2->m_mapPosition2.m_y)
 					return false;
+				else
+					return true;
 			}
 			return true;
 		}
