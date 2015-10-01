@@ -85,6 +85,7 @@ public:
 	ConfigGame configGame;
 	static Parser* parInstance;
 
+	void escribirLog(string msg);
 
 	void Inicializar(YAML::Node);
 	void reset();

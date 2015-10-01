@@ -30,6 +30,7 @@ Molino::Molino(int x,int y){
 	GameObject::setAlto(TheParser::Instance()->configGame.objetos.at("molino").alto);
 	GameObject::setAncho(TheParser::Instance()->configGame.objetos.at("molino").ancho);
 	delete vec;
+
 }
 
 Molino::~Molino() {
@@ -38,13 +39,19 @@ Molino::~Molino() {
 
 void Molino::update(){
 
-	if(m_currentFrame == 2 && TheParser::Instance()->configGame.objetos.at("molino").animacion.delay != 0)
+	if(m_currentFrame == 2 )//&& //TheParser::Instance()->configGame.objetos.at("molino").animacion.delay != 0)
 	{
 		delay += 1;
-		if(delay > 50*TheParser::Instance()->configGame.objetos.at("molino").animacion.delay) {m_currentFrame = 0; delay = 0;}
+		if(delay > 25*TheParser::Instance()->configGame.objetos.at("molino").animacion.delay) {m_currentFrame = 0; delay = 0;}
 	}
 	else{
-	m_currentFrame = int(((SDL_GetTicks() / (100)) % m_numFrames));
+	count += TheParser::Instance()->configGame.objetos.at("molino").animacion.fps;
+	if (count >= 60){
+		m_currentFrame += 1;
+		count = 0;
+
+	}
+		//m_currentFrame = int((( TheParser::Instance()->configGame.objetos.at("molino").animacion.fps ) % m_numFrames));
 	}
 
 }

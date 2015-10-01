@@ -7,6 +7,8 @@
 
 #include "Logger.h"
 #include <fstream>
+#include <iostream>
+
 #include "time.h"
 
 using namespace std;
@@ -28,7 +30,7 @@ void Logger::write(string message) {
 
 	  time ( &rawtime );
 	  timeinfo = localtime ( &rawtime );
-
+	  cout << message ;
 	  string salida = message + " - " + asctime (timeinfo);
 	  fputs(salida.c_str(),file);
 

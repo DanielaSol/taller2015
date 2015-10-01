@@ -30,7 +30,7 @@ public:
 	int row = 1;
 	int frame = 0;
 
-
+	int count = 0;
 
 };
 

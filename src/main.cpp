@@ -21,6 +21,11 @@ int main(int argc, char **argv)
     Uint32 frameStart, frameTime;
 
 	Logger* myLog = new Logger();
+	FILE* arch;
+	arch= fopen("prueba.txt","w+");
+	fclose(arch);
+
+
 
 	TheParser::Instance();
 

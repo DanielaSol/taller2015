@@ -62,7 +62,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
         if(m_pWindow != 0) // window init success
         {
             cout << "window creation success\n";
-            m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_ACCELERATED);
+            m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_SOFTWARE);
 
             if(m_pRenderer != 0) // renderer init success
             {
@@ -110,6 +110,21 @@ bool Game::initGame()
 	for (string tipo: vectorTipos){
 		try {
 			if (!TheTextureManager::Instance()->load(TheParser::Instance()->configGame.objetos.at(tipo).imagen,tipo, m_pRenderer)){
+				FILE* arch;
+
+				time_t rawtime;
+				  struct tm * timeinfo;
+
+				  time ( &rawtime );
+				  timeinfo = localtime ( &rawtime );
+
+				  string salida = "la imagen del tipo " + tipo + " no existe, se cargará una imagen por defecto " + " - " + asctime (timeinfo);
+
+
+					arch= fopen("prueba.txt","a+");
+					fputs(salida.c_str(),arch);
+					fclose(arch);
+
 
 				if (tipo=="arbol")
 					imgAux="assets/no-terrain.png";
@@ -245,7 +260,7 @@ void Game::clean()
 
     TheInputHandler::Instance()->clean();
 
-    //m_pGameStateMachine->clean();
+   // m_pGameStateMachine->clean();
    // m_pGameStateMachine = 0;
    // delete m_pGameStateMachine;
     m_pAldeano_test->clean();

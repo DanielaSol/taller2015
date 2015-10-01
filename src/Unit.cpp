@@ -71,7 +71,7 @@ void Unit::moveTo(const Vector2D& position)
 		m_mapPosition2.toCartesian();
 		m_mapPosition2.setX((int)(m_mapPosition2.getX() / TheGame::Instance()->TILE_WIDTH*2));
 		m_mapPosition2.setY((int)(m_mapPosition2.getY() / TheGame::Instance()->TILE_HEIGHT));
-	    cout << m_mapPosition2.getX() << " / " << m_mapPosition2.getY()  << "\n";
+	   //cout << m_mapPosition2.getX() << " / " << m_mapPosition2.getY()  << "\n";
 
 	//calcula el vector direccion y lo normaliza (solo lo queremos para indicar dirección de movimiento, no velocidad)
 	m_direction.setX(m_screenCoordDestination.getX() - m_screenPosition.getX());
@@ -125,7 +125,7 @@ void Unit::handleInput()
 			m_destination.toCartesian();
 			m_destination.setX((int)(m_destination.getX() / TheGame::Instance()->TILE_WIDTH*2));
 			m_destination.setY((int)(m_destination.getY() / TheGame::Instance()->TILE_HEIGHT));
-			cout << "Tile clicked = ( " << (int) m_destination.m_x << " , " << (int)m_destination.m_y << " ) \n";
+			//cout << "Tile clicked = ( " << (int) m_destination.m_x << " , " << (int)m_destination.m_y << " ) \n";
 
 			//analiza que no se cliquee fuera de los bordes
 			if ((m_destination.getX() >= TheGame::Instance()->getMapWidth()) ||

@@ -20,6 +20,26 @@ YAML::Node Trees;
 YAML::Node DefaultTrees;
 Parser* Parser::parInstance = 0;
 
+void Parser::escribirLog(string msg){
+	FILE* arch;
+
+	time_t rawtime;
+	  struct tm * timeinfo;
+
+	  time ( &rawtime );
+	  timeinfo = localtime ( &rawtime );
+
+	  string salida = msg + " - " + asctime (timeinfo);
+
+
+		arch= fopen("prueba.txt","a+");
+		fputs(salida.c_str(),arch);
+		fclose(arch);
+
+
+
+}
+
 Parser::Parser() {
 
 	try{
@@ -27,14 +47,29 @@ Parser::Parser() {
 	}
 	catch (YAML::ParserException& e){
 		 LOG("NO PUEDE ABRIRSE EL ARCHIVO " FILE_YAML ", SE CARGARÁ EL ARCHIVO DE CONFIGURACIÓN POR DEFECTO");
+		 escribirLog("NO PUEDE ABRIRSE EL ARCHIVO " FILE_YAML ", SE CARGARÁ EL ARCHIVO DE CONFIGURACIÓN POR DEFECTO");
 		 try{
 		 		Trees=YAML::LoadFile(FILE_YAML_DEFAULT);
 		 	}
 		 	catch (YAML::BadFile& e){
 		 		LOG("NO PUDO ABRIRSE EL ARCHIVO " FILE_YAML_DEFAULT " EL PROGRAMA SE INTERRUMPIRÁ");
+		 		escribirLog("NO PUDO ABRIRSE EL ARCHIVO " FILE_YAML_DEFAULT " EL PROGRAMA SE INTERRUMPIRÁ");
 		 		exit (1); //acá debería hacer un exit lindo
 		 	}
 	}
+
+	catch (YAML::BadFile& e){
+			 LOG("NO PUEDE ABRIRSE EL ARCHIVO " FILE_YAML ", SE CARGARÁ EL ARCHIVO DE CONFIGURACIÓN POR DEFECTO");
+			 escribirLog("NO PUEDE ABRIRSE EL ARCHIVO " FILE_YAML ", SE CARGARÁ EL ARCHIVO DE CONFIGURACIÓN POR DEFECTO");
+			 try{
+			 		Trees=YAML::LoadFile(FILE_YAML_DEFAULT);
+			 	}
+			 	catch (YAML::BadFile& e){
+			 		LOG("NO PUDO ABRIRSE EL ARCHIVO " FILE_YAML_DEFAULT " EL PROGRAMA SE INTERRUMPIRÁ");
+			 		escribirLog("NO PUDO ABRIRSE EL ARCHIVO " FILE_YAML_DEFAULT " EL PROGRAMA SE INTERRUMPIRÁ");
+			 		exit (1); //acá debería hacer un exit lindo
+			 	}
+		}
 
 	Inicializar(Trees);
 
@@ -59,6 +94,7 @@ YAML::Node Parser::getField(string field , string subField, YAML::Node nodo){
 
 	if (result== NULL) {
 		LOG ("SE INTENTÓ ACCEDER AL CAMPO INEXISTENTE "+field+" "+subField);
+		escribirLog("SE INTENTÓ ACCEDER AL CAMPO INEXISTENTE "+field+" "+subField);
 		throw 0;
 	}
 	else
@@ -72,6 +108,7 @@ YAML::Node Parser::getField(string field, YAML::Node::const_iterator it){
 	result = (*it)[field];
 	if (result== NULL) {
 		LOG ("SE INTENTÓ ACCEDER AL CAMPO INEXISTENTE "+field);
+		escribirLog("SE INTENTÓ ACCEDER AL CAMPO INEXISTENTE "+field);
 		throw 0;
 	}
 	else
@@ -83,6 +120,10 @@ YAML::Node Parser::getField(string field, YAML::Node::const_iterator it){
 void Parser::setField( std::string field, std::string subField,  YAML::Node nodo, int& aSetear){
 
 	aSetear=getField(field ,subField, nodo).as<int>();
+	if(aSetear < 0){
+		cout << "valor negativo";
+		throw 0;
+	}
 }
 
 void Parser::setField(std::string field, std::string subField, YAML::Node nodo, string& aSetear){
@@ -102,6 +143,10 @@ void Parser::setField(string field, YAML::Node::const_iterator it, string& aSete
 void Parser::setField(string field, YAML::Node::const_iterator it, int& aSetear){
 
 	aSetear=getField(field, it).as<int>();
+	if(aSetear < 0){
+		cout << "valor negativos";
+		throw 0;
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -144,6 +189,7 @@ void Parser::Inicializar(YAML::Node Arbol){
 			}
 			catch(std::out_of_range& e){
 				LOG ("SE INTENTÓ CARGAR UN OBJETO INVÁLIDO "+unObjeto.nombre);
+				escribirLog("SE INTENTÓ CARGAR UN OBJETO INVÁLIDO "+unObjeto.nombre);
 				break; // no cargo el elemento
 			}
 
@@ -183,6 +229,7 @@ void Parser::Inicializar(YAML::Node Arbol){
 			}
 			catch(std::out_of_range& e){
 				LOG ("SE INTENTÓ CARGAR UN OBJETO INVÁLIDO "+unaEntidad.tipo);
+				escribirLog("SE INTENTÓ CARGAR UN OBJETO INVÁLIDO "+unaEntidad.tipo);
 				break; // no cargo el elemento
 			}
 
@@ -201,6 +248,7 @@ void Parser::Inicializar(YAML::Node Arbol){
 	}
 	catch (YAML::TypedBadConversion<int>& e){
 		LOG("ERROR DE CONVERSIÓN");
+		escribirLog("ERROR DE CONVERSION");
 		huboErrores = true;
 	}
 
@@ -209,7 +257,9 @@ void Parser::Inicializar(YAML::Node Arbol){
 	}
 
 	if (huboErrores){
-		LOG("HUBO UN ERROR EN EL YAML USADO, SE CARGARÁ EL ARCHIVO YAML POR DEFECTO");
+		//LOG("HUBO UN ERROR EN EL YAML USADO, SE CARGARÁ EL ARCHIVO YAML POR DEFECTO");
+
+		escribirLog("HUBO UN ERROR EN EL YAML USADO, SE CARGARÁ EL ARCHIVO YAML POR DEFECTO ");
 		Trees=YAML::LoadFile(FILE_YAML_DEFAULT);
 		Inicializar(Trees);
 	}

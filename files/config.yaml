@@ -4,7 +4,7 @@ pantalla:
 
 configuracion: 
  vel_personaje : 3 
- margen_scroll : 30
+ margen_scroll : 100
 
 tipos: 
    - nombre: arbol
@@ -14,8 +14,8 @@ tipos:
      pixel_ref_x: 0
      pixel_ref_y: 0
    - nombre: castillo
-     imagen: assets/castillo.png 
-     ancho: 2 
+     imagen: assets/castillo.png
+     ancho: 2
      alto: 2 
      pixel_ref_x: 0
      pixel_ref_y: 0
@@ -53,7 +53,7 @@ tipos:
      alto: 1
      pixel_ref_x: 15
      pixel_ref_y: 0
-     fps: 10
+     fps: 100
      delay: 0
 
 escenario:
@@ -61,10 +61,9 @@ escenario:
      size_x: 100 
      size_y: 100 
      entidades:  
-        - {x: 20, y: 15, tipo: arbol} 
+        - {x: 0, y: 0, tipo: arbol} 
         - {x: 15, y: 20, tipo: arbol} 
         - {x: 10, y: 15, tipo: arbol} 
-        - {x: 10, y: 10, tipo: tierra} 
         - {x:  5, y:  5, tipo: castillo}
         - {x: 1, y: 5, tipo: molino}
 
