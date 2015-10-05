@@ -112,7 +112,7 @@ public:
 	       { "juana_de_arco", {"imagen", "ancho", "fps", "delay", "alto", "pixel_ref_x","pixel_ref_y" }},
 	       { "tierra", {"imagen",  "ancho", "alto", "pixel_ref_x","pixel_ref_y" }},
 	       { "agua", {"imagen",  "ancho", "alto", "pixel_ref_x","pixel_ref_y" }},
-	       { "molino", {"imagen",  "ancho", "alto", "pixel_ref_x","pixel_ref_y", "delay" }}
+	       { "molino", {"imagen",  "ancho", "fps", "alto", "pixel_ref_x","pixel_ref_y", "delay" }}
 
 	    };
 

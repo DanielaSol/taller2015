@@ -39,18 +39,32 @@ Molino::~Molino() {
 
 void Molino::update(){
 
-	if(m_currentFrame == 2 )//&& //TheParser::Instance()->configGame.objetos.at("molino").animacion.delay != 0)
+	if(m_currentFrame == (numFrames-1))
 	{
-		delay += 1;
-		if(delay > 25*TheParser::Instance()->configGame.objetos.at("molino").animacion.delay) {m_currentFrame = 0; delay = 0;}
+		if(TheParser::Instance()->configGame.objetos.at("molino").animacion.delay != 0)
+		{
+			delay += 1;
+			if(delay > 25*TheParser::Instance()->configGame.objetos.at("molino").animacion.delay) {m_currentFrame = 0; delay = 0;}
+		}
+		else
+		{
+			count += TheParser::Instance()->configGame.objetos.at("molino").animacion.fps;
+			if (count > 30)
+			{
+				m_currentFrame = 0;
+				count = 0;
+			}
+		}
 	}
-	else{
-	count += TheParser::Instance()->configGame.objetos.at("molino").animacion.fps;
-	if (count >= 60){
-		m_currentFrame += 1;
-		count = 0;
+	else
+	{
+		count += TheParser::Instance()->configGame.objetos.at("molino").animacion.fps;
+		if (count > 30)
+		{
+			m_currentFrame += 1;
+			count = 0;
 
-	}
+		}
 		//m_currentFrame = int((( TheParser::Instance()->configGame.objetos.at("molino").animacion.fps ) % m_numFrames));
 	}
 
