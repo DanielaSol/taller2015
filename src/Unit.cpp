@@ -60,18 +60,13 @@ void Unit::update(){
 void Unit::moveTo(const Vector2D& position)
 {
 	//calcula posicion actual
-	m_mapPosition.setX(m_screenPosition.getX() - TheGame::Instance()->TILE_WIDTH/4);
-	m_mapPosition.setY(m_screenPosition.getY() - TheGame::Instance()->TILE_HEIGHT/4);
-	m_mapPosition.toCartesian();
-	m_mapPosition.setX((int)(m_mapPosition.getX() / TheGame::Instance()->TILE_WIDTH*2));
-	m_mapPosition.setY((int)(m_mapPosition.getY() / TheGame::Instance()->TILE_HEIGHT));
+	m_mapPosition.setX(m_screenPosition.getX() - TheGame::Instance()->TILE_WIDTH/2);
+	m_mapPosition.setY(m_screenPosition.getY() - TheGame::Instance()->TILE_HEIGHT/2);
+	m_mapPosition.screenToWorld();
 
-		m_mapPosition2.setX(m_screenPosition.getX() - (TheGame::Instance()->TILE_WIDTH/4));
-		m_mapPosition2.setY(m_screenPosition.getY() - (TheGame::Instance()->TILE_HEIGHT/4));
-		m_mapPosition2.toCartesian();
-		m_mapPosition2.setX((int)(m_mapPosition2.getX() / TheGame::Instance()->TILE_WIDTH*2));
-		m_mapPosition2.setY((int)(m_mapPosition2.getY() / TheGame::Instance()->TILE_HEIGHT));
-	   //cout << m_mapPosition2.getX() << " / " << m_mapPosition2.getY()  << "\n";
+		m_mapPosition2.setX(m_screenPosition.getX() - (TheGame::Instance()->TILE_WIDTH/2));
+		m_mapPosition2.setY(m_screenPosition.getY() - (TheGame::Instance()->TILE_HEIGHT/2));
+		m_mapPosition2.screenToWorld();
 
 	//calcula el vector direccion y lo normaliza (solo lo queremos para indicar dirección de movimiento, no velocidad)
 	m_direction.setX(m_screenCoordDestination.getX() - m_screenPosition.getX());
@@ -107,25 +102,22 @@ void Unit::handleInput()
 	{
 		if (!m_bChangingDestination)
 		{
-			//El siguiente cout no informa errores (no es necesario ponerlo en el log) y es bastante costoso. Lo podemos sacar
-			//cout << "moving from  x = " <<  m_screenPosition.getX() << " y = " << m_screenPosition.getY() << " to ---> x = " <<  TheInputHandler::Instance()->getMousePosition()->getX() - (getWidth() / 2.0f) << " y = " << TheInputHandler::Instance()->getMousePosition()->getY() - (getHeight() / 2.0f) << "\n";
-
 			float backUpScreenX = m_screenCoordDestination.getX();
 			float backUpScreenY = m_screenCoordDestination.getY();
 			float backUpCarterianX = m_destination.getX();
 			float backUpCarterianY = m_destination.getY();
 
 			//Calcula la coordenada a moverse en coordenadas cartesianas de mapa
-			float coordX = (TheInputHandler::Instance()->getMousePosition()->getX() + TheCamera::Instance()->offsetX);
-			float coordY = (TheInputHandler::Instance()->getMousePosition()->getY() + TheCamera::Instance()->offsetY);
-			m_screenCoordDestination.setX(coordX);
-			m_screenCoordDestination.setY(coordY);
-			m_destination.setX(coordX - TheGame::Instance()->TILE_WIDTH/4);
-			m_destination.setY(coordY - TheGame::Instance()->TILE_HEIGHT/4);
-			m_destination.toCartesian();
-			m_destination.setX((int)(m_destination.getX() / TheGame::Instance()->TILE_WIDTH*2));
-			m_destination.setY((int)(m_destination.getY() / TheGame::Instance()->TILE_HEIGHT));
-			//cout << "Tile clicked = ( " << (int) m_destination.m_x << " , " << (int)m_destination.m_y << " ) \n";
+			float coordX = (TheInputHandler::Instance()->getMousePosition()->getX() + TheCamera::Instance()->offsetX) - (TheGame::Instance()->TILE_WIDTH/2);
+			float coordY = (TheInputHandler::Instance()->getMousePosition()->getY() + TheCamera::Instance()->offsetY) - (TheGame::Instance()->TILE_HEIGHT/2);
+
+			m_screenCoordDestination.setX(coordX + (TheGame::Instance()->TILE_WIDTH/2));
+			m_screenCoordDestination.setY(coordY + (TheGame::Instance()->TILE_HEIGHT/2));
+			m_destination.setX(coordX);
+			m_destination.setY(coordY);
+			m_destination.screenToWorld();
+
+			cout << "Tile clicked = ( " << (int) m_destination.m_x << " , " << (int)m_destination.m_y << " ) \n";
 
 			//analiza que no se cliquee fuera de los bordes
 			if ((m_destination.getX() >= TheGame::Instance()->getMapWidth()) ||
@@ -174,6 +166,8 @@ void Unit::aumentarFrame(){
 void Unit::checkSpriteDirection()
 {
 	//se esta moviendo y es hacia abajo
+	if ((m_direction.getX() == 0) && (m_direction.getY() == 0))
+		return;
 	if(m_direction.getY() > 0.4f)
 	{
 		//abajo a la derecha

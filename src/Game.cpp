@@ -204,8 +204,10 @@ bool Game::initGame()
 
 void Game::render()
 {
-	SDL_RenderClear(m_pRenderer);
+	if (m_bQuiting)
+		return;
 
+	SDL_RenderClear(m_pRenderer);
 	//m_pGameStateMachine->render();// Dejo esto por si despues implementamos maquinaa finita de estados para los estados de jeugo: menu, etc
     m_pMap->draw();
     //primero dibuja entidades, luego el personaje (siempre aparece por arriba de las cosas
@@ -221,17 +223,20 @@ void Game::render()
 
 void Game::update()
 {
+	if (m_bQuiting)
+		return;
 	TheCamera::Instance()->update();
 		//m_pGameStateMachine->update();
 	//sort(entidades.begin(), entidades.end(), CompareGameObject());
-	 for (int i=0;i<cantDeEntidades;i++){
+	 for (int i=0;i<entidades.size();i++){
 	    	if (entidades[i])
 	    		entidades[i]->update();
 	}
 
-	//if (!entidades.empty())
-		//sort(entidades.begin(), entidades.end(), CompareGameObject());
-	m_pAldeano_test->update();
+	if (entidades.size() > 1)
+		sort(entidades.begin(), entidades.end(), CompareGameObject());
+
+	//m_pAldeano_test->update();
 	m_pMap->update();
 }
 
@@ -247,10 +252,17 @@ void Game::handleEvents()
             return;
         }
 	}
+    else
+    {
+    	return;
+    }
 
 	TheCamera::Instance()->handleInput();
-
-	m_pAldeano_test->handleInput();
+	 for (int i=0;i<entidades.size();i++){
+	    	if (entidades[i])
+	    		entidades[i]->handleInput();
+	}
+	//m_pAldeano_test->handleInput();
 	m_pMap->handleInput();
 }
 
@@ -322,7 +334,7 @@ void Game::restart() //Con Q
 
    m_pAldeano_test->clean();
    m_pMap->clean();
-   for(int i=0;i < entidades.size() ;i++){
+   for(uint i=0;i < entidades.size() ;i++){
 	   if (entidades[i])
 	   {
 			entidades[i]->clean();
@@ -330,6 +342,7 @@ void Game::restart() //Con Q
 	   }
 	}
 	entidades.clear();
+	cantDeEntidades = 0;
 
 	//delete m_pAldeano_test;
 	delete m_pMap;

@@ -92,6 +92,22 @@ public:
 		m_y = (2 * y - x) / 2;
 	}
 
+	void screenToWorld()
+	{
+		float x = m_x;
+		float y = m_y;
+		m_x = roundf(((x / 32) + (y / 16)) / 2);
+		m_y = roundf(((y / 16) - (x / 32)) / 2);
+	}
+
+	void worldToScreen()
+	{
+		float x = m_x;
+		float y = m_y;
+		m_x = (x - y) * 32;
+		m_y = (x + y) * 16;
+	}
+
 	void normalize()
 	{
 		double l = length();
