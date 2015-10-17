@@ -1,11 +1,12 @@
 #ifndef UNIT_H_
 #define UNIT_H_
 
+#include "Astar/MapSearchNode.h"
+#include "Astar/stlastar.h"
 #include "GameObject.h"
 #include "Vector2D.h"
 
 //Clase Padre de las unidades del juego
-
 class Unit: public GameObject
 {
 public:
@@ -36,12 +37,15 @@ private:
 
 	Vector2D m_direction;
 	Vector2D m_screenCoordDestination;
-	//Vector2D buffer;
+
+	AStarSearch<MapSearchNode> astarsearch;
+	MapSearchNode *m_node;
 
 	bool m_bChangingDestination; //variable para evitar que el personaje se mueva teniendo apretado click derecho
 	bool m_bMoving;
 
 	void checkSpriteDirection();
+	bool calculatePath(Vector2D destination);
 
 };
 

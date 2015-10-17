@@ -15,13 +15,16 @@ Castillo::Castillo() {
 }
 
 Castillo::Castillo(int x,int y){
-
-	float possx = (x+1) * TheGame::TILE_WIDTH/2;
-	float possy = (y+1) * TheGame::TILE_HEIGHT;
-	Vector2D* vec = new Vector2D(0,0);
-	vec->setX(possx);
-	vec->setY(possy);
-	vec->toIsometric();
+	//float possx = x * TheGame::TILE_WIDTH/2;
+	//float possy = y * TheGame::TILE_HEIGHT;
+	Vector2D* vec = new Vector2D(x, y);
+	vec->worldToScreen();
+	//offset hardcodeado de la imagen
+	vec->m_x += 15;
+	vec->m_y += 70;
+	//vec->setX(possx);
+	//vec->setY(possy);
+	//vec->toIsometric();
 	GameObject::load( vec->getX(), vec->getY(),  width, height, destWidth, destHeight, numFrames, "castillo");
 	m_mapPosition2.setX(x);
 	m_mapPosition2.setY(y);

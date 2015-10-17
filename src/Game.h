@@ -8,14 +8,13 @@
 #ifndef GAME_H_
 #define GAME_H_
 
-#include "Unit.h"
-#include "SDL2/SDL.h"
-
 #include "Map.h"
 #include "GameObject.h"
 #include "Logger.h"
 #include "SDL_image.h"
+#include "SDL2/SDL.h"
 #include <iostream>
+
 using namespace std;
 
 class Game
@@ -64,14 +63,16 @@ public:
 
     float getMapWidth() const;
     float getMapHeight() const;
+    Map* m_pMap;
 
 private:
 
     //variable temporal, más avanzado en el diseño, la deberiamos mover a otra clase.
     //Yo pense en hacer la clase Player referente al jugador físico, a la persona.
     GameObject* m_pAldeano_test; // será un Unit,
-    Map* m_pMap;
+
     std::vector<GameObject*> entidades;
+
 
     SDL_Window* m_pWindow;
     SDL_Renderer* m_pRenderer;

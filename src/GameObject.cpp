@@ -11,11 +11,12 @@
 #include "Game.h"
 #include "Camera.h"
 
-void GameObject::load(int x, int y, int width, int height,int destWidth, int destHeight, int numFrames, std::string textureID)
+void GameObject::load(int screenX, int screenY, int width, int height,int destWidth, int destHeight, int numFrames, std::string textureID)
 {
-	m_mapPosition = Vector2D(x,y);
-	m_screenPosition = Vector2D(m_mapPosition.m_x * TheGame::Instance()->TILE_WIDTH/2 + TheGame::Instance()->TILE_WIDTH/2,
-								m_mapPosition.m_y * TheGame::Instance()->TILE_HEIGHT + TheGame::Instance()->TILE_HEIGHT/2);
+	m_mapPosition = Vector2D(screenX, screenY);
+
+	//m_screenPosition = Vector2D(m_mapPosition.m_x * TheGame::Instance()->TILE_WIDTH/2 + TheGame::Instance()->TILE_WIDTH/2,
+					//			m_mapPosition.m_y * TheGame::Instance()->TILE_HEIGHT + TheGame::Instance()->TILE_HEIGHT/2);
 	m_width = width;
 	m_height = height;
 	m_destWidth = destWidth;

@@ -4,8 +4,12 @@
 #include "Parser.h"
 #include "Game.h"
 #include "Camera.h"
+
 #include <iostream>
 #include <math.h>
+
+#include "Astar/MapSearchNode.h"
+#include "Astar/stlastar.h"
 
 using namespace std;
 
@@ -47,9 +51,26 @@ void Unit::update(){
 
 	GameObject::update();
 	//Si no se encuentra donde en la direccion destino asignada, se dirige hacia allá
-	if ((m_bMoving) && (((m_mapPosition.getX() != m_destination.getX()) || (m_mapPosition.getY() != m_destination.getY()))))
+	if (m_bMoving)
 	{
-		moveTo(m_destination);
+		if (((m_mapPosition.getX() != m_destination.getX()) || (m_mapPosition.getY() != m_destination.getY())))
+		{
+			moveTo(m_destination);
+		}
+		else
+		{
+			m_node = astarsearch.GetSolutionNext();
+			if (!m_node)
+			{
+				m_bMoving = false;
+				astarsearch.FreeSolutionNodes();
+				//astarsearch.EnsureMemoryFreed();
+				return;
+			}
+			m_destination.setX(m_node->x);
+			m_destination.setY(m_node->y);
+			cout << "Next node = ( " << (int) m_node->x << " , " << (int)m_node->y << " ) \n";
+		}
 	}
 	else
 	{
@@ -64,9 +85,18 @@ void Unit::moveTo(const Vector2D& position)
 	m_mapPosition.setY(m_screenPosition.getY() - TheGame::Instance()->TILE_HEIGHT/2);
 	m_mapPosition.screenToWorld();
 
-		m_mapPosition2.setX(m_screenPosition.getX() - (TheGame::Instance()->TILE_WIDTH/2));
-		m_mapPosition2.setY(m_screenPosition.getY() - (TheGame::Instance()->TILE_HEIGHT/2));
-		m_mapPosition2.screenToWorld();
+	m_mapPosition2.setX(m_screenPosition.getX() - TheGame::Instance()->TILE_WIDTH/2);
+	m_mapPosition2.setY(m_screenPosition.getY() - TheGame::Instance()->TILE_HEIGHT/2);
+	m_mapPosition2.screenToWorld();
+
+	//calcula las coordenadas en pantalla a la que debe moverse
+	float x = position.m_x;
+	float y = position.m_y;
+	m_screenCoordDestination.setX(x);
+	m_screenCoordDestination.setY(y);
+	m_screenCoordDestination.worldToScreen();
+	m_screenCoordDestination.m_x += 32;
+	m_screenCoordDestination.m_y += 16;
 
 	//calcula el vector direccion y lo normaliza (solo lo queremos para indicar dirección de movimiento, no velocidad)
 	m_direction.setX(m_screenCoordDestination.getX() - m_screenPosition.getX());
@@ -102,41 +132,61 @@ void Unit::handleInput()
 	{
 		if (!m_bChangingDestination)
 		{
-			float backUpScreenX = m_screenCoordDestination.getX();
-			float backUpScreenY = m_screenCoordDestination.getY();
-			float backUpCarterianX = m_destination.getX();
-			float backUpCarterianY = m_destination.getY();
+			float backUpCartesianX = m_destination.getX();
+			float backUpCartesianY = m_destination.getY();
 
 			//Calcula la coordenada a moverse en coordenadas cartesianas de mapa
 			float coordX = (TheInputHandler::Instance()->getMousePosition()->getX() + TheCamera::Instance()->offsetX) - (TheGame::Instance()->TILE_WIDTH/2);
 			float coordY = (TheInputHandler::Instance()->getMousePosition()->getY() + TheCamera::Instance()->offsetY) - (TheGame::Instance()->TILE_HEIGHT/2);
 
-			m_screenCoordDestination.setX(coordX + (TheGame::Instance()->TILE_WIDTH/2));
-			m_screenCoordDestination.setY(coordY + (TheGame::Instance()->TILE_HEIGHT/2));
-			m_destination.setX(coordX);
-			m_destination.setY(coordY);
-			m_destination.screenToWorld();
+			//vector para que guarda temporalmente la posicion a donde se quiere mover el jugador
+			Vector2D* goalDestination = new Vector2D();
 
-			cout << "Tile clicked = ( " << (int) m_destination.m_x << " , " << (int)m_destination.m_y << " ) \n";
+			goalDestination->setX(coordX);
+			goalDestination->setY(coordY);
+			goalDestination->screenToWorld();
+
+			cout << "Tile clicked = ( " << (int) goalDestination->m_x << " , " << (int)goalDestination->m_y << " ) \n";
+			cout << "Screen pos clicked = ( " << (int) coordX << " , " << (int)coordY << " ) \n";
+
+			if (((m_mapPosition.getX() == goalDestination->getX()) && (m_mapPosition.getY() == goalDestination->getY())))
+				return;
 
 			//analiza que no se cliquee fuera de los bordes
-			if ((m_destination.getX() >= TheGame::Instance()->getMapWidth()) ||
-					(m_destination.getY() >= TheGame::Instance()->getMapHeight())||
-					(m_destination.getX() < 0) ||
-					(m_destination.getY() < 0))
+			if ((goalDestination->getX() >= TheGame::Instance()->getMapWidth()) ||
+					(goalDestination->getY() >= TheGame::Instance()->getMapHeight())||
+					(goalDestination->getX() < 0) ||
+					(goalDestination->getY() < 0))
 			{
 				//revierte en caso positivo
 				m_bChangingDestination = false;
-				m_destination.setX(backUpCarterianX);
-				m_destination.setY(backUpCarterianY);
-				m_screenCoordDestination.setX(backUpScreenX);
-				m_screenCoordDestination.setY(backUpScreenY);
+				m_destination.setX(backUpCartesianX);
+				m_destination.setY(backUpCartesianY);
+				if (goalDestination)
+					delete goalDestination;
+
 				return;
 			}
-
-			m_bChangingDestination = true; //se me ocurrio, para evitar cambiar posicion si mantiene click derecho apretado
-			m_bMoving = true;
-
+			//Si pasa las condiciones, calcula el path
+			m_bChangingDestination = true;
+			bool pathFound = calculatePath(*goalDestination);
+			delete goalDestination;
+			//si encuentra camino setea el comienzo del movimiento
+			if (pathFound)
+			{
+				m_node = astarsearch.GetSolutionStart();
+				if (!m_node)
+				{
+					m_bMoving = false;
+					astarsearch.FreeSolutionNodes();
+					//astarsearch.EnsureMemoryFreed();
+					return;
+				}
+				cout << "First node = ( " << (int) m_node->x << " , " << (int)m_node->y << " ) \n";
+				m_destination.setX(m_node->x);
+				m_destination.setY(m_node->y);
+			}
+			m_bMoving = pathFound;
 		}
 	}
 	else
@@ -219,3 +269,40 @@ void Unit::checkSpriteDirection()
 	}
 }
 
+bool Unit::calculatePath(Vector2D destination)
+{
+	bool searchResult = false;
+
+	//node donde esta parado el personaje
+	MapSearchNode nodeStart;
+	nodeStart.x = m_mapPosition.getX();
+	nodeStart.y = m_mapPosition.getY();
+
+	//nodo destino
+	MapSearchNode nodeEnd;
+	nodeEnd.x = destination.getX();
+	nodeEnd.y = destination.getY();
+
+	astarsearch.SetStartAndGoalStates( nodeStart, nodeEnd );
+
+	unsigned int SearchState;
+	do
+	{
+		SearchState = astarsearch.SearchStep();
+
+	} while( SearchState == AStarSearch<MapSearchNode>::SEARCH_STATE_SEARCHING );
+
+	//Camino encontrado
+	if( SearchState == AStarSearch<MapSearchNode>::SEARCH_STATE_SUCCEEDED )
+	{
+		searchResult = true;
+	}
+	//Camino no encontrado
+	else if( SearchState == AStarSearch<MapSearchNode>::SEARCH_STATE_FAILED )
+	{
+		astarsearch.FreeSolutionNodes();
+		//astarsearch.EnsureMemoryFreed();
+		searchResult = false;
+	}
+	return searchResult;
+}

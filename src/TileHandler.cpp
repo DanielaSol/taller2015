@@ -36,6 +36,17 @@ void TileHandler::drawTile(int tileID, int isoX, int isoY)
 
 }
 
+int TileHandler::getWalkCost(int tileID)
+{
+	switch (tileID)
+	{
+	case 1: return 1;
+	break;
+
+	default: return 1000;
+	}
+}
+
 std::string TileHandler::getTileID(int tileID)
 {
 	switch (tileID)

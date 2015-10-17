@@ -2,16 +2,17 @@
 #define MAP_H_
 
 #include "Vector2D.h"
-#include <string>
-
+#include "TileHandler.h"
 #include "GameObject.h"
+
 #include <vector>
 #include <string>
-#include "TileHandler.h"
+#include <string>
+
 
 class Map
 {
-
+friend class MapSearchNode;
 public:
 	Map();
 	Map(std::string mapName, int mapWidth, int mapHeight);
@@ -39,7 +40,6 @@ private:
 	Vector2D m_mapSize;
 
 	std::vector< std::vector<int> >  m_mapGrid;
-
 	TileHandler* m_pTileHandler;
 
 	Vector2D* isometricCord; //temp buffer
