@@ -17,17 +17,22 @@ TileHandler::TileHandler(): m_tileWidth(64),m_tileHeight(32){}
 void TileHandler::loadTiles()
 {
 	TheTextureManager::Instance()->load("assets/Tiles/Grass.png","grassTile", TheGame::Instance()->getRenderer());
+	TheTextureManager::Instance()->load("assets/Tiles/GrassSeen.png","grassSeen", TheGame::Instance()->getRenderer());
 }
 
 void TileHandler::drawTile(int tileID, int isoX, int isoY)
 {
 	switch (tileID)
 	{
-	case 0: TheTextureManager::Instance()->draw("grassTile", isoX, isoY,
-			m_tileWidth, m_tileHeight, TheGame::Instance()->getRenderer());
+	case 0:// TheTextureManager::Instance()->draw("grassTile", isoX, isoY,
+		//	m_tileWidth, m_tileHeight, TheGame::Instance()->getRenderer());
 	break;
 
 	case 1: TheTextureManager::Instance()->draw("grassTile", isoX, isoY,
+			m_tileWidth, m_tileHeight, TheGame::Instance()->getRenderer());
+	break;
+
+	case 2: TheTextureManager::Instance()->draw("grassSeen", isoX, isoY,
 			m_tileWidth, m_tileHeight, TheGame::Instance()->getRenderer());
 	break;
 

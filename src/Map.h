@@ -40,6 +40,7 @@ private:
 	Vector2D m_mapSize;
 
 	std::vector< std::vector<int> >  m_mapGrid;
+	std::vector< std::vector<int> >  m_mapGrid2;
 	TileHandler* m_pTileHandler;
 
 	Vector2D* isometricCord; //temp buffer

@@ -159,7 +159,7 @@ bool Game::initGame()
 						vec->getY(),
 						125, 168, 		 //125 y 168 son el ancho y alto de la imagen a cortar
 						40,	54.76f,			// 40 y 54.76 son el ancho y alto de la imagen a dibujar
-						5, "animate");   // y el 5 corresponde a la cantidad de Frames
+						5, "animate",true);   // y el 5 corresponde a la cantidad de Frames
 	delete vec;
     m_pMap = new Map();
     m_pMap->load();
@@ -213,7 +213,7 @@ void Game::render()
     m_pMap->draw();
     //primero dibuja entidades, luego el personaje (siempre aparece por arriba de las cosas
     for (uint i=0;i<entidades.size();i++){
-    	if (entidades[i])
+    	if (entidades[i] && (entidades[i]->m_atSight || entidades[i]->m_wasSeen))
     		entidades[i]->draw();
     }
    // m_pAldeano_test->draw();

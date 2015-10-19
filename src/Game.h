@@ -65,11 +65,12 @@ public:
     float getMapHeight() const;
     Map* m_pMap;
 
+    GameObject* m_pAldeano_test;
 private:
 
     //variable temporal, más avanzado en el diseño, la deberiamos mover a otra clase.
     //Yo pense en hacer la clase Player referente al jugador físico, a la persona.
-    GameObject* m_pAldeano_test; // será un Unit,
+    //GameObject* m_pAldeano_test; // será un Unit,
 
     std::vector<GameObject*> entidades;
 

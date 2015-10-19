@@ -8,6 +8,7 @@
 #include "Arbolit.h"
 #include "Parser.h"
 #include "Game.h"
+#include "TextureManager.h"
 
 Arbolit::Arbolit() {
 	// TODO Auto-generated constructor stub
@@ -16,13 +17,14 @@ Arbolit::Arbolit() {
 
 Arbolit::Arbolit(int x,int y){
 
+	TheTextureManager::Instance()->load("assets/terrainSeen.png","arbolSeen", TheGame::Instance()->getRenderer());
 	float possx = (x+1) * TheGame::TILE_WIDTH/2;
 	float possy = (y+1) * TheGame::TILE_HEIGHT;
 	Vector2D* vec = new Vector2D(0,0);
 	vec->setX(possx);
 	vec->setY(possy);
 	vec->toIsometric();
-	GameObject::load( vec->getX(), vec->getY(),  width, height, destWidth, destHeight, numFrames, "arbol");
+	GameObject::load( vec->getX(), vec->getY(),  width, height, destWidth, destHeight, numFrames, "arbol",false);
 	m_mapPosition2.setX(x);
 	m_mapPosition2.setY(y);
 	GameObject::setFrame(frame);
@@ -36,6 +38,15 @@ Arbolit::Arbolit(int x,int y){
 
 Arbolit::~Arbolit() {
 	// TODO Auto-generated destructor stub
+}
+
+void Arbolit::update(){
+	GameObject::update();
+	if(!m_atSight && m_wasSeen){
+		setTexture("arbolSeen");
+	}else{
+		setTexture("arbol");
+	}
 }
 
 

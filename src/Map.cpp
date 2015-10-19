@@ -38,8 +38,12 @@ void Map::load()
 
 	//resize de los vectores del mapa
 	m_mapGrid.resize(mapWidth);
+	m_mapGrid2.resize(mapWidth);
 	for (int i = 0; i < mapWidth; ++i)
+	{
 		m_mapGrid[i].resize(mapHeight);
+		m_mapGrid2[i].resize(mapHeight);
+	}
 
 	//Inicializa la matriz del mapa con todos 1 (pasto desocupado)
 	for(int i = 0 ; i < mapWidth ; i++)
@@ -47,6 +51,7 @@ void Map::load()
 		for(int j = 0 ; j < mapHeight ; j++)
 		{
 			m_mapGrid[i][j] = 1; //guarda todos tiles de id 1 (pasto desocupado). Al ser ocupado por un GameObject se tiene que setear el tile en 0
+			m_mapGrid2[i][j] = 0; // 0: no visto. 1: esta siendo visto. 2: fue visto
 		}
 	}
 
@@ -57,7 +62,25 @@ void Map::draw()
 	drawMap();
 }
 
-void Map::update(){}
+void Map::update()
+{
+	int mapWidth = getMapSize().getX();
+		int mapHeight = getMapSize().getY();
+
+		for(int i = 0 ; i <  mapWidth; i++)
+		{
+			for(int j = 0 ; j < mapHeight ; j++)
+			{
+				if(TheGame::Instance()->m_pAldeano_test->positionAtSight(i,j)){
+					m_mapGrid2[i][j] = 1;
+				}
+				else if(m_mapGrid2[i][j] == 1){
+					m_mapGrid2[i][j] = 2;
+				}
+			}
+		}
+
+}
 void Map::handleInput(){}
 
 void Map::clean()
@@ -86,7 +109,7 @@ void Map::drawMap()
 		for(int j = 0 ; j < mapHeight ; j++)
 		{
 			if (TheCamera::Instance()->isVisible(i,j))
-				placeTile(i, j, m_mapGrid[i][j]);
+				placeTile(i, j, m_mapGrid2[i][j]);
 		}
 	}
 

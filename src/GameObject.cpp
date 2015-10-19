@@ -11,7 +11,7 @@
 #include "Game.h"
 #include "Camera.h"
 
-void GameObject::load(int screenX, int screenY, int width, int height,int destWidth, int destHeight, int numFrames, std::string textureID)
+void GameObject::load(int screenX, int screenY, int width, int height,int destWidth, int destHeight, int numFrames, std::string textureID, bool visibility)
 {
 	m_mapPosition = Vector2D(screenX, screenY);
 
@@ -23,6 +23,8 @@ void GameObject::load(int screenX, int screenY, int width, int height,int destWi
 	m_destHeight = destHeight;
 	m_numFrames = numFrames;
 	m_textureID = textureID;
+	m_atSight = visibility;
+	m_wasSeen = visibility;
 
 	m_currentRow = 1;
 	m_currentFrame = 1;
@@ -39,6 +41,18 @@ void GameObject::draw()
 
 void GameObject::update()
 {
+	for(int i = m_mapPosition2.getX() ;i<=m_mapPosition2.getX() + m_ancho;i++)
+	{
+		for(int j = m_mapPosition2.getY() ; j <= m_mapPosition2.getY() + m_alto;j++){
+			if(TheGame::Instance()->m_pAldeano_test->positionAtSight(i,j))
+			{
+				m_atSight = true;
+			}else if(m_atSight){
+				m_wasSeen = true;
+				m_atSight = false;
+			}
+		}
+	}
 }
 
 void GameObject::handleInput()
@@ -83,6 +97,14 @@ void GameObject::setAncho(int ancho){
 	m_ancho = ancho;
 }
 
+bool GameObject::positionAtSight(int x,int y){
+
+}
+
+void GameObject::setTexture(std::string textureID)
+{
+	m_textureID = textureID;
+}
 
 bool GameObject::operator< (const  GameObject &obj2)
 {

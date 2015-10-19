@@ -16,6 +16,8 @@ public:
 	Castillo(int x,int y);
 	virtual ~Castillo();
 
+	virtual void update();
+
 	const int width = 192;
 	const int height = 224;
 	const int destWidth = 130;

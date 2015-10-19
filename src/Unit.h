@@ -14,7 +14,7 @@ public:
 	virtual ~Unit(){}
 
 	//funciones básicas
-	virtual void load(int x, int y, int width, int height,int destWidth,int destHeight, int numFrames, std::string textureID);
+	virtual void load(int x, int y, int width, int height,int destWidth,int destHeight, int numFrames, std::string textureID,bool visibility);
 	virtual void draw();
 	virtual void update();
 	virtual void handleInput();
@@ -24,9 +24,13 @@ public:
 	//funciones específicas
 	virtual void moveTo (const Vector2D& position);
 
+	bool positionAtSight(int,int);
+
 	Vector2D& getVelocity() { return m_velocity; }
 	Vector2D& getDestination() { return m_destination; }
 	Vector2D& getDirection() { return m_direction; }
+
+	int m_vision;
 
 protected:
 

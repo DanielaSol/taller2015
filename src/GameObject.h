@@ -26,6 +26,8 @@ public:
                     m_currentRow(0),
                     m_currentFrame(0),
 					m_numFrames(0),
+					m_atSight(false),
+					m_wasSeen(false),
                     m_bUpdating(false)/*,
                     m_angle(0),
                     m_alpha(255)*/
@@ -34,7 +36,7 @@ public:
 
 	virtual ~GameObject() {}
 
-	virtual void load(int x, int y, int width, int height,int destWidth, int destHeight, int numFrames, std::string textureID);
+	virtual void load(int x, int y, int width, int height,int destWidth, int destHeight, int numFrames, std::string textureID, bool visibility);
 
 	virtual void draw();
 
@@ -62,8 +64,12 @@ public:
 
 	virtual void setOffset(int x, int y);
 
+	virtual bool positionAtSight(int x, int y);
+
 	// aumenta el frame a animar
 	virtual void aumentarFrame();
+
+	virtual void setTexture(std::string textureID);
 
 	Vector2D& getMapPosition() { return m_screenPosition; }
 	Vector2D& getScreenPosition() { return m_screenPosition; }
@@ -87,6 +93,9 @@ public:
     Vector2D m_mapPosition2;
 
     bool operator< (const GameObject &obj2);
+
+    bool m_atSight;
+    bool m_wasSeen;
 
 protected:
 

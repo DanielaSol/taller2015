@@ -22,7 +22,7 @@ Suelo::Suelo(int x,int y,std::string tipo){
 	vec->setX(possx);
 	vec->setY(possy);
 	vec->toIsometric();
-	GameObject::load( vec->getX(), vec->getY(),  width, height, destWidth, destHeight, numFrames, tipo);
+	GameObject::load( vec->getX(), vec->getY(),  width, height, destWidth, destHeight, numFrames, tipo,false);
 	m_mapPosition2.setX(x);
 	m_mapPosition2.setY(y);
 	GameObject::setFrame(frame);

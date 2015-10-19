@@ -16,6 +16,8 @@ public:
 	Arbolit(int x,int y);
 	virtual ~Arbolit();
 
+	virtual void update();
+
 	const int width = 65;
 	const int height = 128;
 	const int destWidth = 65;

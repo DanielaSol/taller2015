@@ -8,6 +8,7 @@
 #include "Castillo.h"
 #include "Parser.h"
 #include "Game.h"
+#include "TextureManager.h"
 
 Castillo::Castillo() {
 	// TODO Auto-generated constructor stub
@@ -15,6 +16,8 @@ Castillo::Castillo() {
 }
 
 Castillo::Castillo(int x,int y){
+
+	TheTextureManager::Instance()->load("assets/castilloSeen.png","castilloSeen", TheGame::Instance()->getRenderer());
 	//float possx = x * TheGame::TILE_WIDTH/2;
 	//float possy = y * TheGame::TILE_HEIGHT;
 	Vector2D* vec = new Vector2D(x, y);
@@ -25,7 +28,7 @@ Castillo::Castillo(int x,int y){
 	//vec->setX(possx);
 	//vec->setY(possy);
 	//vec->toIsometric();
-	GameObject::load( vec->getX(), vec->getY(),  width, height, destWidth, destHeight, numFrames, "castillo");
+	GameObject::load( vec->getX(), vec->getY(),  width, height, destWidth, destHeight, numFrames, "castillo",false);
 	m_mapPosition2.setX(x);
 	m_mapPosition2.setY(y);
 	GameObject::setFrame(frame);
@@ -40,3 +43,11 @@ Castillo::~Castillo() {
 	// TODO Auto-generated destructor stub
 }
 
+void Castillo::update(){
+	GameObject::update();
+	if(!m_atSight && m_wasSeen){
+		setTexture("castilloSeen");
+	}else{
+		setTexture("castillo");
+	}
+}

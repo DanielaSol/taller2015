@@ -18,13 +18,14 @@ m_velocity(TheParser::Instance()->configGame.configuracion.vel_personaje,
 			TheParser::Instance()->configGame.configuracion.vel_personaje),
 m_direction(0,0),
 m_bChangingDestination(false),
-m_bMoving(false)
+m_bMoving(false),
+m_vision(3)
 {
 }
 
-void Unit::load(int x, int y, int width, int height,int destWidth, int destHeight, int numFrames, std::string textureID)
+void Unit::load(int x, int y, int width, int height,int destWidth, int destHeight, int numFrames, std::string textureID,bool visibility)
 {
-    GameObject::load(x, y, width, height, destWidth, destHeight, numFrames, textureID);
+    GameObject::load(x, y, width, height, destWidth, destHeight, numFrames, textureID,visibility);
 
     //
 	//m_destination.setX(m_screenPosition.getX());
@@ -49,7 +50,7 @@ void Unit::draw()
 
 void Unit::update(){
 
-	GameObject::update();
+	//GameObject::update();
 	//Si no se encuentra donde en la direccion destino asignada, se dirige hacia allá
 	if (m_bMoving)
 	{
@@ -305,4 +306,19 @@ bool Unit::calculatePath(Vector2D destination)
 		searchResult = false;
 	}
 	return searchResult;
+}
+
+bool Unit::positionAtSight(int x,int y){
+
+	bool atSight = false;
+	for(int i = m_mapPosition2.getX() - m_vision; i <= m_mapPosition2.getX() + m_vision; i++)
+	{
+		for(int j = m_mapPosition2.getY() - m_vision; j <= m_mapPosition2.getY() + m_vision; j++)
+		{
+			if(i == x && j == y){atSight = true;}
+		}
+
+	}
+	return atSight;
+
 }

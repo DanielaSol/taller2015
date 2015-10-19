@@ -7,6 +7,7 @@
 
 #include "Molino.h"
 #include "Game.h"
+#include "TextureManager.h"
 
 Molino::Molino() {
 	// TODO Auto-generated constructor stub
@@ -15,13 +16,14 @@ Molino::Molino() {
 
 Molino::Molino(int x,int y){
 
+	TheTextureManager::Instance()->load("assets/windmillSeen.png","molinoSeen", TheGame::Instance()->getRenderer());
 	float possx = (x+1) * TheGame::TILE_WIDTH/2;
 	float possy = (y+1) * TheGame::TILE_HEIGHT;
 	Vector2D* vec = new Vector2D(0,0);
 	vec->setX(possx);
 	vec->setY(possy);
 	vec->toIsometric();
-	GameObject::load( vec->getX(), vec->getY(),  width, height, destWidth, destHeight, numFrames, "molino");
+	GameObject::load( vec->getX(), vec->getY(),  width, height, destWidth, destHeight, numFrames, "molino",false);
 	m_mapPosition2.setX(x);
 	m_mapPosition2.setY(y);
 	GameObject::setFrame(frame);
@@ -38,7 +40,7 @@ Molino::~Molino() {
 }
 
 void Molino::update(){
-
+	GameObject::update();
 	if(m_currentFrame == (numFrames-1))
 	{
 		if(TheParser::Instance()->configGame.objetos.at("molino").animacion.delay != 0)
@@ -67,5 +69,11 @@ void Molino::update(){
 		}
 		//m_currentFrame = int((( TheParser::Instance()->configGame.objetos.at("molino").animacion.fps ) % m_numFrames));
 	}
+
+	if(!m_atSight && m_wasSeen){
+			setTexture("molinoSeen");
+		}else{
+			setTexture("molino");
+		}
 
 }
