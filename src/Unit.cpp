@@ -148,7 +148,7 @@ void Unit::handleInput()
 			goalDestination->screenToWorld();
 
 			cout << "Tile clicked = ( " << (int) goalDestination->m_x << " , " << (int)goalDestination->m_y << " ) \n";
-			cout << "Screen pos clicked = ( " << (int) coordX << " , " << (int)coordY << " ) \n";
+			//cout << "Screen pos clicked = ( " << (int) coordX << " , " << (int)coordY << " ) \n";
 
 			if (((m_mapPosition.getX() == goalDestination->getX()) && (m_mapPosition.getY() == goalDestination->getY())))
 				return;
@@ -183,7 +183,7 @@ void Unit::handleInput()
 					//astarsearch.EnsureMemoryFreed();
 					return;
 				}
-				cout << "First node = ( " << (int) m_node->x << " , " << (int)m_node->y << " ) \n";
+				//cout << "First node = ( " << (int) m_node->x << " , " << (int)m_node->y << " ) \n";
 				m_destination.setX(m_node->x);
 				m_destination.setY(m_node->y);
 			}
@@ -272,6 +272,11 @@ void Unit::checkSpriteDirection()
 
 bool Unit::calculatePath(Vector2D destination)
 {
+	//calcula posicion actual
+	m_mapPosition.setX(m_screenPosition.getX() - TheGame::Instance()->TILE_WIDTH/2);
+	m_mapPosition.setY(m_screenPosition.getY() - TheGame::Instance()->TILE_HEIGHT/2);
+	m_mapPosition.screenToWorld();
+
 	bool searchResult = false;
 
 	//node donde esta parado el personaje
