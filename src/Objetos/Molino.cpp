@@ -6,8 +6,8 @@
  */
 
 #include "Molino.h"
-#include "Game.h"
-#include "TextureManager.h"
+#include "../Game.h"
+#include "../TextureManager.h"
 
 Molino::Molino() {
 	// TODO Auto-generated constructor stub

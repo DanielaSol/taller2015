@@ -1,9 +1,9 @@
 #ifndef MAP_H_
 #define MAP_H_
 
-#include "Vector2D.h"
-#include "TileHandler.h"
-#include "GameObject.h"
+#include "../Vector2D.h"
+#include "../TileHandler.h"
+#include "../GameObject.h"
 
 #include <vector>
 #include <string>

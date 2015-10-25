@@ -8,7 +8,7 @@
 #ifndef ARBOLIT_H_
 #define ARBOLIT_H_
 
-#include "GameObject.h"
+#include "../GameObject.h"
 
 class Arbolit: public GameObject {
 public:

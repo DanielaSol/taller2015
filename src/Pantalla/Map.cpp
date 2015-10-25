@@ -3,12 +3,12 @@
 {
 }*/
 
-#include "Game.h"
+#include "../Game.h"
 #include "Map.h"
-#include "TextureManager.h"
-#include "InputHandler.h"
-#include "Vector2D.h"
-#include "Camera.h"
+#include "../TextureManager.h"
+#include "../InputHandler.h"
+#include "../Vector2D.h"
+#include "../Camera.h"
 #include <math.h>
 #include <iostream>
 

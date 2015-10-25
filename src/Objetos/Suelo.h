@@ -8,7 +8,7 @@
 #ifndef SUELO_H_
 #define SUELO_H_
 
-#include "GameObject.h"
+#include "../GameObject.h"
 
 class Suelo: public GameObject {
 public:

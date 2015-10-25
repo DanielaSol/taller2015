@@ -6,9 +6,9 @@
  */
 
 #include "Castillo.h"
-#include "Parser.h"
-#include "Game.h"
-#include "TextureManager.h"
+#include "../Utilitarios/Parser.h"
+#include "../Game.h"
+#include "../TextureManager.h"
 
 Castillo::Castillo() {
 	// TODO Auto-generated constructor stub

@@ -8,14 +8,16 @@
 #ifndef GAME_H_
 #define GAME_H_
 
-#include "Map.h"
+#include "Pantalla/Map.h"
 #include "GameObject.h"
-#include "Logger.h"
+#include "Utilitarios/Logger.h"
 #include "SDL_image.h"
 #include "SDL2/SDL.h"
 #include <iostream>
+#include "Pantalla/Pantalla.h"
 
 using namespace std;
+
 
 class Game
 {
@@ -23,6 +25,8 @@ public:
 	//constantes globales
 	static const int TILE_WIDTH = 64;
 	static const int TILE_HEIGHT = 32;
+
+
 
 	//Singleton
     static Game* Instance()
@@ -53,7 +57,7 @@ public:
 
     bool running() { return m_bRunning; }
 
-    void restart(); //Al presionar Q
+    void restart(); //Al presionar R
     bool m_bQuiting;
 
     void quit() { m_bRunning = false; }
@@ -64,6 +68,7 @@ public:
     float getMapWidth() const;
     float getMapHeight() const;
     Map* m_pMap;
+    Pantalla * m_pPantalla;
 
     GameObject* m_pAldeano_test;
 private:
@@ -85,6 +90,7 @@ private:
     int m_gameWidth;
     int m_gameHeight;
     int cantDeEntidades;
+
 
 	bool initGame();
 	void orderGameObjects();

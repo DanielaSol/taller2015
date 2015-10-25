@@ -6,9 +6,9 @@
  */
 
 #include "Arbolit.h"
-#include "Parser.h"
-#include "Game.h"
-#include "TextureManager.h"
+#include "../Utilitarios/Parser.h"
+#include "../Game.h"
+#include "../TextureManager.h"
 
 Arbolit::Arbolit() {
 	// TODO Auto-generated constructor stub

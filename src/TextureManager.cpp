@@ -7,7 +7,7 @@
 
 #include "TextureManager.h"
 #include <string>
-#include "Logger.h"
+#include "Utilitarios/Logger.h"
 
 using namespace std;
 TextureManager* TextureManager::s_pInstance = 0;

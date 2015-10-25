@@ -8,7 +8,7 @@
 #ifndef CASTILLO_H_
 #define CASTILLO_H_
 
-#include "GameObject.h"
+#include "../GameObject.h"
 
 class Castillo: public GameObject {
 public:

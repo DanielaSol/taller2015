@@ -6,8 +6,8 @@
  */
 
 #include "Suelo.h"
-#include "Parser.h"
-#include "Game.h"
+#include "../Utilitarios/Parser.h"
+#include "../Game.h"
 
 Suelo::Suelo() {
 	// TODO Auto-generated constructor stub

@@ -10,14 +10,15 @@
 #include "TextureManager.h"
 #include "InputHandler.h"
 
-#include "Parser.h"
+#include "Utilitarios/Parser.h"
 #include "GameObject.h"
 #include "Camera.h"
-#include "Map.h"
-#include "Molino.h"
-#include "Arbolit.h"
-#include "Castillo.h"
-#include "Suelo.h"
+#include "Pantalla/Map.h"
+#include "Pantalla/Pantalla.h"
+#include "Objetos/Molino.h"
+#include "Objetos/Arbolit.h"
+#include "Objetos/Castillo.h"
+#include "Objetos/Suelo.h"
 
 #include <algorithm>
 #include <string>
@@ -27,6 +28,7 @@ using namespace std;
 
 
 Game* Game::s_pInstance = 0;
+
 
 
 Game::Game():
@@ -98,6 +100,8 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
     return true;
 }
 
+
+
 //init Game inicializa el estado del juego. Lo deberia hacer desde el archivo yaml
 bool Game::initGame()
 {
@@ -163,6 +167,7 @@ bool Game::initGame()
 	delete vec;
     m_pMap = new Map();
     m_pMap->load();
+    m_pPantalla = new Pantalla(m_gameWidth,m_gameHeight);
 
     GameObject* objetoACargar;
 
@@ -210,15 +215,11 @@ void Game::render()
 
 	SDL_RenderClear(m_pRenderer);
 	//m_pGameStateMachine->render();// Dejo esto por si despues implementamos maquinaa finita de estados para los estados de jeugo: menu, etc
-    m_pMap->draw();
-    //primero dibuja entidades, luego el personaje (siempre aparece por arriba de las cosas
-    for (uint i=0;i<entidades.size();i++){
-    	if (entidades[i] && (entidades[i]->m_atSight || entidades[i]->m_wasSeen))
-    		entidades[i]->draw();
-    }
-   // m_pAldeano_test->draw();
 
-    SDL_RenderPresent(m_pRenderer);
+	m_pPantalla->draw(m_pRenderer,m_pMap,entidades);
+
+
+
 
 }
 
@@ -289,6 +290,7 @@ void Game::clean()
 
     delete m_pAldeano_test;
     delete m_pMap;
+    delete m_pPantalla;
 
     TheTextureManager::Instance()->clearTextureMap();
 
@@ -328,7 +330,7 @@ void Game::cargarEntidadd(GameObject* entidad){
 
 }
 
-void Game::restart() //Con Q
+void Game::restart() //Con R
 {
 	m_bQuiting = true;
 	//LIMPIA EL ESTADO DEL JUEGO

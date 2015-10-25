@@ -8,8 +8,8 @@
 #ifndef MOLINO_H_
 #define MOLINO_H_
 
-#include "GameObject.h"
-#include "Parser.h"
+#include "../GameObject.h"
+#include "../Utilitarios/Parser.h"
 
 class Molino: public GameObject {
 public:
