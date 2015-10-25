@@ -63,7 +63,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
         if(m_pWindow != 0) // window init success
         {
             cout << "window creation success\n";
-            m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_SOFTWARE);
+            m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_ACCELERATED);
 
             if(m_pRenderer != 0) // renderer init success
             {
@@ -160,6 +160,8 @@ bool Game::initGame()
 						125, 168, 		 //125 y 168 son el ancho y alto de la imagen a cortar
 						40,	54.76f,			// 40 y 54.76 son el ancho y alto de la imagen a dibujar
 						5, "animate",true);   // y el 5 corresponde a la cantidad de Frames
+	m_pAldeano_test->m_mapPosition2.setX(TheParser::Instance()->configGame.protagonista.x);
+	m_pAldeano_test->m_mapPosition2.setY(TheParser::Instance()->configGame.protagonista.y);
 	delete vec;
     m_pMap = new Map();
     m_pMap->load();
@@ -199,6 +201,8 @@ bool Game::initGame()
     }
    entidades.push_back(m_pAldeano_test);
 
+   TheTextureManager::Instance()->load("assets/frame/frame4.png","frame", m_pRenderer);
+   TheTextureManager::Instance()->load("assets/frame/minimapa.png","minimapa", m_pRenderer);
     return true;
 }
 
@@ -216,7 +220,22 @@ void Game::render()
     	if (entidades[i] && (entidades[i]->m_atSight || entidades[i]->m_wasSeen))
     		entidades[i]->draw();
     }
-   // m_pAldeano_test->draw();
+     TheTextureManager::Instance()->drawFrame("frame",-5,-5,1148,800,TheParser::Instance()->configGame.pantalla.ancho,
+        		TheParser::Instance()->configGame.pantalla.alto,1,0,m_pRenderer);
+     for(int i = 0 ; i <  m_pMap->getMapSize().getX(); i++)
+     	{
+     		for(int j = 0 ; j < m_pMap->getMapSize().getY() ; j++)
+     		{
+     			if (m_pMap->getVisionMapValue(i,j) == 1 || m_pMap->getVisionMapValue(i,j) == 2)
+     			{
+     				Vector2D* vector = new Vector2D(0,0);
+     				vector->setX(i); vector->setY(j); vector->toIsometric();
+     				TheTextureManager::Instance()->drawFrame("minimapa",vector->getX()+620,vector->getY()+430,180,150,50,50,1,0,TheGame::Instance()->getRenderer());
+     			}
+     		}
+     	}
+
+     // m_pAldeano_test->draw();
 
     SDL_RenderPresent(m_pRenderer);
 
