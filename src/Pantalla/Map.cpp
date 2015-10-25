@@ -139,3 +139,8 @@ int Map::getValue(int x, int y){
 
 }
 
+int Map::getVisionMapValue(int x,int y){
+
+	return m_mapGrid2[x][y];
+}
+
