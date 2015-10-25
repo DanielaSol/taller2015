@@ -231,6 +231,7 @@ void Game::render()
      				Vector2D* vector = new Vector2D(0,0);
      				vector->setX(i); vector->setY(j); vector->toIsometric();
      				TheTextureManager::Instance()->drawFrame("minimapa",vector->getX()+620,vector->getY()+430,180,150,50,50,1,0,TheGame::Instance()->getRenderer());
+     				delete vector;
      			}
      		}
      	}
