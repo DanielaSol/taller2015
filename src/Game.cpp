@@ -211,8 +211,8 @@ bool Game::initGame()
    //TENGO QUE ARREGLAR ESTO
    m_gameWidth = m_pPantalla->sectores.at("mapa").w;
    m_gameHeight = m_pPantalla->sectores.at("mapa").h;
-   //TheTextureManager::Instance()->load("assets/frame/frame4.png","frame", m_pRenderer);
-   //TheTextureManager::Instance()->load("assets/frame/minimapa.png","minimapa", m_pRenderer);
+   TheTextureManager::Instance()->load("assets/frame/frame4.png","frame", m_pRenderer);
+   TheTextureManager::Instance()->load("assets/frame/minimapa.png","minimapa", m_pRenderer);
    return true;
 
 
@@ -225,55 +225,8 @@ void Game::render()
 		return;
 
 	SDL_RenderClear(m_pRenderer);
-	//m_pGameStateMachine->render();// Dejo esto por si despues implementamos maquinaa finita de estados para los estados de jeugo: menu, etc
-/*<<<<<<< HEAD
-=======
-    m_pMap->draw();
-    //primero dibuja entidades, luego el personaje (siempre aparece por arriba de las cosas
-    for (uint i=0;i<entidades.size();i++){
-    	if (entidades[i] && (entidades[i]->m_atSight || entidades[i]->m_wasSeen))
-    		entidades[i]->draw();
-    }
-     TheTextureManager::Instance()->drawFrame("frame",-5,-5,1148,800,TheParser::Instance()->configGame.pantalla.ancho,
-        		TheParser::Instance()->configGame.pantalla.alto,1,0,m_pRenderer);
-     for(int i = 0 ; i <  m_pMap->getMapSize().getX(); i++)
-     	{
-     		for(int j = 0 ; j < m_pMap->getMapSize().getY() ; j++)
-     		{
-     			if (m_pMap->getVisionMapValue(i,j) == 1 || m_pMap->getVisionMapValue(i,j) == 2)
-     			{
-     				Vector2D* vector = new Vector2D(0,0);
-     				vector->setX(i); vector->setY(j); vector->toIsometric();
-     				TheTextureManager::Instance()->drawFrame("minimapa",vector->getX()+620,vector->getY()+430,180,150,50,50,1,0,TheGame::Instance()->getRenderer());
-     				delete vector;
-     			}
-     		}
-     	}
-
-     // m_pAldeano_test->draw();
->>>>>>> e2dc2e842129e7a4c680730c18706d7f8779c6e5*/
-
 
 	m_pPantalla->draw(m_pRenderer,m_pMap,entidades);
-
-	/*TheTextureManager::Instance()->drawFrame("frame",-5,-5,1148,800,TheParser::Instance()->configGame.pantalla.ancho,
-	TheParser::Instance()->configGame.pantalla.alto,1,0,m_pRenderer);
-	     for(int i = 0 ; i <  m_pMap->getMapSize().getX(); i++)
-	     	{
-	     		for(int j = 0 ; j < m_pMap->getMapSize().getY() ; j++)
-	     		{
-	     			if (m_pMap->getVisionMapValue(i,j) == 1 || m_pMap->getVisionMapValue(i,j) == 2)
-	     			{
-	     				Vector2D* vector = new Vector2D(0,0);
-	     				vector->setX(i); vector->setY(j); vector->toIsometric();
-	     				TheTextureManager::Instance()->drawFrame("minimapa",vector->getX()+620,vector->getY()+430,180,150,50,50,1,0,TheGame::Instance()->getRenderer());
-	     				delete vector;
-	     			}
-	     		}
-	     	}
-
-*/
-
 
 }
 
