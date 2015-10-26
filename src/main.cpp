@@ -22,7 +22,7 @@ int main(int argc, char **argv)
 
 	Logger* myLog = new Logger();
 	FILE* arch;
-	arch= fopen("prueba.txt","w+");
+	arch= fopen("log.txt","w+");
 	fclose(arch);
 
 
@@ -35,10 +35,10 @@ int main(int argc, char **argv)
 
 	{
 		std::cout << "game init success!\n";
+
 		while (TheGame::Instance()->running()) {
-		
+
 			frameStart = SDL_GetTicks();
-			
 			TheGame::Instance()->handleEvents();
 			TheGame::Instance()->update();
 			TheGame::Instance()->render();

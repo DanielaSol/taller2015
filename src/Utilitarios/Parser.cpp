@@ -32,7 +32,7 @@ void Parser::escribirLog(string msg){
 	  string salida = msg + " - " + asctime (timeinfo);
 
 
-		arch= fopen("prueba.txt","a+");
+		arch= fopen("log.txt","a+");
 		fputs(salida.c_str(),arch);
 		fclose(arch);
 

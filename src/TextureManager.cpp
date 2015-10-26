@@ -79,3 +79,11 @@ void TextureManager::clearFromTextureMap(std::string id)
     m_textureMap.erase(id);
 }
 
+void TextureManager::drawArea(std::string id, SDL_Rect sector ,SDL_Renderer* m_pRenderer) {
+
+	SDL_RenderSetViewport( m_pRenderer, &sector );
+	SDL_Texture* gTexture= TheTextureManager::Instance()->getTextureMap().at(id);
+	SDL_RenderCopy( m_pRenderer, gTexture, NULL, NULL );
+
+}
+

@@ -13,7 +13,6 @@
 #include "Map.h"
 #include "../GameObject.h"
 #include <map>
-#include "../Utilitarios/Dimensiones.h"
 
 
 namespace std {
@@ -24,7 +23,7 @@ public:
 	int width;
 	int height;
 
-	std::map<std::string,Dimensiones> sectores;
+	std::map<std::string,SDL_Rect> sectores;
 
 
 
@@ -32,6 +31,7 @@ public:
 	virtual ~Pantalla();
 
 	void draw(SDL_Renderer* m_pRenderer, Map* m_pMap,std::vector<GameObject*> );
+	void init(SDL_Renderer* m_pRenderer);
 
 };
 

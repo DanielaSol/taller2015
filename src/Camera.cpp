@@ -11,14 +11,11 @@
 #include "SDL2/SDL.h"
 #include "InputHandler.h"
 #include "Utilitarios/Parser.h"
-#include "Utilitarios/Dimensiones.h"
-#include <map>
 
-using namespace std;
-
+//Camera* Camera::s_pCamera = new Camera();
 Camera* Camera::s_pCamera;
 
-Camera::Camera() : m_scrollSpeed(30,30),m_scrollMargin(TheParser::Instance()->configGame.configuracion.margen_scroll), m_direction(0,0), offsetX(0.0f), offsetY(0.0f)
+Camera::Camera() : m_scrollSpeed(20,20),m_scrollMargin(TheParser::Instance()->configGame.configuracion.margen_scroll), m_direction(0,0), offsetX(0.0f), offsetY(0.0f)
 {
 	// CAMBIAR TMB EN RESET m_scrollMargin = TheParser::Instance()->configGame.configuracion.margen_scroll;
   //  cout << TheParser::Instance()->configGame.configuracion.margen_scroll << endl;
@@ -34,16 +31,10 @@ void Camera::init()
 	SLOPE_X = MAX_SCROLLSPEED.getX() / (float)m_scrollMargin;
 	SLOPE_Y = MAX_SCROLLSPEED.getY() / (float)m_scrollMargin;
 
-   /* m_boundY_top = - TheGame::Instance()->TILE_HEIGHT;;
+    m_boundY_top = - TheGame::Instance()->TILE_HEIGHT;;
     m_boundY_bot = (int)(TheGame::Instance()->getMapHeight() * TheGame::Instance()->TILE_HEIGHT) - TheGame::Instance()->getGameHeight() + TheGame::Instance()->TILE_HEIGHT;//tile height
     m_boundX_left = (int)(TheGame::Instance()->getMapWidth() * -TheGame::Instance()->TILE_HEIGHT);
-    m_boundX_right = (int)(TheGame::Instance()->getMapWidth() * TheGame::Instance()->TILE_HEIGHT) - TheGame::Instance()->getGameWidth() +  TheGame::Instance()->TILE_WIDTH;*/
-
-	Dimensiones sector = TheGame::Instance()->m_pPantalla->sectores.at("mapa");
-	m_boundY_top = - TheGame::Instance()->TILE_HEIGHT + sector.y;
-	m_boundY_bot = (int)(sector.height * TheGame::Instance()->TILE_HEIGHT) - sector.height + TheGame::Instance()->TILE_HEIGHT + sector.y;//tile height
-	m_boundX_left = (int)(sector.width * -TheGame::Instance()->TILE_HEIGHT + sector.x);
-    m_boundX_right = (int)(sector.width * TheGame::Instance()->TILE_HEIGHT) - TheGame::Instance()->getGameWidth() +  TheGame::Instance()->TILE_WIDTH + sector.x;
+    m_boundX_right = (int)(TheGame::Instance()->getMapWidth() * TheGame::Instance()->TILE_HEIGHT) - TheGame::Instance()->getGameWidth() +  TheGame::Instance()->TILE_WIDTH;
 
 	m_cameraViewport = { 0, 0, TheGame::Instance()->getGameWidth() , TheGame::Instance()->getGameHeight() }; //posX, posY, width, height
 }
@@ -119,72 +110,32 @@ void Camera::update()
 
 void Camera::handleInput()
 {
-	/*float mouseX = TheInputHandler::Instance()->getMousePosition()->getX();
+	float mouseX = TheInputHandler::Instance()->getMousePosition()->getX();
 	float mouseY = TheInputHandler::Instance()->getMousePosition()->getY();
 
 	m_direction.setX(0.0f);
 	m_direction.setY(0.0f);
 
+	SDL_Rect sector = TheGame::Instance()->m_pPantalla->sectores.at("mapa");
 
-	if (mouseX <= m_scrollMargin && mouseX > 0)
-	{
+	if (mouseX <= m_scrollMargin && mouseX > 0)	{
 		m_direction.setX(-1.0f);
 		m_scrollSpeed.setX ( MAX_SCROLLSPEED.getX() - (SLOPE_X * mouseX));
 	}
-
-	if ((mouseX >= (TheGame::Instance()->getGameWidth() - m_scrollMargin)))
-	{
+	else if ((mouseX >= (TheGame::Instance()->getGameWidth() - m_scrollMargin)) && (mouseX < TheGame::Instance()->getGameWidth() ))	{
 		m_direction.setX(1.0f);
 		m_scrollSpeed.setX ( MAX_SCROLLSPEED.getX() - (SLOPE_X * (TheGame::Instance()->getGameWidth() - mouseX)));
 	}
-
-	if ((mouseY <= m_scrollMargin) && (mouseY > 0))
-	{
+	else if ((mouseY <= sector.y + m_scrollMargin) && (mouseY > sector.y)){
 		m_direction.setY(-1.0f);
-		m_scrollSpeed.setY ( MAX_SCROLLSPEED.getY() - (SLOPE_Y * mouseY));
+		m_scrollSpeed.setY ( MAX_SCROLLSPEED.getY() - (SLOPE_Y * (mouseY - sector.y )));
 	}
-
-	if ((mouseY >= (TheGame::Instance()->getGameHeight() - m_scrollMargin)) && (mouseY < (TheGame::Instance()->getGameHeight())))
-	{
+	else if ((mouseY >= (sector.y + TheGame::Instance()->getGameHeight() - m_scrollMargin)) && (mouseY <sector.y + TheGame::Instance()->getGameHeight() )) {
 		m_direction.setY(1.0f);
-		m_scrollSpeed.setY ( MAX_SCROLLSPEED.getY() - (SLOPE_Y * (TheGame::Instance()->getGameHeight() - mouseY)));
+		m_scrollSpeed.setY ( MAX_SCROLLSPEED.getY() - (SLOPE_Y * (sector.y + TheGame::Instance()->getGameHeight() - mouseY)));
 	}
 
-	m_direction.normalize();*/
-
-	float mouseX = TheInputHandler::Instance()->getMousePosition()->getX();
-		float mouseY = TheInputHandler::Instance()->getMousePosition()->getY();
-
-		m_direction.setX(0.0f);
-		m_direction.setY(0.0f);
-
-		if (mouseX <= m_scrollMargin && mouseX > 0)
-		{
-			m_direction.setX(-1.0f);
-			m_scrollSpeed.setX ( MAX_SCROLLSPEED.getX() - (SLOPE_X * mouseX));
-		}
-
-		if ((mouseX >= (TheGame::Instance()->getGameWidth() - m_scrollMargin)))
-		{
-			m_direction.setX(1.0f);
-			m_scrollSpeed.setX ( MAX_SCROLLSPEED.getX() - (SLOPE_X * (TheGame::Instance()->getGameWidth() - mouseX)));
-		}
-
-		if ((mouseY <= m_scrollMargin) && (mouseY > 30))
-		{
-			m_direction.setY(-1.0f);
-			m_scrollSpeed.setY ( MAX_SCROLLSPEED.getY() - (SLOPE_Y * mouseY));
-		}
-
-		if ((mouseY >= (TheGame::Instance()->getGameHeight() - m_scrollMargin)) && (mouseY < (TheGame::Instance()->getGameHeight())))
-		{
-			m_direction.setY(1.0f);
-			m_scrollSpeed.setY ( MAX_SCROLLSPEED.getY() - (SLOPE_Y * (TheGame::Instance()->getGameHeight() - mouseY)));
-		}
-
-		m_direction.normalize();
-
-
+	m_direction.normalize();
 }
 
 const Vector2D Camera::TranslateToWorldCoordinates(int screenX, int screenY) //NO USAR, ME ESTABA DANDO MAL Y LA ABANDONE

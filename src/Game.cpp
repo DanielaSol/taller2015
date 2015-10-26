@@ -126,7 +126,7 @@ bool Game::initGame()
 				  string salida = "la imagen del tipo " + tipo + " no existe, se cargará una imagen por defecto " + " - " + asctime (timeinfo);
 
 
-					arch= fopen("prueba.txt","a+");
+					arch= fopen("log.txt","a+");
 					fputs(salida.c_str(),arch);
 					fclose(arch);
 
@@ -169,7 +169,6 @@ bool Game::initGame()
 	delete vec;
     m_pMap = new Map();
     m_pMap->load();
-    m_pPantalla = new Pantalla(m_gameWidth,m_gameHeight);
 
     GameObject* objetoACargar;
 
@@ -206,9 +205,17 @@ bool Game::initGame()
     }
    entidades.push_back(m_pAldeano_test);
 
-   TheTextureManager::Instance()->load("assets/frame/frame4.png","frame", m_pRenderer);
-   TheTextureManager::Instance()->load("assets/frame/minimapa.png","minimapa", m_pRenderer);
-    return true;
+   m_pPantalla = new Pantalla(m_gameWidth,m_gameHeight);
+   m_pPantalla->init(m_pRenderer);
+
+   //TENGO QUE ARREGLAR ESTO
+   m_gameWidth = m_pPantalla->sectores.at("mapa").w;
+   m_gameHeight = m_pPantalla->sectores.at("mapa").h;
+   //TheTextureManager::Instance()->load("assets/frame/frame4.png","frame", m_pRenderer);
+   //TheTextureManager::Instance()->load("assets/frame/minimapa.png","minimapa", m_pRenderer);
+   return true;
+
+
 }
 
 
@@ -246,9 +253,26 @@ void Game::render()
      // m_pAldeano_test->draw();
 >>>>>>> e2dc2e842129e7a4c680730c18706d7f8779c6e5*/
 
+
 	m_pPantalla->draw(m_pRenderer,m_pMap,entidades);
 
+	/*TheTextureManager::Instance()->drawFrame("frame",-5,-5,1148,800,TheParser::Instance()->configGame.pantalla.ancho,
+	TheParser::Instance()->configGame.pantalla.alto,1,0,m_pRenderer);
+	     for(int i = 0 ; i <  m_pMap->getMapSize().getX(); i++)
+	     	{
+	     		for(int j = 0 ; j < m_pMap->getMapSize().getY() ; j++)
+	     		{
+	     			if (m_pMap->getVisionMapValue(i,j) == 1 || m_pMap->getVisionMapValue(i,j) == 2)
+	     			{
+	     				Vector2D* vector = new Vector2D(0,0);
+	     				vector->setX(i); vector->setY(j); vector->toIsometric();
+	     				TheTextureManager::Instance()->drawFrame("minimapa",vector->getX()+620,vector->getY()+430,180,150,50,50,1,0,TheGame::Instance()->getRenderer());
+	     				delete vector;
+	     			}
+	     		}
+	     	}
 
+*/
 
 
 }
@@ -379,6 +403,7 @@ void Game::restart() //Con R
 
 	//delete m_pAldeano_test;
 	delete m_pMap;
+	delete m_pPantalla;
 	SDL_DestroyWindow(m_pWindow);
 	SDL_DestroyRenderer(m_pRenderer);
 

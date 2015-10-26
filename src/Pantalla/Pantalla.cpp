@@ -10,8 +10,7 @@
 #include "../GameObject.h"
 #include "../TextureManager.h"
 #include <map>
-#include "../Utilitarios/Dimensiones.h"
-
+#include "../Vector2D.h"
 
 namespace std {
 Pantalla::Pantalla(int width, int height) {
@@ -19,19 +18,33 @@ Pantalla::Pantalla(int width, int height) {
 	this->height = height;
 
 	//defino los sectores
-	Dimensiones sector;
+	SDL_Rect sector;
 	sector.x=0;
 	sector.y=0;
-	sector.width = this->width;
-	sector.height = 30;
-	sectores.insert( std::pair<string,Dimensiones> ("barra",sector) );
+	sector.w = this->width;
+	sector.h = 30;
+	sectores.insert( std::pair<string,SDL_Rect> ("barra",sector) );
 
+	//mapa
 	sector.x=0;
 	sector.y=30;
-	sector.width = this->width;
-	sector.height = this->height - 30 - 200;
-	sectores.insert( std::pair<string,Dimensiones> ("mapa",sector) );
+	sector.w = this->width;
+	sector.h = this->height - 30 -150;
+	sectores.insert( std::pair<string,SDL_Rect> ("mapa",sector) );
 
+	//barra_bajo
+	sector.x=0;
+	sector.y=this->height -150 ;
+	sector.w = this->width/2;
+	sector.h = this->height - 30 ;
+	sectores.insert( std::pair<string,SDL_Rect> ("barra_bajo",sector) );
+
+	//minimapa
+	sector.x=this->width/2;
+	sector.y=this->height -150 ;
+	sector.w = this->width/2;
+	sector.h = this->height - 30 ;
+	sectores.insert( std::pair<string,SDL_Rect> ("minimapa",sector) );
 
 
 }
@@ -44,35 +57,64 @@ Pantalla::~Pantalla() {
 
 void Pantalla::draw(SDL_Renderer* m_pRenderer, Map* m_pMap ,std::vector<GameObject*> entidades) {
 
-	SDL_Rect topLeftViewport;
+	SDL_Rect sector;
+	//SDL_Rect viewport;
+	//////////////////////////////////////////////////////////////////
+	sector = sectores.at("barra");
+	TheTextureManager::Instance()->drawArea("barra",sector,m_pRenderer);
 
-	Dimensiones sector = sectores.at("barra");
-	topLeftViewport.x = sector.x;
-	topLeftViewport.y = sector.y;
-	topLeftViewport.w = sector.width;
-	topLeftViewport.h = sector.height;
-	SDL_RenderSetViewport( m_pRenderer, &topLeftViewport );
-
-	TheTextureManager::Instance()->load("assets/wood.jpg","Barra", m_pRenderer);
-	SDL_Texture* gTexture= TheTextureManager::Instance()->getTextureMap().at("Barra");
-	SDL_RenderCopy( m_pRenderer, gTexture, NULL, NULL );
-
+	//////////////////////////////////////////////////////////////////
+	sector = sectores.at("barra_bajo");
+	TheTextureManager::Instance()->drawArea("barra_bajo",sector,m_pRenderer);
+	//////////////////////////////////////////////////////////////////
 	sector = sectores.at("mapa");
-	topLeftViewport.x = sector.x;
-	topLeftViewport.y = sector.y;
-	topLeftViewport.w = sector.width;
-	topLeftViewport.h = sector.height;
-	SDL_RenderSetViewport( m_pRenderer, &topLeftViewport );
-
+	/*viewport.x = sector.x;
+	viewport.y = sector.y;
+	viewport.w = sector.w;
+	viewport.h = sector.h;*/
+	SDL_RenderSetViewport( m_pRenderer, &sector );
 
 	m_pMap->draw();
+	//m_pMap->drawMap(sector);
 	 //primero dibuja entidades, luego el personaje (siempre aparece por arriba de las cosas
 	for (uint i=0;i<entidades.size();i++){
 		if (entidades[i] && (entidades[i]->m_atSight || entidades[i]->m_wasSeen))
 			entidades[i]->draw();
 	}
-
-
 	SDL_RenderPresent(m_pRenderer);
+
+
+
+
+	/*for(int i = 0 ; i <  m_pMap->getMapSize().getX(); i++)
+	{
+		for(int j = 0 ; j < m_pMap->getMapSize().getY() ; j++)
+		{
+			if (m_pMap->getVisionMapValue(i,j) == 1 || m_pMap->getVisionMapValue(i,j) == 2)
+			{
+				Vector2D* vector = new Vector2D(0,0);
+				vector->setX(i); vector->setY(j); vector->toIsometric();
+				TheTextureManager::Instance()->drawFrame("minimapa",vector->getX()+620,vector->getY()+430,180,150,50,50,1,0,m_pRenderer);
+
+				delete vector;
+			}
+		}
+	}
+
+*/
+
+
+
+
 }
+
+void Pantalla::init(SDL_Renderer* m_pRenderer) {
+
+	TheTextureManager::Instance()->load("assets/wood.jpg","barra", m_pRenderer);
+	TheTextureManager::Instance()->load("assets/paper.png","barra_bajo", m_pRenderer);
+	TheTextureManager::Instance()->load("assets/papiro.png","minimapa", m_pRenderer);
+
+}
+
+
 }
