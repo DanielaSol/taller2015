@@ -46,7 +46,7 @@ public:
 private:
 
     TextureManager() {}
-    ~TextureManager() {}
+    ~TextureManager() {delete (this->s_pInstance);}
 
     //sobreescribe el operador = y lo hace privado
 

@@ -11,8 +11,11 @@
 #include "Objetos/Castillo.h"
 #include "Objetos/Suelo.h"
 #include "Objetos/Molino.h"
+#include "Objetos/Recursos/Madera.h"
+#include "Objetos/Recursos/Oro.h"
+#include "Objetos/Recursos/Comida.h"
 
-namespace std {
+using namespace std;
 
 ObjectFactory* ObjectFactory::objectInstance = 0;
 
@@ -43,9 +46,27 @@ GameObject* ObjectFactory::crear(string tipo, int x, int y) {
 	else if(tipo == "molino"){
 		objetoACargar = new Molino(x,y);
 	}
+	else if(tipo == "madera") {
+		objetoACargar = new Madera(x,y);
+	}
+	else if(tipo == "oro") {
+		objetoACargar = new Oro(x,y);
+	}
+	else if(tipo == "comida") {
+		objetoACargar = new Comida(x,y);
+	}
 	return objetoACargar;
 
+}
+
+GameObject* ObjectFactory::crear(string tipo, int x, int y, int cant) {
+	GameObject* objetoACargar = NULL;
+
+
+
+
+	return objetoACargar;
 
 }
 
-}
+

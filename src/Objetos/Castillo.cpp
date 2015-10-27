@@ -17,7 +17,9 @@ Castillo::Castillo() {
 
 Castillo::Castillo(int x,int y){
 
-	TheTextureManager::Instance()->load("assets/castilloSeen.png","castilloSeen", TheGame::Instance()->getRenderer());
+	if (TheTextureManager::Instance()->getTextureMap().count("castilloSeen") == 0) {
+		TheTextureManager::Instance()->load("assets/castilloSeen.png","castilloSeen", TheGame::Instance()->getRenderer());
+	}
 	//float possx = x * TheGame::TILE_WIDTH/2;
 	//float possy = y * TheGame::TILE_HEIGHT;
 	Vector2D* vec = new Vector2D(x, y);

@@ -18,6 +18,8 @@ Arbolit::Arbolit() {
 Arbolit::Arbolit(int x,int y){
 
 	TheTextureManager::Instance()->load("assets/terrainSeen.png","arbolSeen", TheGame::Instance()->getRenderer());
+
+
 	float possx = (x+1) * TheGame::TILE_WIDTH/2;
 	float possy = (y+1) * TheGame::TILE_HEIGHT;
 	Vector2D* vec = new Vector2D(0,0);
@@ -39,6 +41,8 @@ Arbolit::Arbolit(int x,int y){
 Arbolit::~Arbolit() {
 	// TODO Auto-generated destructor stub
 }
+
+
 
 void Arbolit::update(){
 	GameObject::update();

@@ -158,6 +158,7 @@ void Unit::handleInput()
 					(goalDestination->getY() >= TheGame::Instance()->getMapHeight())||
 					(goalDestination->getX() < 0) ||
 					(goalDestination->getY() < 0))
+
 			{
 				//revierte en caso positivo
 				m_bChangingDestination = false;

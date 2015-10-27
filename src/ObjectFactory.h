@@ -10,10 +10,11 @@
 
 #include "GameObject.h"
 
-namespace std {
+using namespace std;
 
 class ObjectFactory {
 public:
+
 	static ObjectFactory* Instance() {
 		if (objectInstance == 0) {
 			objectInstance = new ObjectFactory ();
@@ -23,21 +24,12 @@ public:
 		return objectInstance;
 	}
 
-	/*static ObjectFactory* Instance()
-		{
-			if(s_pInstance == 0)
-			{
-				s_pInstance = new ObjectFactory();
-				return s_pInstance;
-			}
-
-			return s_pInstance;
-		}*/
 
 	ObjectFactory();
 	virtual ~ObjectFactory();
 
 	GameObject* crear (string tipo, int x, int y);
+	GameObject* crear (string tipo, int x, int y, int cant);
 
 private:
 	static ObjectFactory* objectInstance;
@@ -45,5 +37,5 @@ private:
 
 typedef ObjectFactory TheObjectFactory ;
 
-}
+
 #endif /* OBJECTFACTORY_H_ */

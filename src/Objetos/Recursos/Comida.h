@@ -1,22 +1,21 @@
 /*
- * Madera.h
+ * Comida.h
  *
- *  Created on: 26/10/2015
+ *  Created on: 27/10/2015
  *      Author: daniela
  */
 
-#ifndef MADERA_H_
-#define MADERA_H_
+#ifndef COMIDA_H_
+#define COMIDA_H_
 
 #include "../../GameObject.h"
 
-class Madera: public GameObject {
+class Comida: public GameObject {
 public:
-	Madera();
-	Madera(int x,int y);
-	virtual ~Madera();
-
-	virtual void update();
+	Comida();
+	Comida(int x, int y);
+	virtual ~Comida();
+	void update();
 
 	const int width = 32;
 	const int height = 32;
@@ -25,9 +24,9 @@ public:
 	const int offsetX = 0;
 	const int offsetY = 32;
 	const int numFrames = 5;
-	int row = 14;
-	int frame = 3;
+	int row = 7;
+	int frame = 7;
+
 };
 
-
-#endif /* MADERA_H_ */
+#endif /* COMIDA_H_ */

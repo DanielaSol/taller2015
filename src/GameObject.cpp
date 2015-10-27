@@ -11,6 +11,8 @@
 #include "Game.h"
 #include "Camera.h"
 
+using namespace std;
+
 void GameObject::load(int screenX, int screenY, int width, int height,int destWidth, int destHeight, int numFrames, std::string textureID, bool visibility)
 {
 	m_mapPosition = Vector2D(screenX, screenY);

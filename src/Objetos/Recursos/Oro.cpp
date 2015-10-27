@@ -1,23 +1,20 @@
 /*
- * Madera.cpp
+ * Oro.cpp
  *
- *  Created on: 26/10/2015
+ *  Created on: 27/10/2015
  *      Author: daniela
  */
 
-#include "Madera.h"
+#include "Oro.h"
 #include "../../TextureManager.h"
 #include "../../Game.h"
 #include "../../Utilitarios/Parser.h"
 
-Madera::Madera() {
-}
+Oro::Oro() {}
 
-Madera::Madera(int x,int y) {
+Oro::Oro(int x,int y) {
+	TheTextureManager::Instance()->load("assets/resources.png","oro", TheGame::Instance()->getRenderer());
 
-	//if (TheTextureManager::Instance()->getTextureMap().count("madera") == 0) {
-		TheTextureManager::Instance()->load("assets/resources.png","madera", TheGame::Instance()->getRenderer());
-	//}
 
 	float possx = (x+1) * TheGame::TILE_WIDTH/2;
 	float possy = (y+1) * TheGame::TILE_HEIGHT;
@@ -25,7 +22,7 @@ Madera::Madera(int x,int y) {
 	vec->setX(possx);
 	vec->setY(possy);
 	vec->toIsometric();
-	GameObject::load( vec->getX(), vec->getY(),  width, height, destWidth, destHeight, numFrames, "madera",false);
+	GameObject::load( vec->getX(), vec->getY(),  width, height, destWidth, destHeight, numFrames, "oro",false);
 	m_mapPosition2.setX(x);
 	m_mapPosition2.setY(y);
 	GameObject::setFrame(frame);
@@ -39,17 +36,17 @@ Madera::Madera(int x,int y) {
 	delete vec;
 }
 
-Madera::~Madera() {
-	// TODO Auto-generated destructor stub
-}
-
-void Madera::update(){
+void Oro::update(){
 	GameObject::update();
 	if(!m_atSight && m_wasSeen){
-		setTexture("madera");
+		setTexture("oro");
 	}else{
-		setTexture("madera");
+		setTexture("oro");
 	}
 }
 
+
+Oro::~Oro() {
+	// TODO Auto-generated destructor stub
+}
 

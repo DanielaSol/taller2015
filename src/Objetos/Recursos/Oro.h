@@ -1,22 +1,21 @@
 /*
- * Madera.h
+ * Oro.h
  *
- *  Created on: 26/10/2015
+ *  Created on: 27/10/2015
  *      Author: daniela
  */
 
-#ifndef MADERA_H_
-#define MADERA_H_
+#ifndef ORO_H_
+#define ORO_H_
 
 #include "../../GameObject.h"
 
-class Madera: public GameObject {
+class Oro: public GameObject {
 public:
-	Madera();
-	Madera(int x,int y);
-	virtual ~Madera();
-
-	virtual void update();
+	Oro();
+	Oro(int x, int y);
+	virtual ~Oro();
+	void update();
 
 	const int width = 32;
 	const int height = 32;
@@ -25,9 +24,8 @@ public:
 	const int offsetX = 0;
 	const int offsetY = 32;
 	const int numFrames = 5;
-	int row = 14;
-	int frame = 3;
+	int row = 7;
+	int frame = 0;
 };
 
-
-#endif /* MADERA_H_ */
+#endif /* ORO_H_ */

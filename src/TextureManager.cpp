@@ -17,8 +17,6 @@ bool TextureManager::load(std::string fileName, std::string id, SDL_Renderer* pR
 	SDL_Surface* pTempSurface = IMG_Load(fileName.c_str());
 	if(pTempSurface == 0)
 	{
-		//std::string  nombre= "no-"+fileName;
-		//pTempSurface = IMG_Load(nombre.c_str());
 		LOG("NO SE ENCONTRO LA IMAGEN "+fileName+", SE CARGARA UNA IMAGEN POR DEFECTO");
 		return false;
 	}
@@ -73,6 +71,7 @@ void TextureManager::clearTextureMap()
 {
     m_textureMap.clear();
 }
+
 
 void TextureManager::clearFromTextureMap(std::string id)
 {

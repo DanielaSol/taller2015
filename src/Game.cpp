@@ -120,17 +120,16 @@ bool Game::initGame()
 				FILE* arch;
 
 				time_t rawtime;
-				  struct tm * timeinfo;
+				struct tm * timeinfo;
 
-				  time ( &rawtime );
-				  timeinfo = localtime ( &rawtime );
+				time ( &rawtime );
+				timeinfo = localtime ( &rawtime );
 
-				  string salida = "la imagen del tipo " + tipo + " no existe, se cargará una imagen por defecto " + " - " + asctime (timeinfo);
+				string salida = "la imagen del tipo " + tipo + " no existe, se cargará una imagen por defecto " + " - " + asctime (timeinfo);
 
-
-					arch= fopen("log.txt","a+");
-					fputs(salida.c_str(),arch);
-					fclose(arch);
+				arch= fopen("log.txt","a+");
+				fputs(salida.c_str(),arch);
+				fclose(arch);
 
 
 				if (tipo=="arbol")
@@ -172,7 +171,6 @@ bool Game::initGame()
     m_pMap = new Map();
     m_pMap->load();
 
-    GameObject* objetoACargar;
 
     for(int i =0; i< TheParser::Instance()->configGame.escenario.entidades.size();i++){
     	GameObject* objetoACargar = TheObjectFactory::Instance()->crear(
@@ -182,7 +180,21 @@ bool Game::initGame()
     	cargarEntidadd(objetoACargar);
     }
 
+    //////////////////////////////////////////////////////////
+    // PROVISORIO, RECURSOS
+    GameObject* recurso = TheObjectFactory::Instance()->crear("madera", 14, 11);
+    cargarEntidadd(recurso);
+    GameObject* recurso2 = TheObjectFactory::Instance()->crear("oro", 20, 11);
+    cargarEntidadd(recurso2);
+    GameObject* recurso3 = TheObjectFactory::Instance()->crear("comida", 21, 22);
+    cargarEntidadd(recurso3);
+
    entidades.push_back(m_pAldeano_test);
+
+
+
+
+   ////////////////////////////////////////////////////////////
 
    m_pPantalla = new Pantalla(m_gameWidth,m_gameHeight);
    m_pPantalla->init(m_pRenderer);

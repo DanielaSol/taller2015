@@ -137,6 +137,8 @@ protected:
     // blending
     int m_alpha;*/
 
+    bool recurso = false;
+
 };
 
 #endif /* GAMEOBJECT_H_ */
