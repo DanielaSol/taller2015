@@ -29,6 +29,7 @@ public:
 
 	Pantalla(int width, int height);
 	virtual ~Pantalla();
+	void clean();
 
 	void draw(SDL_Renderer* m_pRenderer, Map* m_pMap,std::vector<GameObject*> );
 	void init(SDL_Renderer* m_pRenderer);

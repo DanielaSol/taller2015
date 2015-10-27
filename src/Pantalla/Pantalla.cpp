@@ -50,7 +50,7 @@ Pantalla::Pantalla(int width, int height) {
 
 
 Pantalla::~Pantalla() {
-	// TODO Auto-generated destructor stub
+	clean();
 }
 
 
@@ -106,6 +106,12 @@ void Pantalla::init(SDL_Renderer* m_pRenderer) {
 	TheTextureManager::Instance()->load("assets/paper.png","barra_bajo", m_pRenderer);
 	TheTextureManager::Instance()->load("assets/papiro.png","minimapa", m_pRenderer);
 	TheTextureManager::Instance()->load("assets/punto.png","punto", m_pRenderer);
+
+}
+
+void Pantalla::clean() {
+
+	sectores.clear();
 
 }
 

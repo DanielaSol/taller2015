@@ -19,6 +19,7 @@
 #include "Objetos/Arbolit.h"
 #include "Objetos/Castillo.h"
 #include "Objetos/Suelo.h"
+#include "ObjectFactory.h"
 
 #include <algorithm>
 #include <string>
@@ -45,6 +46,7 @@ Game::~Game()
     // para evitar memory leaks
     m_pRenderer= 0;
     m_pWindow = 0;
+
 }
 
 
@@ -173,36 +175,13 @@ bool Game::initGame()
     GameObject* objetoACargar;
 
     for(int i =0; i< TheParser::Instance()->configGame.escenario.entidades.size();i++){
-
-    	if(TheParser::Instance()->configGame.escenario.entidades[i].tipo == "arbol")
-    	{
-    		objetoACargar = new Arbolit(TheParser::Instance()->configGame.escenario.entidades[i].x,
-    									TheParser::Instance()->configGame.escenario.entidades[i].y);
-
-    	}else if(TheParser::Instance()->configGame.escenario.entidades[i].tipo == "castillo"){
-
-    		objetoACargar = new Castillo(TheParser::Instance()->configGame.escenario.entidades[i].x,
-										 TheParser::Instance()->configGame.escenario.entidades[i].y);
-
-    	}else if(TheParser::Instance()->configGame.escenario.entidades[i].tipo == "agua"){
-
-    		objetoACargar = new Suelo(TheParser::Instance()->configGame.escenario.entidades[i].x,
-    	    						  TheParser::Instance()->configGame.escenario.entidades[i].y,"agua");
-
-
-    	}else if(TheParser::Instance()->configGame.escenario.entidades[i].tipo == "tierra"){
-
-    		objetoACargar = new Suelo(TheParser::Instance()->configGame.escenario.entidades[i].x,
-    	    						  TheParser::Instance()->configGame.escenario.entidades[i].y,"tierra");
-
-    	}else if(TheParser::Instance()->configGame.escenario.entidades[i].tipo == "molino"){
-
-    		objetoACargar = new Molino(TheParser::Instance()->configGame.escenario.entidades[i].x,
-    								   TheParser::Instance()->configGame.escenario.entidades[i].y);
-
-    	}
+    	GameObject* objetoACargar = TheObjectFactory::Instance()->crear(
+    										TheParser::Instance()->configGame.escenario.entidades[i].tipo,
+    										TheParser::Instance()->configGame.escenario.entidades[i].x,
+    										TheParser::Instance()->configGame.escenario.entidades[i].y);
     	cargarEntidadd(objetoACargar);
     }
+
    entidades.push_back(m_pAldeano_test);
 
    m_pPantalla = new Pantalla(m_gameWidth,m_gameHeight);
@@ -286,6 +265,7 @@ void Game::clean()
    // delete m_pGameStateMachine;
     m_pAldeano_test->clean();
     m_pMap->clean();
+    m_pPantalla->clean();
     for(uint i = 0; i < entidades.size(); i++){
     	if (entidades [i])
     	{
@@ -344,6 +324,7 @@ void Game::restart() //Con R
 
    m_pAldeano_test->clean();
    m_pMap->clean();
+   m_pPantalla->clean();
    for(uint i=0;i < entidades.size() ;i++){
 	   if (entidades[i])
 	   {
