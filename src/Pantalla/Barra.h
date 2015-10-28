@@ -8,14 +8,22 @@
 #ifndef BARRA_H_
 #define BARRA_H_
 
-namespace std {
+#include <string>
+#include <map>
 
+
+using namespace std;
 
 class Barra {
 public:
 	Barra();
 	virtual ~Barra();
+	void setRecurso(string,int);
+
+
+
+
 };
 
-} /* namespace std */
+
 #endif /* BARRA_H_ */

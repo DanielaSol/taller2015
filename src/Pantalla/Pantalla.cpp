@@ -62,6 +62,7 @@ void Pantalla::draw(SDL_Renderer* m_pRenderer, Map* m_pMap ,std::vector<GameObje
 	sector = sectores.at("barra");
 	TheTextureManager::Instance()->drawArea("barra",sector,m_pRenderer);
 
+
 	//////////////////////////////////////////////////////////////////
 	sector = sectores.at("barra_bajo");
 	TheTextureManager::Instance()->drawArea("barra_bajo",sector,m_pRenderer);

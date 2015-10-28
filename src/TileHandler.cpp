@@ -69,6 +69,7 @@ bool TileHandler::isWalkable(int tileID)
 	{
 	case 0: return false;
 	case 1: return true;
+	case 3: return true;
 	default: return false;
 	}
 }
@@ -79,7 +80,21 @@ bool TileHandler::isNavigable(int tileID)
 	{
 	case 0: return false;
 	case 1: return false;
+	case 3: return false;
 	default: return false;
 	}
 }
+
+bool TileHandler::isGetable(int tileID)
+{
+	switch (tileID)
+	{
+	case 0: return false;
+	case 1: return false;
+	case 3: return true;
+	default: return false;
+	}
+}
+
+
 

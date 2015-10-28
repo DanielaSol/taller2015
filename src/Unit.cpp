@@ -50,6 +50,7 @@ void Unit::draw()
 
 void Unit::update(){
 
+
 	//GameObject::update();
 	//Si no se encuentra donde en la direccion destino asignada, se dirige hacia allá
 	if (m_bMoving)
@@ -57,6 +58,7 @@ void Unit::update(){
 		if (((m_mapPosition.getX() != m_destination.getX()) || (m_mapPosition.getY() != m_destination.getY())))
 		{
 			moveTo(m_destination);
+
 		}
 		else
 		{
@@ -71,6 +73,41 @@ void Unit::update(){
 			m_destination.setX(m_node->x);
 			m_destination.setY(m_node->y);
 			cout << "Next node = ( " << (int) m_node->x << " , " << (int)m_node->y << " ) \n";
+
+			int tileValue1 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()][m_mapPosition.getY()];
+			int tileValue2 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()+1][m_mapPosition.getY()];
+			int tileValue3 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()+1][m_mapPosition.getY()+1];
+			int tileValue4 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()][m_mapPosition.getY()+1];
+			int tileValue5 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()-1][m_mapPosition.getY()];
+			int tileValue6 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()-1][m_mapPosition.getY()-1];
+			int tileValue7 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()][m_mapPosition.getY()-1];
+
+			if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue1))  {
+				TheGame::Instance()->tomarRecurso(m_mapPosition.getX(),m_mapPosition.getY());
+
+			}
+			else if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue2))  {
+				TheGame::Instance()->tomarRecurso(m_mapPosition.getX()+1,m_mapPosition.getY());
+			}
+			if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue3))  {
+				TheGame::Instance()->tomarRecurso(m_mapPosition.getX()+1,m_mapPosition.getY()+1);
+
+			}
+			else if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue4))  {
+				TheGame::Instance()->tomarRecurso(m_mapPosition.getX(),m_mapPosition.getY()+1);
+			}
+			if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue5))  {
+				TheGame::Instance()->tomarRecurso(m_mapPosition.getX()-1,m_mapPosition.getY());
+
+			}
+			else if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue6))  {
+				TheGame::Instance()->tomarRecurso(m_mapPosition.getX()-1,m_mapPosition.getY()-1);
+			}
+			if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue7))  {
+				TheGame::Instance()->tomarRecurso(m_mapPosition.getX(),m_mapPosition.getY()-1);
+
+			}
+
 		}
 	}
 	else

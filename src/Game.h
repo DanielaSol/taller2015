@@ -15,6 +15,7 @@
 #include "SDL2/SDL.h"
 #include <iostream>
 #include "Pantalla/Pantalla.h"
+#include "Pantalla/Barra.h"
 
 using namespace std;
 
@@ -51,6 +52,8 @@ public:
     				int numFrames,int row,int frame,int offsetX,int offsetY,int longBase,
     				int longAlt, std::string nombre);
     void cargarEntidadd(GameObject*);
+    void cargarRecurso(GameObject* entidad);
+    void tomarRecurso(int x, int y);
 
     SDL_Renderer* getRenderer() const { return m_pRenderer; }
     SDL_Window* getWindow() const { return m_pWindow; }
@@ -68,7 +71,8 @@ public:
     float getMapWidth() const;
     float getMapHeight() const;
     Map* m_pMap;
-    Pantalla * m_pPantalla;
+    Pantalla* m_pPantalla;
+    Barra* m_pBarra;
 
     GameObject* m_pAldeano_test;
 private:

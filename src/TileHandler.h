@@ -13,6 +13,7 @@ public:
 
 	bool isWalkable(int tileID);
 	bool isNavigable(int tileID);
+	bool isGetable(int tileID);
 	int getWalkCost (int tileID);
 	std::string getTileID (int tileID);
 

@@ -36,14 +36,19 @@ public:
 	void placeTile(int gridPosX, int gridPosY, int tileID);
 
 
+	// PROVISORIO: Lo pongo público
+	std::vector< std::vector<int> >  m_mapGrid;
+	std::vector< std::vector<int> >  m_mapGrid2;
+	TileHandler* m_pTileHandler;
+
+
 private:
 
 	std::string m_mapName;
 	Vector2D m_mapSize;
 
-	std::vector< std::vector<int> >  m_mapGrid;
-	std::vector< std::vector<int> >  m_mapGrid2;
-	TileHandler* m_pTileHandler;
+
+
 
 	Vector2D* isometricCord; //temp buffer
 

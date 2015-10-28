@@ -20,6 +20,7 @@
 #include "Objetos/Castillo.h"
 #include "Objetos/Suelo.h"
 #include "ObjectFactory.h"
+#include "Pantalla/Barra.h"
 
 #include <algorithm>
 #include <string>
@@ -183,13 +184,13 @@ bool Game::initGame()
     //////////////////////////////////////////////////////////
     // PROVISORIO, RECURSOS
     GameObject* recurso = TheObjectFactory::Instance()->crear("madera", 14, 11);
-    cargarEntidadd(recurso);
+    cargarRecurso(recurso);
     GameObject* recurso2 = TheObjectFactory::Instance()->crear("oro", 20, 11);
-    cargarEntidadd(recurso2);
+    cargarRecurso(recurso2);
     GameObject* recurso3 = TheObjectFactory::Instance()->crear("comida", 21, 22);
-    cargarEntidadd(recurso3);
+    cargarRecurso(recurso3);
 
-   entidades.push_back(m_pAldeano_test);
+    entidades.push_back(m_pAldeano_test);
 
 
 
@@ -198,6 +199,7 @@ bool Game::initGame()
 
    m_pPantalla = new Pantalla(m_gameWidth,m_gameHeight);
    m_pPantalla->init(m_pRenderer);
+   m_pBarra = new Barra();
 
    //TENGO QUE ARREGLAR ESTO
    m_gameWidth = m_pPantalla->sectores.at("mapa").w;
@@ -290,6 +292,7 @@ void Game::clean()
     delete m_pAldeano_test;
     delete m_pMap;
     delete m_pPantalla;
+    delete m_pBarra;
 
     TheTextureManager::Instance()->clearTextureMap();
 
@@ -329,6 +332,57 @@ void Game::cargarEntidadd(GameObject* entidad){
 
 }
 
+/////////////////// PROVISORIO ////////////////////////////
+
+void Game::cargarRecurso(GameObject* entidad){
+
+	for(int i=entidad->m_mapPosition2.getX();i<entidad->m_mapPosition2.getX() + entidad->getAncho();i++){
+				for(int j=entidad->m_mapPosition2.getY();j<entidad->m_mapPosition2.getY()+ entidad->getAlto();j++){
+					if(m_pMap->getValue(i,j) == 0)
+						{
+							LOG("TILE OCUPADO, NO ES POSIBLE UBICAR");
+							return;
+						}
+					else{m_pMap->setValue(i,j,3);}
+			}
+		}
+
+	cantDeEntidades += 1;
+	entidades.resize(cantDeEntidades);
+
+	entidades[cantDeEntidades -1] = entidad;
+
+}
+
+void Game::tomarRecurso(int x, int y) {
+
+	for(uint i = 0; i < entidades.size(); i++){
+	    	if (entidades [i])
+	    	{
+	    		Vector2D vector = entidades[i]->m_mapPosition2;
+	    		if ((vector.m_x == x) && (vector.m_y == y)){
+	    			GameObject* objeto = entidades[i];
+	    		    if (entidades[i])
+				    {
+				    	entidades[i]->m_mapPosition2.setX(-1);
+				    	entidades[i]->m_mapPosition2.setY(-1);
+				    	entidades[i]->m_mapPosition.setX(-1);
+				    	entidades[i]->m_mapPosition.setY(-1);
+
+				    	m_pMap->m_mapGrid[x][y] = 0;
+				    	m_pMap->m_mapGrid2[x][y] = 0;
+
+				    }
+	    		}
+	    	}
+
+	  }
+
+}
+
+
+/////////////////////////////////////////////////////////////////
+
 void Game::restart() //Con R
 {
 	m_bQuiting = true;
@@ -350,6 +404,7 @@ void Game::restart() //Con R
 	//delete m_pAldeano_test;
 	delete m_pMap;
 	delete m_pPantalla;
+	delete m_pBarra;
 	SDL_DestroyWindow(m_pWindow);
 	SDL_DestroyRenderer(m_pRenderer);
 
