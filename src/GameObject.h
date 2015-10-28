@@ -11,6 +11,7 @@
 #include "Vector2D.h"
 #include <string>
 
+using namespace std;
 //Clase base de los elementos del juego - VENDRIAN A SER TODAS LAS ENTIDADES MENOS LAS DE TERRENO: AGUA, TIERRA
 
 class GameObject
@@ -97,6 +98,11 @@ public:
     bool m_atSight;
     bool m_wasSeen;
 
+    //PROVISORIO Hay que pasarlo a protected
+    bool recurso;
+    string name;
+    int cantidad;
+
 protected:
 
     // "Age" Variables
@@ -137,7 +143,7 @@ protected:
     // blending
     int m_alpha;*/
 
-    bool recurso = false;
+
 
 };
 

@@ -21,6 +21,7 @@
 #include "Objetos/Suelo.h"
 #include "ObjectFactory.h"
 #include "Pantalla/Barra.h"
+#include "SDL/SDL_ttf.h"
 
 #include <algorithm>
 #include <string>
@@ -47,6 +48,7 @@ Game::~Game()
     // para evitar memory leaks
     m_pRenderer= 0;
     m_pWindow = 0;
+
 
 }
 
@@ -95,6 +97,18 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 
     if (!initGame())
     	return false;
+
+	if( TTF_Init() == -1 )
+	{	printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+		return false;
+
+	}
+
+	//Open the font
+	gFont = TTF_OpenFont( "files/fontArial.ttf", 14 );
+	if( gFont == NULL ) {
+		printf( "No se pudo cargar la fuente! SDL_ttf Error: %s\n", TTF_GetError() );
+	}
 
     TheCamera::Instance()->init();
 
@@ -206,6 +220,10 @@ bool Game::initGame()
    m_gameHeight = m_pPantalla->sectores.at("mapa").h;
    TheTextureManager::Instance()->load("assets/frame/frame4.png","frame", m_pRenderer);
    TheTextureManager::Instance()->load("assets/frame/minimapa.png","minimapa", m_pRenderer);
+
+   /////////////////////////////////////////////////////////////
+
+
    return true;
 
 
@@ -296,9 +314,14 @@ void Game::clean()
 
     TheTextureManager::Instance()->clearTextureMap();
 
+	TTF_CloseFont( gFont );
+	gFont = NULL;
+
     SDL_DestroyWindow(m_pWindow);
     SDL_DestroyRenderer(m_pRenderer);
     SDL_Quit();
+    TTF_Quit();
+    IMG_Quit();
 }
 
 float Game::getMapWidth() const
@@ -372,6 +395,9 @@ void Game::tomarRecurso(int x, int y) {
 				    	m_pMap->m_mapGrid[x][y] = 0;
 				    	m_pMap->m_mapGrid2[x][y] = 0;
 
+
+				    	m_pBarra->addRecurso(objeto->name.c_str(),objeto->cantidad);
+
 				    }
 	    		}
 	    	}
@@ -391,6 +417,7 @@ void Game::restart() //Con R
    m_pAldeano_test->clean();
    m_pMap->clean();
    m_pPantalla->clean();
+   m_pBarra->clean();
    for(uint i=0;i < entidades.size() ;i++){
 	   if (entidades[i])
 	   {

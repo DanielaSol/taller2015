@@ -41,6 +41,8 @@ public:
     void draw(std::string id, int x, int y, int width, int height, SDL_Renderer* pRenderer, SDL_RendererFlip flip = SDL_FLIP_NONE);
     void drawFrame(std::string id, int x, int y, int width, int height,int destWidth, int destHeight, int currentRow, int currentFrame, SDL_Renderer* pRenderer, SDL_RendererFlip flip = SDL_FLIP_NONE);
     void drawArea(std::string id, SDL_Rect dim ,SDL_Renderer* pRenderer);
+    void drawText(std::string text, SDL_Color color, SDL_Rect sector ,SDL_Renderer* m_pRenderer);
+
     std::map<std::string, SDL_Texture*> getTextureMap() { return m_textureMap; }
 
 private:

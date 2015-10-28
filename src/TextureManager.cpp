@@ -8,6 +8,7 @@
 #include "TextureManager.h"
 #include <string>
 #include "Utilitarios/Logger.h"
+#include "Game.h"
 
 using namespace std;
 TextureManager* TextureManager::s_pInstance = 0;
@@ -75,7 +76,9 @@ void TextureManager::clearTextureMap()
 
 void TextureManager::clearFromTextureMap(std::string id)
 {
-    m_textureMap.erase(id);
+	m_textureMap.erase(id);
+
+
 }
 
 void TextureManager::drawArea(std::string id, SDL_Rect sector ,SDL_Renderer* m_pRenderer) {
@@ -83,6 +86,37 @@ void TextureManager::drawArea(std::string id, SDL_Rect sector ,SDL_Renderer* m_p
 	SDL_RenderSetViewport( m_pRenderer, &sector );
 	SDL_Texture* gTexture= TheTextureManager::Instance()->getTextureMap().at(id);
 	SDL_RenderCopy( m_pRenderer, gTexture, NULL, NULL );
+
+}
+
+void TextureManager::drawText(std::string text, SDL_Color color, SDL_Rect sector ,SDL_Renderer* m_pRenderer) {
+
+	//Render text surface
+	SDL_Surface* textSurface = TTF_RenderText_Solid( TheGame::Instance()->gFont,text.c_str(), color );
+	if( textSurface == NULL ){
+		printf( "No se pudo cargar el texto! SDL_ttf Error: %s\n", TTF_GetError() );
+	}
+	else {
+		//Create texture from surface pixels
+
+		SDL_Texture*  mTexture = SDL_CreateTextureFromSurface( m_pRenderer, textSurface );
+		if( mTexture == NULL ){
+			printf( "No se pudo crear la textura del texto! SDL Error: %s\n", SDL_GetError() );
+		}
+		else{
+			//Get image dimensions
+			sector.w = textSurface->w;
+			sector.h = textSurface->h;
+
+			SDL_RenderCopyEx( m_pRenderer, mTexture, NULL, &sector, 0, 0, SDL_FLIP_NONE);
+
+
+		}
+		SDL_FreeSurface( textSurface );
+		SDL_DestroyTexture(mTexture);
+
+	}
+
 
 }
 

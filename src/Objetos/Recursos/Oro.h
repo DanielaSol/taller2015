@@ -23,8 +23,8 @@ public:
 	const int destHeight = 32;
 	const int offsetX = 0;
 	const int offsetY = 32;
-	const int numFrames = 5;
-	int row = 7;
+	const int numFrames = 10;
+	int row = 8;
 	int frame = 0;
 };
 

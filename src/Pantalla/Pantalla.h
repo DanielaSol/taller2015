@@ -15,7 +15,7 @@
 #include <map>
 
 
-namespace std {
+using namespace std;
 
 class Pantalla {
 
@@ -23,18 +23,16 @@ public:
 	int width;
 	int height;
 
-	std::map<std::string,SDL_Rect> sectores;
-
-
+	map<string,SDL_Rect> sectores;
 
 	Pantalla(int width, int height);
 	virtual ~Pantalla();
 	void clean();
 
-	void draw(SDL_Renderer* m_pRenderer, Map* m_pMap,std::vector<GameObject*> );
+	void draw(SDL_Renderer* m_pRenderer, Map* m_pMap,vector<GameObject*> );
 	void init(SDL_Renderer* m_pRenderer);
 
 };
 
-}
+
 #endif /* PANTALLA_H_ */

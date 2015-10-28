@@ -10,6 +10,8 @@
 #include "../Game.h"
 #include <math.h>
 
+using namespace std;
+
 bool MapSearchNode::IsSameState( MapSearchNode &rhs )
 {
 	// same state in a maze search is simply when (x,y) are the same
@@ -59,7 +61,6 @@ bool MapSearchNode::GetSuccessors( AStarSearch<MapSearchNode> *astarsearch, MapS
 		parent_x = parent_node->x;
 		parent_y = parent_node->y;
 	}
-
 
 	MapSearchNode NewNode;
 	bool validNode = true;

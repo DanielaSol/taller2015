@@ -16,6 +16,7 @@
 #include <iostream>
 #include "Pantalla/Pantalla.h"
 #include "Pantalla/Barra.h"
+#include "SDL/SDL_ttf.h"
 
 using namespace std;
 
@@ -75,6 +76,8 @@ public:
     Barra* m_pBarra;
 
     GameObject* m_pAldeano_test;
+
+    TTF_Font* gFont;
 private:
 
     //variable temporal, más avanzado en el diseño, la deberiamos mover a otra clase.
@@ -125,6 +128,7 @@ private:
 			return true;
 		}
 	};
+
 
     Game(); // Singleton --> Contructor y destructor privados
     ~Game();

@@ -6,13 +6,19 @@
  */
 
 #include "Pantalla.h"
-#include "Map.h"
 #include "../GameObject.h"
 #include "../TextureManager.h"
 #include <map>
-#include "../Vector2D.h"
+#include <sstream>
+#include <string>
 
-namespace std {
+
+#include "../Vector2D.h"
+#include "SDL/SDL_ttf.h"
+#include "../Game.h"
+#include "stdlib.h"
+
+using namespace std;
 Pantalla::Pantalla(int width, int height) {
 	this->width = width;
 	this->height = height;
@@ -23,28 +29,28 @@ Pantalla::Pantalla(int width, int height) {
 	sector.y=0;
 	sector.w = this->width;
 	sector.h = 30;
-	sectores.insert( std::pair<string,SDL_Rect> ("barra",sector) );
+	sectores.insert( pair<string,SDL_Rect> ("barra",sector) );
 
 	//mapa
 	sector.x=0;
 	sector.y=30;
 	sector.w = this->width;
 	sector.h = this->height - 30 -150;
-	sectores.insert( std::pair<string,SDL_Rect> ("mapa",sector) );
+	sectores.insert( pair<string,SDL_Rect> ("mapa",sector) );
 
 	//barra_bajo
 	sector.x=0;
 	sector.y=this->height -150 ;
 	sector.w = 2*(this->width/3);
 	sector.h = this->height - 30 ;
-	sectores.insert( std::pair<string,SDL_Rect> ("barra_bajo",sector) );
+	sectores.insert( pair<string,SDL_Rect> ("barra_bajo",sector) );
 
 	//minimapa
 	sector.x=2*(this->width/3);
 	sector.y=this->height -150 ;
 	sector.w = 1*(this->width/3);
 	sector.h = this->height - 30 ;
-	sectores.insert( std::pair<string,SDL_Rect> ("minimapa",sector) );
+	sectores.insert( pair<string,SDL_Rect> ("minimapa",sector) );
 
 }
 
@@ -54,13 +60,33 @@ Pantalla::~Pantalla() {
 }
 
 
-void Pantalla::draw(SDL_Renderer* m_pRenderer, Map* m_pMap ,std::vector<GameObject*> entidades) {
+void Pantalla::draw(SDL_Renderer* m_pRenderer, Map* m_pMap ,vector<GameObject*> entidades) {
 
 	SDL_Rect sector;
 
 	//////////////////////////////////////////////////////////////////
 	sector = sectores.at("barra");
 	TheTextureManager::Instance()->drawArea("barra",sector,m_pRenderer);
+
+	SDL_Color textColor = { 255, 255, 255 };
+
+	map<string, int>myMap = TheGame::Instance()->m_pBarra->getMapRecursos();
+
+	int acum =0;
+	for (const auto& recurso : myMap) {
+	    ostringstream convert;   // stream used for the conversion
+	    convert << (recurso.second);
+	    string text = recurso.first+ ": " + convert.str();
+	    sector.x=5+acum;
+	    sector.y=5;
+	    acum+= 100;
+
+	   TheTextureManager::Instance()->drawText(text,textColor,sector,m_pRenderer);
+
+	}
+
+
+
 
 
 	//////////////////////////////////////////////////////////////////
@@ -99,6 +125,11 @@ void Pantalla::draw(SDL_Renderer* m_pRenderer, Map* m_pMap ,std::vector<GameObje
 
 	SDL_RenderPresent(m_pRenderer);
 
+	//////////////////////////////////////////////////////////////////
+
+
+
+
 }
 
 void Pantalla::init(SDL_Renderer* m_pRenderer) {
@@ -117,4 +148,4 @@ void Pantalla::clean() {
 }
 
 
-}
+

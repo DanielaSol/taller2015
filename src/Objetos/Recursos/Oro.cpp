@@ -32,6 +32,8 @@ Oro::Oro(int x,int y) {
 	GameObject::setAncho(1);
 
 	this->recurso = true;
+	this->name = "Oro";
+	this->cantidad = 1;
 
 	delete vec;
 }

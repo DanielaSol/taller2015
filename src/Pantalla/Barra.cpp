@@ -24,10 +24,21 @@ Barra::~Barra() {
 	// TODO Auto-generated destructor stub
 }
 
-void addRecurso(string nombre, int valor) {
+void Barra::addRecurso(string nombre, int valor) {
+	std::map<string, int>::iterator it = recursos.find(nombre);
+	if (it != recursos.end())
+	    it->second += valor;
+}
 
+map<string, int> Barra::getMapRecursos() {
+	return recursos;
 
 }
+
+void Barra::clean() {
+	recursos.clear();
+}
+
 
 
 

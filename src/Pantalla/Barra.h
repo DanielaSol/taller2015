@@ -18,10 +18,9 @@ class Barra {
 public:
 	Barra();
 	virtual ~Barra();
-	void setRecurso(string,int);
-
-
-
+	void addRecurso(string nombre, int valor);
+	map<string, int> getMapRecursos();
+	void clean();
 
 };
 
