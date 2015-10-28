@@ -170,6 +170,14 @@ void Unit::handleInput()
 	{
 		if (!m_bChangingDestination)
 		{
+			//El click no puede darse fuera del panel del mapa, se pueden poner funcionalidades del menú
+			SDL_Rect sector = TheGame::Instance()->m_pPantalla->sectores.at("mapa");
+			if ((TheInputHandler::Instance()->getMousePosition()->getY() >= sector.y + sector.h ) ||
+				(TheInputHandler::Instance()->getMousePosition()->getY() <= sector.y  )){
+				return;
+			}
+
+
 			float backUpCartesianX = m_destination.getX();
 			float backUpCartesianY = m_destination.getY();
 
