@@ -197,12 +197,19 @@ bool Game::initGame()
 
     //////////////////////////////////////////////////////////
     // PROVISORIO, RECURSOS
+
+
     GameObject* recurso = TheObjectFactory::Instance()->crear("madera", 14, 11);
     cargarRecurso(recurso);
     GameObject* recurso2 = TheObjectFactory::Instance()->crear("oro", 20, 11);
     cargarRecurso(recurso2);
     GameObject* recurso3 = TheObjectFactory::Instance()->crear("comida", 21, 22);
     cargarRecurso(recurso3);
+
+
+
+
+
 
     entidades.push_back(m_pAldeano_test);
 
@@ -218,8 +225,7 @@ bool Game::initGame()
    //TENGO QUE ARREGLAR ESTO
    m_gameWidth = m_pPantalla->sectores.at("mapa").w;
    m_gameHeight = m_pPantalla->sectores.at("mapa").h;
-   TheTextureManager::Instance()->load("assets/frame/frame4.png","frame", m_pRenderer);
-   TheTextureManager::Instance()->load("assets/frame/minimapa.png","minimapa", m_pRenderer);
+
 
    /////////////////////////////////////////////////////////////
 
@@ -258,6 +264,37 @@ void Game::update()
 
 	//m_pAldeano_test->update();
 	m_pMap->update();
+
+
+	//PROVISORIO
+	int randomX = rand() % 3000 ;
+	int randomY;
+	int randomItem;
+	if (randomX < 100){
+		randomY = rand() % 3000 ;
+		if (randomY < 100){
+			randomItem = (rand() % 3) + 1;
+			cout <<"random: "<<  randomX << " " << randomY << " item: " << randomItem<< endl;
+			switch (randomItem) {
+				case 1: {
+					GameObject* recurso = TheObjectFactory::Instance()->crear("madera", randomX, randomY);
+					cargarRecurso(recurso);
+					break;
+				}
+				case 2: {
+					GameObject* recurso2 = TheObjectFactory::Instance()->crear("oro", randomX, randomY);
+					cargarRecurso(recurso2);
+					break;
+				}
+				case 3: {
+					 GameObject* recurso3 = TheObjectFactory::Instance()->crear("comida", randomX, randomY);
+					 cargarRecurso(recurso3);
+					 break;
+				}
+
+			}
+		}
+	}
 }
 
 void Game::handleEvents()
