@@ -85,10 +85,6 @@ void Pantalla::draw(SDL_Renderer* m_pRenderer, Map* m_pMap ,vector<GameObject*> 
 
 	}
 
-
-
-
-
 	//////////////////////////////////////////////////////////////////
 	sector = sectores.at("barra_bajo");
 	TheTextureManager::Instance()->drawArea("barra_bajo",sector,m_pRenderer);
@@ -102,8 +98,21 @@ void Pantalla::draw(SDL_Renderer* m_pRenderer, Map* m_pMap ,vector<GameObject*> 
 			if (m_pMap->getVisionMapValue(i,j) == 1 || m_pMap->getVisionMapValue(i,j) == 2) {
 				Vector2D* vector = new Vector2D(0,0);
 			    vector->setX(i); vector->setY(j); vector->toIsometric();
-			    TheTextureManager::Instance()->drawFrame("punto",vector->getX()+100,vector->getY(),180,150,50,50,1,0,m_pRenderer);
-				delete vector;
+
+
+			    int tileValue1 = TheGame::Instance()->m_pMap->getValue(i,j);
+			    if (tileValue1 == 3 ) {
+			    	TheTextureManager::Instance()->drawFrame("puntoRojo",vector->getX()+100,vector->getY(),180,150,80,80,1,0,m_pRenderer);
+
+			    }
+			    else if (tileValue1 == 0){
+			    	 TheTextureManager::Instance()->drawFrame("puntoAmarillo",vector->getX()+100,vector->getY(),180,150,50,50,1,0,m_pRenderer);
+			    }
+			    else
+			    	 TheTextureManager::Instance()->drawFrame("puntoVerde",vector->getX()+100,vector->getY(),180,150,50,50,1,0,m_pRenderer);
+
+
+			    delete vector;
 
 			}
 		}
@@ -137,7 +146,9 @@ void Pantalla::init(SDL_Renderer* m_pRenderer) {
 	TheTextureManager::Instance()->load("assets/wood.jpg","barra", m_pRenderer);
 	TheTextureManager::Instance()->load("assets/paper.png","barra_bajo", m_pRenderer);
 	TheTextureManager::Instance()->load("assets/papiro.png","minimapa", m_pRenderer);
-	TheTextureManager::Instance()->load("assets/punto.png","punto", m_pRenderer);
+	TheTextureManager::Instance()->load("assets/puntoVerde.png","puntoVerde", m_pRenderer);
+	TheTextureManager::Instance()->load("assets/puntoRojo.png","puntoRojo", m_pRenderer);
+	TheTextureManager::Instance()->load("assets/puntoAmarillo.png","puntoAmarillo", m_pRenderer);
 
 }
 
