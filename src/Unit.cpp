@@ -26,7 +26,9 @@ m_vision(3)
 void Unit::load(int x, int y, int width, int height,int destWidth, int destHeight, int numFrames, std::string textureID,bool visibility)
 {
     GameObject::load(x, y, width, height, destWidth, destHeight, numFrames, textureID,visibility);
-
+	m_mapPosition.setX(m_screenPosition.getX() - TheGame::Instance()->TILE_WIDTH/2);
+	m_mapPosition.setY(m_screenPosition.getY() - TheGame::Instance()->TILE_HEIGHT/2);
+	m_mapPosition.screenToWorld();
     //
 	//m_destination.setX(m_screenPosition.getX());
 	//m_destination.setY(m_screenPosition.getY());
@@ -72,41 +74,7 @@ void Unit::update(){
 			}
 			m_destination.setX(m_node->x);
 			m_destination.setY(m_node->y);
-			cout << "Next node = ( " << (int) m_node->x << " , " << (int)m_node->y << " ) \n";
-
-			int tileValue1 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()][m_mapPosition.getY()];
-			int tileValue2 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()+1][m_mapPosition.getY()];
-			int tileValue3 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()+1][m_mapPosition.getY()+1];
-			int tileValue4 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()][m_mapPosition.getY()+1];
-			int tileValue5 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()-1][m_mapPosition.getY()];
-			int tileValue6 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()-1][m_mapPosition.getY()-1];
-			int tileValue7 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()][m_mapPosition.getY()-1];
-
-			if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue1))  {
-				TheGame::Instance()->tomarRecurso(m_mapPosition.getX(),m_mapPosition.getY());
-
-			}
-			else if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue2))  {
-				TheGame::Instance()->tomarRecurso(m_mapPosition.getX()+1,m_mapPosition.getY());
-			}
-			if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue3))  {
-				TheGame::Instance()->tomarRecurso(m_mapPosition.getX()+1,m_mapPosition.getY()+1);
-
-			}
-			else if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue4))  {
-				TheGame::Instance()->tomarRecurso(m_mapPosition.getX(),m_mapPosition.getY()+1);
-			}
-			if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue5))  {
-				TheGame::Instance()->tomarRecurso(m_mapPosition.getX()-1,m_mapPosition.getY());
-
-			}
-			else if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue6))  {
-				TheGame::Instance()->tomarRecurso(m_mapPosition.getX()-1,m_mapPosition.getY()-1);
-			}
-			if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue7))  {
-				TheGame::Instance()->tomarRecurso(m_mapPosition.getX(),m_mapPosition.getY()-1);
-
-			}
+			//cout << "Next node = ( " << (int) m_node->x << " , " << (int)m_node->y << " ) \n";
 
 		}
 	}
@@ -114,6 +82,40 @@ void Unit::update(){
 	{
 		m_bMoving = false;
 	}
+
+	int tileValue1 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()][m_mapPosition.getY()];
+	/*int tileValue2 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()+1][m_mapPosition.getY()];
+	int tileValue3 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()+1][m_mapPosition.getY()+1];
+	int tileValue4 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()][m_mapPosition.getY()+1];
+	int tileValue5 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()-1][m_mapPosition.getY()];
+	int tileValue6 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()-1][m_mapPosition.getY()-1];
+	int tileValue7 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()][m_mapPosition.getY()-1];*/
+
+	if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue1))  {
+		TheGame::Instance()->tomarRecurso(m_mapPosition.getX(),m_mapPosition.getY());
+
+	}
+	/*else if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue2))  {
+		TheGame::Instance()->tomarRecurso(m_mapPosition.getX()+1,m_mapPosition.getY());
+	}
+	if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue3))  {
+		TheGame::Instance()->tomarRecurso(m_mapPosition.getX()+1,m_mapPosition.getY()+1);
+
+	}
+	else if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue4))  {
+		TheGame::Instance()->tomarRecurso(m_mapPosition.getX(),m_mapPosition.getY()+1);
+	}
+	if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue5))  {
+		TheGame::Instance()->tomarRecurso(m_mapPosition.getX()-1,m_mapPosition.getY());
+
+	}
+	else if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue6))  {
+		TheGame::Instance()->tomarRecurso(m_mapPosition.getX()-1,m_mapPosition.getY()-1);
+	}
+	if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue7))  {
+		TheGame::Instance()->tomarRecurso(m_mapPosition.getX(),m_mapPosition.getY()-1);
+
+	}*/
 }
 
 void Unit::moveTo(const Vector2D& position)
@@ -191,6 +193,8 @@ void Unit::handleInput()
 			goalDestination->setX(coordX);
 			goalDestination->setY(coordY);
 			goalDestination->screenToWorld();
+			goalDestination->m_x-=1;
+			goalDestination->m_y-=1;
 
 			cout << "Tile clicked = ( " << (int) goalDestination->m_x << " , " << (int)goalDestination->m_y << " ) \n";
 			//cout << "Screen pos clicked = ( " << (int) coordX << " , " << (int)coordY << " ) \n";
