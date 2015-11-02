@@ -90,7 +90,7 @@ bool MapSearchNode::GetSuccessors( AStarSearch<MapSearchNode> *astarsearch, MapS
 		astarsearch->AddSuccessor( NewNode );
 	}
 
-	validNode = ((x + 1) <= TheGame::Instance()->getMapWidth());
+	validNode = ((x + 1) < TheGame::Instance()->getMapWidth());
 	if (validNode)
 		tileValue = TheGame::Instance()->m_pMap->m_mapGrid[x+1][y];
 	if( validNode && (TheGame::Instance()->m_pMap->m_pTileHandler->isWalkable(tileValue))
@@ -101,7 +101,7 @@ bool MapSearchNode::GetSuccessors( AStarSearch<MapSearchNode> *astarsearch, MapS
 		astarsearch->AddSuccessor( NewNode );
 	}
 
-	validNode = ((y + 1) <= TheGame::Instance()->getMapHeight());
+	validNode = ((y + 1) < TheGame::Instance()->getMapHeight());
 	if (validNode)
 		tileValue = TheGame::Instance()->m_pMap->m_mapGrid[x][y+1];
 	if( validNode && (TheGame::Instance()->m_pMap->m_pTileHandler->isWalkable(tileValue))
@@ -113,7 +113,7 @@ bool MapSearchNode::GetSuccessors( AStarSearch<MapSearchNode> *astarsearch, MapS
 	}
 
 	// MOVIMIENTOS DIAGONALES
-	validNode = (((y + 1) <= TheGame::Instance()->getMapHeight()) && (((x + 1) <= TheGame::Instance()->getMapWidth())));
+	validNode = (((y + 1) < TheGame::Instance()->getMapHeight()) && (((x + 1) < TheGame::Instance()->getMapWidth())));
 	if (validNode)
 		tileValue = TheGame::Instance()->m_pMap->m_mapGrid[x+1][y+1];
 	if( validNode && (TheGame::Instance()->m_pMap->m_pTileHandler->isWalkable(tileValue))
@@ -135,7 +135,7 @@ bool MapSearchNode::GetSuccessors( AStarSearch<MapSearchNode> *astarsearch, MapS
 		astarsearch->AddSuccessor( NewNode );
 	}
 
-	validNode = (((y - 1) >= 0) && (((x + 1) <= TheGame::Instance()->getMapWidth())));
+	validNode = (((y - 1) >= 0) && (((x + 1) < TheGame::Instance()->getMapWidth())));
 	if (validNode)
 		tileValue = TheGame::Instance()->m_pMap->m_mapGrid[x+1][y-1];
 	if( validNode && (TheGame::Instance()->m_pMap->m_pTileHandler->isWalkable(tileValue))
@@ -146,7 +146,7 @@ bool MapSearchNode::GetSuccessors( AStarSearch<MapSearchNode> *astarsearch, MapS
 		astarsearch->AddSuccessor( NewNode );
 	}
 
-	validNode = (((y + 1) <= TheGame::Instance()->getMapHeight()) && (((x - 1) >= 0)));
+	validNode = (((y + 1) < TheGame::Instance()->getMapHeight()) && (((x - 1) >= 0)));
 	if (validNode)
 		tileValue = TheGame::Instance()->m_pMap->m_mapGrid[x-1][y+1];
 	if( validNode && (TheGame::Instance()->m_pMap->m_pTileHandler->isWalkable(tileValue))

@@ -36,6 +36,7 @@ protected:
 
 	Vector2D m_velocity;
 	Vector2D m_destination;
+	Vector2D m_lastMapPosition;
 
 private:
 
@@ -49,6 +50,7 @@ private:
 	bool m_bMoving;
 
 	void checkSpriteDirection();
+	void occupyTile(const Vector2D& newPosition);
 	bool calculatePath(Vector2D destination);
 
 };

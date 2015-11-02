@@ -151,6 +151,7 @@ const Vector2D Camera::TranslateToWorldCoordinates(int screenX, int screenY) //N
 	return buffer;
 }
 
+
 void Camera::reset()
 {
 	offsetX = 0;
@@ -158,6 +159,12 @@ void Camera::reset()
 	//por yaml
 	init();
 	//m_scrollMargin = TheParser::Instance()->configGame.configuracion.margen_scroll;
+}
+
+void Camera::centerAt(const Vector2D& screenPosition)
+{
+	offsetX = screenPosition.m_x - (TheGame::Instance()->getGameWidth()/2);
+	offsetY = screenPosition.m_y - (TheGame::Instance()->getGameHeight()/2);
 }
 
 void Camera::clean()

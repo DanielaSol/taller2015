@@ -29,6 +29,12 @@ void Unit::load(int x, int y, int width, int height,int destWidth, int destHeigh
 	m_mapPosition.setX(m_screenPosition.getX() - TheGame::Instance()->TILE_WIDTH/2);
 	m_mapPosition.setY(m_screenPosition.getY() - TheGame::Instance()->TILE_HEIGHT/2);
 	m_mapPosition.screenToWorld();
+
+	m_lastMapPosition.setX(m_mapPosition.getX());
+	m_lastMapPosition.setY(m_mapPosition.getY());
+	TheGame::Instance()->changeMapGrid(m_lastMapPosition.getX(), m_lastMapPosition.getY(), 0);
+
+	TheCamera::Instance()->centerAt(m_screenPosition);
     //
 	//m_destination.setX(m_screenPosition.getX());
 	//m_destination.setY(m_screenPosition.getY());
@@ -59,11 +65,20 @@ void Unit::update(){
 	{
 		if (((m_mapPosition.getX() != m_destination.getX()) || (m_mapPosition.getY() != m_destination.getY())))
 		{
+			//actualiza la ultima posicion
+			m_lastMapPosition.setX(m_mapPosition.getX());
+			m_lastMapPosition.setY(m_mapPosition.getY());
+
+			//se mueve hacia el destino
 			moveTo(m_destination);
 
 		}
 		else
 		{
+			//ocupa la nueva posicion y desocupa la ultima
+			occupyTile(m_mapPosition);
+
+			//agarra la solucion siguiente
 			m_node = astarsearch.GetSolutionNext();
 			if (!m_node)
 			{
@@ -162,6 +177,7 @@ void Unit::moveTo(const Vector2D& position)
 	}
 
 }
+
 
 void Unit::handleInput()
 {
@@ -375,5 +391,13 @@ bool Unit::positionAtSight(int x,int y){
 
 	}
 	return atSight;
+
+}
+
+
+void Unit::occupyTile(const Vector2D& newPosition)
+{
+	TheGame::Instance()->changeMapGrid(m_lastMapPosition.getX(), m_lastMapPosition.getY(), 1);
+	TheGame::Instance()->changeMapGrid(newPosition.m_x, newPosition.m_y, 0);
 
 }

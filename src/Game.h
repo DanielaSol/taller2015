@@ -16,7 +16,7 @@
 #include <iostream>
 #include "Pantalla/Pantalla.h"
 #include "Pantalla/Barra.h"
-#include "SDL/SDL_ttf.h"
+#include "SDL2/SDL_ttf.h"
 
 using namespace std;
 
@@ -55,6 +55,7 @@ public:
     void cargarEntidadd(GameObject*);
     void cargarRecurso(GameObject* entidad);
     void tomarRecurso(int x, int y);
+    void changeMapGrid(int x, int y, int value);
 
     SDL_Renderer* getRenderer() const { return m_pRenderer; }
     SDL_Window* getWindow() const { return m_pWindow; }

@@ -21,7 +21,7 @@
 #include "Objetos/Suelo.h"
 #include "ObjectFactory.h"
 #include "Pantalla/Barra.h"
-#include "SDL/SDL_ttf.h"
+#include "SDL2/SDL_ttf.h"
 
 #include <algorithm>
 #include <string>
@@ -70,7 +70,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
         if(m_pWindow != 0) // window init success
         {
             cout << "window creation success\n";
-            m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_ACCELERATED);
+            m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_SOFTWARE);
 
             if(m_pRenderer != 0) // renderer init success
             {
@@ -169,31 +169,10 @@ bool Game::initGame()
 		}
 
 	}
-
-	Vector2D* vec = new Vector2D(0,0);
-	vec->setX(TheParser::Instance()->configGame.protagonista.x);
-	vec->setY(TheParser::Instance()->configGame.protagonista.y);
-	vec->toIsometric();
-	m_pAldeano_test = new Unit();
-	m_pAldeano_test->load(vec->getX(),
-						vec->getY(),
-						125, 168, 		 //125 y 168 son el ancho y alto de la imagen a cortar
-						40,	54.76f,			// 40 y 54.76 son el ancho y alto de la imagen a dibujar
-						5, "animate",true);   // y el 5 corresponde a la cantidad de Frames
-	m_pAldeano_test->m_mapPosition2.setX(TheParser::Instance()->configGame.protagonista.x);
-	m_pAldeano_test->m_mapPosition2.setY(TheParser::Instance()->configGame.protagonista.y);
-	delete vec;
     m_pMap = new Map();
     m_pMap->load();
 
 
-    for(int i =0; i< TheParser::Instance()->configGame.escenario.entidades.size();i++){
-    	GameObject* objetoACargar = TheObjectFactory::Instance()->crear(
-    										TheParser::Instance()->configGame.escenario.entidades[i].tipo,
-    										TheParser::Instance()->configGame.escenario.entidades[i].x,
-    										TheParser::Instance()->configGame.escenario.entidades[i].y);
-    	cargarEntidadd(objetoACargar);
-    }
 
     //////////////////////////////////////////////////////////
     // PROVISORIO, RECURSOS
@@ -205,16 +184,6 @@ bool Game::initGame()
     cargarRecurso(recurso2);
     GameObject* recurso3 = TheObjectFactory::Instance()->crear("comida", 21, 22);
     cargarRecurso(recurso3);
-
-
-
-
-
-
-    entidades.push_back(m_pAldeano_test);
-
-
-
 
    ////////////////////////////////////////////////////////////
 
@@ -230,8 +199,31 @@ bool Game::initGame()
    /////////////////////////////////////////////////////////////
 
 
-   return true;
+	Vector2D* vec = new Vector2D(0,0);
+	vec->setX(TheParser::Instance()->configGame.protagonista.x);
+	vec->setY(TheParser::Instance()->configGame.protagonista.y);
+	vec->toIsometric();
+	m_pAldeano_test = new Unit();
+	m_pAldeano_test->load(vec->getX(),
+						vec->getY(),
+						125, 168, 		 //125 y 168 son el ancho y alto de la imagen a cortar
+						40,	54.76f,			// 40 y 54.76 son el ancho y alto de la imagen a dibujar
+						5, "animate",true);   // y el 5 corresponde a la cantidad de Frames
+	m_pAldeano_test->m_mapPosition2.setX(TheParser::Instance()->configGame.protagonista.x);
+	m_pAldeano_test->m_mapPosition2.setY(TheParser::Instance()->configGame.protagonista.y);
+	delete vec;
 
+
+   for(uint i =0; i< TheParser::Instance()->configGame.escenario.entidades.size();i++){
+   	GameObject* objetoACargar = TheObjectFactory::Instance()->crear(
+   										TheParser::Instance()->configGame.escenario.entidades[i].tipo,
+   										TheParser::Instance()->configGame.escenario.entidades[i].x,
+   										TheParser::Instance()->configGame.escenario.entidades[i].y);
+   	cargarEntidadd(objetoACargar);
+    entidades.push_back(m_pAldeano_test);
+   }
+
+   return true;
 
 }
 
@@ -254,7 +246,7 @@ void Game::update()
 	TheCamera::Instance()->update();
 		//m_pGameStateMachine->update();
 	//sort(entidades.begin(), entidades.end(), CompareGameObject());
-	 for (int i=0;i<entidades.size();i++){
+	 for (uint i=0;i<entidades.size();i++){
 	    	if (entidades[i])
 	    		entidades[i]->update();
 	}
@@ -424,16 +416,16 @@ void Game::tomarRecurso(int x, int y) {
 	    			GameObject* objeto = entidades[i];
 	    		    if (entidades[i])
 				    {
-				    	entidades[i]->m_mapPosition2.setX(-1);
-				    	entidades[i]->m_mapPosition2.setY(-1);
-				    	entidades[i]->m_mapPosition.setX(-1);
-				    	entidades[i]->m_mapPosition.setY(-1);
+				    	entidades[i]->m_mapPosition2.setX(-100);
+				    	entidades[i]->m_mapPosition2.setY(-100);
+				    	entidades[i]->m_mapPosition.setX(-100);
+				    	entidades[i]->m_mapPosition.setY(-100);
 
-				    	m_pMap->m_mapGrid[x][y] = 0;
-				    	m_pMap->m_mapGrid2[x][y] = 0;
-
+				    	m_pMap->m_mapGrid[x][y] = 1;
+				    	m_pMap->m_mapGrid2[x][y] = 1;
 
 				    	m_pBarra->addRecurso(objeto->name.c_str(),objeto->cantidad);
+
 
 				    }
 	    		}
@@ -480,7 +472,16 @@ void Game::restart() //Con R
 	init("TP of Empires", 400, 150, TheParser::Instance()->configGame.pantalla.ancho, TheParser::Instance()->configGame.pantalla.alto, 0);
 	TheInputHandler::Instance()->reset();
 	TheCamera::Instance()->reset();
+	TheCamera::Instance()->centerAt(m_pAldeano_test->getScreenPosition());
 	m_bQuiting = false;
+}
+
+void Game::changeMapGrid(int x, int y, int value)
+{
+	if ((x < 0) || (x > getMapWidth()) || (y < 0) || (y > getMapHeight()))
+		return;
+	m_pMap->m_mapGrid[x][y] = value;
+	m_pMap->m_mapGrid2[x][y] = value;
 }
 
 

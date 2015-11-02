@@ -1,12 +1,3 @@
-/*
-A* Algorithm Implementation using STL is
-Copyright (C)2001-2005 Justin Heyes-Jones
-
-Permission is given by the author to freely redistribute and
-include this code in any program as long as this credit is
-given where due.
-*/
-
 #ifndef SRC_ASTAR_FSA_H_
 #define SRC_ASTAR_FSA_H_
 
@@ -23,8 +14,6 @@ public:
 		FSA_DEFAULT_SIZE = 100
 	};
 
-	// This class enables us to transparently manage the extra data
-	// needed to enable the user class to form part of the double-linked
 	// list class
 	struct FSA_ELEMENT
 	{
@@ -34,27 +23,25 @@ public:
 		FSA_ELEMENT *pNext;
 	};
 
-public: // methods
+public:
 	FixedSizeAllocator( unsigned int MaxElements = FSA_DEFAULT_SIZE ) :
 	m_pFirstUsed( NULL ),
 	m_MaxElements( MaxElements )
 	{
-		// Allocate enough memory for the maximum number of elements
+		// Aloca memoria suficiente para la cantidad maxima de elementos
 
 		char *pMem = new char[ m_MaxElements * sizeof(FSA_ELEMENT) ];
 
 		m_pMemory = (FSA_ELEMENT *) pMem;
 
-		// Set the free list first pointer
 		m_pFirstFree = m_pMemory;
 
-		// Clear the memory
 		memset( m_pMemory, 0, sizeof( FSA_ELEMENT ) * m_MaxElements );
 
-		// Point at first element
+		// Apunta al primer elemento
 		FSA_ELEMENT *pElement = m_pFirstFree;
 
-		// Set the double linked free list
+		// configura los punteros
 		for( unsigned int i=0; i<m_MaxElements; i++ )
 		{
 			pElement->pPrev = pElement-1;
@@ -63,9 +50,7 @@ public: // methods
 			pElement++;
 		}
 
-		// first element should have a null prev
 		m_pFirstFree->pPrev = NULL;
-		// last element should have a null next
 		(pElement-1)->pNext = NULL;
 
 	}
@@ -73,7 +58,6 @@ public: // methods
 
 	~FixedSizeAllocator()
 	{
-		// Free up the memory
 		delete [] (char *) m_pMemory;
 	}
 
@@ -119,23 +103,16 @@ public: // methods
 		return reinterpret_cast<USER_TYPE*>(pNewNode);
 	}
 
-	// Free the given user type
-	// For efficiency I don't check whether the user_data is a valid
-	// pointer that was allocated. I may add some debug only checking
-	// (To add the debug check you'd need to make sure the pointer is in
-	// the m_pMemory area and is pointing at the start of a node)
 	void free( USER_TYPE *user_data )
 	{
 		FSA_ELEMENT *pNode = reinterpret_cast<FSA_ELEMENT*>(user_data);
 
-		// manage used list, remove this node from it
 		if( pNode->pPrev )
 		{
 			pNode->pPrev->pNext = pNode->pNext;
 		}
 		else
 		{
-			// this handles the case that we delete the first node in the used list
 			m_pFirstUsed = pNode->pNext;
 		}
 
@@ -144,49 +121,20 @@ public: // methods
 			pNode->pNext->pPrev = pNode->pPrev;
 		}
 
-		// add to free list
 		if( m_pFirstFree == NULL )
 		{
-			// free list was empty
 			m_pFirstFree = pNode;
 			pNode->pPrev = NULL;
 			pNode->pNext = NULL;
 		}
 		else
 		{
-			// Add this node at the start of the free list
 			m_pFirstFree->pPrev = pNode;
 			pNode->pNext = m_pFirstFree;
 			m_pFirstFree = pNode;
 		}
 
 	}
-
-	// For debugging this displays both lists (using the prev/next list pointers)
-	void Debug()
-	{
-		printf( "free list " );
-
-		FSA_ELEMENT *p = m_pFirstFree;
-		while( p )
-		{
-			printf( "%x!%x ", p->pPrev, p->pNext );
-			p = p->pNext;
-		}
-		printf( "\n" );
-
-		printf( "used list " );
-
-		p = m_pFirstUsed;
-		while( p )
-		{
-			printf( "%x!%x ", p->pPrev, p->pNext );
-			p = p->pNext;
-		}
-		printf( "\n" );
-	}
-
-	// Iterators
 
 	USER_TYPE *GetFirst()
 	{
@@ -201,19 +149,15 @@ public: // methods
 			);
 	}
 
-public: // data
+public:
 
-private: // methods
+private:
 
-private: // data
-
+private:
 	FSA_ELEMENT *m_pFirstFree;
 	FSA_ELEMENT *m_pFirstUsed;
 	unsigned int m_MaxElements;
 	FSA_ELEMENT *m_pMemory;
-
 };
-
-
 
 #endif /* SRC_ASTAR_FSA_H_ */

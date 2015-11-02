@@ -30,6 +30,7 @@ public:
     void clean();
 
     void reset();
+    void centerAt(const Vector2D& screenPosition);
 
     bool isVisible(int mapPosX, int mapPosY);
 
