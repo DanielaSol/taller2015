@@ -213,6 +213,20 @@ bool Game::initGame()
 	m_pAldeano_test->m_mapPosition2.setY(TheParser::Instance()->configGame.protagonista.y);
 	delete vec;
 
+	Vector2D* vec2 = new Vector2D(0,0);
+	vec2->setX(9);
+	vec2->setY(2);
+	vec2->toIsometric();
+	GameObject* anotherUnit = new Unit();
+	anotherUnit->load(vec2->getX(),
+						vec2->getY(),
+						125, 168, 		 //125 y 168 son el ancho y alto de la imagen a cortar
+						40,	54.76f,			// 40 y 54.76 son el ancho y alto de la imagen a dibujar
+						5, "animate",true);   // y el 5 corresponde a la cantidad de Frames
+	anotherUnit->m_mapPosition2.setX(9);
+	anotherUnit->m_mapPosition2.setY(2);
+	delete vec2;
+
 
    for(uint i =0; i< TheParser::Instance()->configGame.escenario.entidades.size();i++){
    	GameObject* objetoACargar = TheObjectFactory::Instance()->crear(
@@ -220,7 +234,8 @@ bool Game::initGame()
    										TheParser::Instance()->configGame.escenario.entidades[i].x,
    										TheParser::Instance()->configGame.escenario.entidades[i].y);
    	cargarEntidadd(objetoACargar);
-    entidades.push_back(m_pAldeano_test);
+   	entidades.push_back(anotherUnit);
+   	entidades.push_back(m_pAldeano_test);
    }
 
    return true;
@@ -250,7 +265,6 @@ void Game::update()
 	    	if (entidades[i])
 	    		entidades[i]->update();
 	}
-
 	if (entidades.size() > 1)
 		sort(entidades.begin(), entidades.end(), CompareGameObject());
 
@@ -484,5 +498,18 @@ void Game::changeMapGrid(int x, int y, int value)
 	m_pMap->m_mapGrid2[x][y] = value;
 }
 
+void Game::declick(){
+	for(uint i=0;i<entidades.size();i++){
+		entidades[i]->m_isClicked = false;
+	}
+}
 
+bool Game::unitVision(int x,int y){
+	bool atSight=false;
+	for(uint i=0;i<entidades.size();i++){
+		if(entidades[i]->positionAtSight(x,y))
+			atSight = true;
+	}
+	return atSight;
+}
 

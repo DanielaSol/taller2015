@@ -9,6 +9,7 @@
 #define GAMEOBJECT_H_
 
 #include "Vector2D.h"
+#include "InputHandler.h"
 #include <string>
 
 using namespace std;
@@ -29,6 +30,7 @@ public:
 					m_numFrames(0),
 					m_atSight(false),
 					m_wasSeen(false),
+					m_isClicked(false),
                     m_bUpdating(false)/*,
                     m_angle(0),
                     m_alpha(255)*/
@@ -67,6 +69,8 @@ public:
 
 	virtual bool positionAtSight(int x, int y);
 
+	virtual void isClicked();
+
 	// aumenta el frame a animar
 	virtual void aumentarFrame();
 
@@ -97,6 +101,8 @@ public:
 
     bool m_atSight;
     bool m_wasSeen;
+
+    bool m_isClicked;
 
     //PROVISORIO Hay que pasarlo a protected
     bool recurso;

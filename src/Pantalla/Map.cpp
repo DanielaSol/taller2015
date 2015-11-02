@@ -71,7 +71,7 @@ void Map::update()
 		{
 			for(int j = 0 ; j < mapHeight ; j++)
 			{
-				if(TheGame::Instance()->m_pAldeano_test->positionAtSight(i,j)){
+				if(TheGame::Instance()->unitVision(i,j)){
 					m_mapGrid2[i][j] = 1;
 				}
 				else if(m_mapGrid2[i][j] == 1){

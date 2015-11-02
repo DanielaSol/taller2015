@@ -45,15 +45,19 @@ void GameObject::update()
 	for(int i = m_mapPosition2.getX() ;i<=m_mapPosition2.getX() + m_ancho;i++)
 	{
 		for(int j = m_mapPosition2.getY() ; j <= m_mapPosition2.getY() + m_alto;j++){
-			if(TheGame::Instance()->m_pAldeano_test->positionAtSight(i,j))
-			{
-				m_atSight = true;
-			}else if(m_atSight){
-				m_wasSeen = true;
-				m_atSight = false;
-			}
+
+				if(TheGame::Instance()->unitVision(i,j)){
+					m_atSight = true;
+				}else if(m_atSight){
+					m_wasSeen = true;
+					m_atSight = false;
+				}
 		}
 	}
+
+
+
+	isClicked();
 }
 
 void GameObject::handleInput()
@@ -99,7 +103,7 @@ void GameObject::setAncho(int ancho){
 }
 
 bool GameObject::positionAtSight(int x,int y){
-
+	return false;
 }
 
 void GameObject::setTexture(std::string textureID)
@@ -126,5 +130,19 @@ bool GameObject::operator< (const  GameObject &obj2)
 			return false;
 	}
 	return true;
+}
+
+void GameObject::isClicked(){
+
+	float posx = TheInputHandler::Instance()->getMousePosition()->getX() + TheCamera::Instance()->offsetX - (TheGame::Instance()->TILE_WIDTH/2);
+	float posy = TheInputHandler::Instance()->getMousePosition()->getY() + TheCamera::Instance()->offsetY - (TheGame::Instance()->TILE_WIDTH/2);
+	Vector2D* vec = new Vector2D(posx,posy);
+	vec->screenToWorld();
+	if((m_mapPosition2.getX() == vec->getX())&& (m_mapPosition2.getY() == vec->getY()) && TheInputHandler::Instance()->getMouseButtonState(LEFT)){
+		TheGame::Instance()->declick();
+		cout << "is clicked" << endl;
+		m_isClicked = true;
+	}
+	delete vec;
 }
 

@@ -56,6 +56,8 @@ public:
     void cargarRecurso(GameObject* entidad);
     void tomarRecurso(int x, int y);
     void changeMapGrid(int x, int y, int value);
+    void declick();
+    bool unitVision(int x,int y);
 
     SDL_Renderer* getRenderer() const { return m_pRenderer; }
     SDL_Window* getWindow() const { return m_pWindow; }
@@ -86,7 +88,6 @@ private:
     //GameObject* m_pAldeano_test; // será un Unit,
 
     std::vector<GameObject*> entidades;
-
 
     SDL_Window* m_pWindow;
     SDL_Renderer* m_pRenderer;

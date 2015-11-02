@@ -60,6 +60,7 @@ void Unit::update(){
 
 
 	//GameObject::update();
+	isClicked();
 	//Si no se encuentra donde en la direccion destino asignada, se dirige hacia allá
 	if (m_bMoving)
 	{
@@ -184,7 +185,7 @@ void Unit::handleInput()
 	// deberia checkear tambien si la unidad está seleccionada. La variable isSelected la puse en GameObject, ya que consideré que
 	// se puede apretar en cualquier objeto, como en el age.
 
-	if (TheInputHandler::Instance()->getMouseButtonState(RIGHT))
+	if (TheInputHandler::Instance()->getMouseButtonState(RIGHT) && m_isClicked)
 	{
 		if (!m_bChangingDestination)
 		{
