@@ -70,7 +70,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
         if(m_pWindow != 0) // window init success
         {
             cout << "window creation success\n";
-            m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_SOFTWARE);
+            m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_ACCELERATED);
 
             if(m_pRenderer != 0) // renderer init success
             {

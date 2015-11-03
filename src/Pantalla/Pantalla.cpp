@@ -102,11 +102,11 @@ void Pantalla::draw(SDL_Renderer* m_pRenderer, Map* m_pMap ,vector<GameObject*> 
 
 			    int tileValue1 = TheGame::Instance()->m_pMap->getValue(i,j);
 			    if (tileValue1 == 3 ) {
-			    	TheTextureManager::Instance()->drawFrame("puntoRojo",vector->getX()+100,vector->getY(),180,150,80,80,1,0,m_pRenderer);
+			    	TheTextureManager::Instance()->drawFrame("puntoRojo",vector->getX()+95,vector->getY()-5,180,150,50,50,1,0,m_pRenderer);
 
 			    }
 			    else if (tileValue1 == 0){
-			    	 TheTextureManager::Instance()->drawFrame("puntoAmarillo",vector->getX()+100,vector->getY(),180,150,50,50,1,0,m_pRenderer);
+			    	 TheTextureManager::Instance()->drawFrame("puntoAmarillo",vector->getX()+95,vector->getY()-5,180,150,50,50,1,0,m_pRenderer);
 			    }
 			    else
 			    	 TheTextureManager::Instance()->drawFrame("puntoVerde",vector->getX()+100,vector->getY(),180,150,50,50,1,0,m_pRenderer);
