@@ -9,18 +9,29 @@
 #include "Unit.h"
 #include "TextureManager.h"
 #include "InputHandler.h"
-#include <iostream>
 
-#include "Parser.h"
+#include "Utilitarios/Parser.h"
 #include "GameObject.h"
 #include "Camera.h"
-#include "Map.h"
-#include<algorithm>
+#include "Pantalla/Map.h"
+#include "Pantalla/Pantalla.h"
+#include "Objetos/Molino.h"
+#include "Objetos/Arbolit.h"
+#include "Objetos/Castillo.h"
+#include "Objetos/Suelo.h"
+#include "ObjectFactory.h"
+#include "Pantalla/Barra.h"
+#include "SDL2/SDL_ttf.h"
+
+#include <algorithm>
+#include <string>
+#include <iostream>
 
 using namespace std;
 
 
 Game* Game::s_pInstance = 0;
+
 
 
 Game::Game():
@@ -37,6 +48,8 @@ Game::~Game()
     // para evitar memory leaks
     m_pRenderer= 0;
     m_pWindow = 0;
+
+
 }
 
 
@@ -85,12 +98,26 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
     if (!initGame())
     	return false;
 
+	if( TTF_Init() == -1 )
+	{	printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+		return false;
+
+	}
+
+	//Open the font
+	gFont = TTF_OpenFont( "files/fontArial.ttf", 14 );
+	if( gFont == NULL ) {
+		printf( "No se pudo cargar la fuente! SDL_ttf Error: %s\n", TTF_GetError() );
+	}
+
     TheCamera::Instance()->init();
 
     m_bRunning = true; // everything inited successfully, start the main loop
 
     return true;
 }
+
+
 
 //init Game inicializa el estado del juego. Lo deberia hacer desde el archivo yaml
 bool Game::initGame()
@@ -99,115 +126,182 @@ bool Game::initGame()
 
 	if(!TheTextureManager::Instance()->load(TheParser::Instance()->configGame.objetos.at("juana_de_arco").imagen,"animate", m_pRenderer))
 		return false;
-	/*if (TheParser::Instance()->configGame.objetos.at("arbol").imagen == " "){
-		TheTextureManager::Instance()->load("assets/Terrain_tileset2.png","arbol",m_pRenderer);
-	}else{
-		TheTextureManager::Instance()->load(TheParser::Instance()->configGame.objetos.at("arbol").imagen,"arbol",m_pRenderer);
-	}
-	if (TheParser::Instance()->configGame.objetos.at("castillo").imagen == " "){
-		TheTextureManager::Instance()->load("assets/cubo.png","casa",m_pRenderer);
-	}else{
-		TheTextureManager::Instance()->load(TheParser::Instance()->configGame.objetos.at("castillo").imagen,"casa",m_pRenderer);
-	}
-	if (TheParser::Instance()->configGame.objetos.at("agua").imagen == " "){
-		TheTextureManager::Instance()->load("assets/Tiles/No-tile.png","agua",m_pRenderer);
-	}else{
-	TheTextureManager::Instance()->load(TheParser::Instance()->configGame.objetos.at("agua").imagen,"agua",m_pRenderer);
-	}
-	if (TheParser::Instance()->configGame.objetos.at("tierra").imagen == " "){
-		TheTextureManager::Instance()->load("assets/Tiles/No-tile.png","tierra",m_pRenderer);
-	}else{
-	TheTextureManager::Instance()->load(TheParser::Instance()->configGame.objetos.at("tierra").imagen,"tierra",m_pRenderer);
-	}
-	// PODRIA HACER QUE CUANDO NO ENCUANTRA UNA DE ESTAS IMAGENES CARGUE ALGUNA POR DEFECTO
 
-*/
-	std::vector<string> vectorTipos={"arbol","castillo","juana_de_arco","tierra","agua"};
-
+	std::vector<string> vectorTipos={"arbol","castillo","juana_de_arco","tierra","agua","molino"};
+	string imgAux;
 	for (string tipo: vectorTipos){
+		try {
+			if (!TheTextureManager::Instance()->load(TheParser::Instance()->configGame.objetos.at(tipo).imagen,tipo, m_pRenderer)){
+				FILE* arch;
 
-		TheTextureManager::Instance()->load(TheParser::Instance()->configGame.objetos.at(tipo).imagen,tipo, m_pRenderer);
+				time_t rawtime;
+				struct tm * timeinfo;
 
+				time ( &rawtime );
+				timeinfo = localtime ( &rawtime );
+
+				string salida = "la imagen del tipo " + tipo + " no existe, se cargará una imagen por defecto " + " - " + asctime (timeinfo);
+
+				arch= fopen("log.txt","a+");
+				fputs(salida.c_str(),arch);
+				fclose(arch);
+
+
+				if (tipo=="arbol")
+					imgAux="assets/no-terrain.png";
+				else if (tipo=="castillo")
+					imgAux="assets/no-castillo.png";
+				else if (tipo=="juana_de_arco")
+					imgAux="assets/no-GoblinWalk.png";
+				else if (tipo=="tierra")
+					imgAux="assets/Tiles/no-tierra.png";
+				else if (tipo=="agua")
+					imgAux="assets/Tiles/no-agua.png";
+				else if (tipo=="molino")
+					imgAux="assets/no-windmill.png";
+
+				TheTextureManager::Instance()->load(imgAux,tipo, m_pRenderer);
+			}
+		}
+
+		catch (std::out_of_range& e){
+			continue;
+		}
 
 	}
-
-
-
-	m_pAldeano_test = new Unit();
-	m_pAldeano_test->load(TheParser::Instance()->configGame.protagonista.x,
-					TheParser::Instance()->configGame.protagonista.y,
-						125, 168, 		 //125 y 168 son el ancho y alto de la imagen a cortar
-						40,	54.76f,			// 40 y 54.76 son el ancho y alto de la imagen a dibujar
-						5, "animate");   // y el 5 corresponde a la cantidad de Frames
     m_pMap = new Map();
     m_pMap->load();
 
 
-    //Estos datos 'hardcodeados' se deben ingresar por el archivo yaml (posicion en el mapa,
-    // y string que indique que es, una ves que se sabe el string, es decir el nombre del objeto
-    //se puede averiguar cual es el alto y ancho de la imagen fuente y destino y tambien a que frame
-    // y row pertenece asi como el offset con el cual se lo debe dibujar)
 
-    for(int i =0; i< TheParser::Instance()->configGame.escenario.entidades.size();i++){
+    //////////////////////////////////////////////////////////
+    // PROVISORIO, RECURSOS
 
-    	if(TheParser::Instance()->configGame.escenario.entidades[i].tipo == "arbol")
-    	{
-    		cargarEntidad(TheParser::Instance()->configGame.escenario.entidades[i].x,
-    					  TheParser::Instance()->configGame.escenario.entidades[i].y,
-    					  65,128,65,128,1,8,2,0,128,TheParser::Instance()->configGame.objetos.at("arbol").ancho,
-    					  TheParser::Instance()->configGame.objetos.at("arbol").alto,"arbol");
 
-    	}else if(TheParser::Instance()->configGame.escenario.entidades[i].tipo == "castillo"){
-    		cargarEntidad(TheParser::Instance()->configGame.escenario.entidades[i].x,
-    		    		  TheParser::Instance()->configGame.escenario.entidades[i].y,
-    		    		  192,224,130,151.66f,1,1,0,130/4,151,TheParser::Instance()->configGame.objetos.at("castillo").ancho,
-    		    		  TheParser::Instance()->configGame.objetos.at("castillo").alto,"castillo");
+    GameObject* recurso = TheObjectFactory::Instance()->crear("madera", 14, 11);
+    cargarRecurso(recurso);
+    GameObject* recurso2 = TheObjectFactory::Instance()->crear("oro", 20, 11);
+    cargarRecurso(recurso2);
+    GameObject* recurso3 = TheObjectFactory::Instance()->crear("comida", 21, 22);
+    cargarRecurso(recurso3);
 
-    	}else if(TheParser::Instance()->configGame.escenario.entidades[i].tipo == "agua"){
-    		cargarEntidad(TheParser::Instance()->configGame.escenario.entidades[i].x,
-    		    		  TheParser::Instance()->configGame.escenario.entidades[i].y,
-    		    		   64,32,64,32,1,1,0,0,0,TheParser::Instance()->configGame.objetos.at("agua").ancho,
-    		    		   TheParser::Instance()->configGame.objetos.at("agua").alto,"agua");
+   ////////////////////////////////////////////////////////////
 
-    	}else if(TheParser::Instance()->configGame.escenario.entidades[i].tipo == "tierra"){
-    		cargarEntidad(TheParser::Instance()->configGame.escenario.entidades[i].x,
-    		    		  TheParser::Instance()->configGame.escenario.entidades[i].y,
-    		    		   64,32,64,32,1,1,0,0,0,TheParser::Instance()->configGame.objetos.at("tierra").ancho,
-    		    		   TheParser::Instance()->configGame.objetos.at("tierra").alto,"tierra");
-    	}
+   m_pPantalla = new Pantalla(m_gameWidth,m_gameHeight);
+   m_pPantalla->init(m_pRenderer);
+   m_pBarra = new Barra();
 
-    }
-  // entidades.push_back(m_pAldeano_test);
+   //TENGO QUE ARREGLAR ESTO
+   m_gameWidth = m_pPantalla->sectores.at("mapa").w;
+   m_gameHeight = m_pPantalla->sectores.at("mapa").h;
 
-    return true;
+
+   /////////////////////////////////////////////////////////////
+
+
+	Vector2D* vec = new Vector2D(0,0);
+	vec->setX(TheParser::Instance()->configGame.protagonista.x);
+	vec->setY(TheParser::Instance()->configGame.protagonista.y);
+	vec->toIsometric();
+	m_pAldeano_test = new Unit();
+	m_pAldeano_test->load(vec->getX(),
+						vec->getY(),
+						125, 168, 		 //125 y 168 son el ancho y alto de la imagen a cortar
+						40,	54.76f,			// 40 y 54.76 son el ancho y alto de la imagen a dibujar
+						5, "animate",true);   // y el 5 corresponde a la cantidad de Frames
+	m_pAldeano_test->m_mapPosition2.setX(TheParser::Instance()->configGame.protagonista.x);
+	m_pAldeano_test->m_mapPosition2.setY(TheParser::Instance()->configGame.protagonista.y);
+	delete vec;
+
+	Vector2D* vec2 = new Vector2D(0,0);
+	vec2->setX(9);
+	vec2->setY(2);
+	vec2->toIsometric();
+	GameObject* anotherUnit = new Unit();
+	anotherUnit->load(vec2->getX(),
+						vec2->getY(),
+						125, 168, 		 //125 y 168 son el ancho y alto de la imagen a cortar
+						40,	54.76f,			// 40 y 54.76 son el ancho y alto de la imagen a dibujar
+						5, "animate",true);   // y el 5 corresponde a la cantidad de Frames
+	anotherUnit->m_mapPosition2.setX(9);
+	anotherUnit->m_mapPosition2.setY(2);
+	delete vec2;
+
+
+   for(uint i =0; i< TheParser::Instance()->configGame.escenario.entidades.size();i++){
+   	GameObject* objetoACargar = TheObjectFactory::Instance()->crear(
+   										TheParser::Instance()->configGame.escenario.entidades[i].tipo,
+   										TheParser::Instance()->configGame.escenario.entidades[i].x,
+   										TheParser::Instance()->configGame.escenario.entidades[i].y);
+   	cargarEntidadd(objetoACargar);
+   	entidades.push_back(anotherUnit);
+   	entidades.push_back(m_pAldeano_test);
+   }
+
+   return true;
+
 }
 
 
 void Game::render()
 {
+	if (m_bQuiting)
+		return;
+
 	SDL_RenderClear(m_pRenderer);
 
-	//m_pGameStateMachine->render();// Dejo esto por si despues implementamos maquinaa finita de estados para los estados de jeugo: menu, etc
-    m_pMap->draw();
-    //primero dibuja entidades, luego el personaje (siempre aparece por arriba de las cosas
-    for (int i=0;i<cantDeEntidades;i++){
-    	if (entidades[i])
-    		entidades[i]->draw();
-    }
-    m_pAldeano_test->draw();
-
-    SDL_RenderPresent(m_pRenderer);
+	m_pPantalla->draw(m_pRenderer,m_pMap,entidades);
 
 }
 
 void Game::update()
 {
+	if (m_bQuiting)
+		return;
 	TheCamera::Instance()->update();
 		//m_pGameStateMachine->update();
 	//sort(entidades.begin(), entidades.end(), CompareGameObject());
+	 for (uint i=0;i<entidades.size();i++){
+	    	if (entidades[i])
+	    		entidades[i]->update();
+	}
 
-	m_pAldeano_test->update();
+	if (entidades.size() > 1)
+		sort(entidades.begin(), entidades.end(), CompareGameObject());
+
+	//m_pAldeano_test->update();
 	m_pMap->update();
+
+
+	//PROVISORIO
+	int randomX = rand() % 3000 ;
+	int randomY;
+	int randomItem;
+	if (randomX < 100){
+		randomY = rand() % 3000 ;
+		if (randomY < 100){
+			randomItem = (rand() % 3) + 1;
+			cout <<"random: "<<  randomX << " " << randomY << " item: " << randomItem<< endl;
+			switch (randomItem) {
+				case 1: {
+					GameObject* recurso = TheObjectFactory::Instance()->crear("madera", randomX, randomY);
+					cargarRecurso(recurso);
+					break;
+				}
+				case 2: {
+					GameObject* recurso2 = TheObjectFactory::Instance()->crear("oro", randomX, randomY);
+					cargarRecurso(recurso2);
+					break;
+				}
+				case 3: {
+					 GameObject* recurso3 = TheObjectFactory::Instance()->crear("comida", randomX, randomY);
+					 cargarRecurso(recurso3);
+					 break;
+				}
+
+			}
+		}
+	}
 }
 
 void Game::handleEvents()
@@ -222,10 +316,17 @@ void Game::handleEvents()
             return;
         }
 	}
+    else
+    {
+    	return;
+    }
 
 	TheCamera::Instance()->handleInput();
-
-	m_pAldeano_test->handleInput();
+	 for (uint i=0;i<entidades.size();i++){
+	    	if (entidades[i])
+	    		entidades[i]->handleInput();
+	}
+	//m_pAldeano_test->handleInput();
 	m_pMap->handleInput();
 }
 
@@ -235,26 +336,36 @@ void Game::clean()
 
     TheInputHandler::Instance()->clean();
 
-    //m_pGameStateMachine->clean();
+   // m_pGameStateMachine->clean();
    // m_pGameStateMachine = 0;
    // delete m_pGameStateMachine;
     m_pAldeano_test->clean();
     m_pMap->clean();
-    for(int i = 0; i < entidades.size(); i++){
+    m_pPantalla->clean();
+    for(uint i = 0; i < entidades.size(); i++){
     	if (entidades [i])
+    	{
     		entidades[i]->clean();
+    	}
     	delete entidades[i];
     }
     entidades.clear();
 
     delete m_pAldeano_test;
     delete m_pMap;
+    delete m_pPantalla;
+    delete m_pBarra;
 
     TheTextureManager::Instance()->clearTextureMap();
+
+	TTF_CloseFont( gFont );
+	gFont = NULL;
 
     SDL_DestroyWindow(m_pWindow);
     SDL_DestroyRenderer(m_pRenderer);
     SDL_Quit();
+    TTF_Quit();
+    IMG_Quit();
 }
 
 float Game::getMapWidth() const
@@ -266,59 +377,105 @@ float Game::getMapHeight() const
 	return m_pMap->getMapSize().getY();
 }
 
-void Game::cargarEntidad(int posx,int posy,int width,int height,int destWidth,
-				int destHeight,int numFrames,int row,int frame,int offsetX,int offsetY,
-				int longBase,int longAlt,std::string nombre)
-{
-	for(int i=posx;i<posx +longBase;i++){
-			for(int j=posy;j<posy+longAlt;j++){
-				if(m_pMap->getValue(i,j) == 0)
-					{
-						LOG("TILE OCUPADO, NO ES POSIBLE UBICAR");
-						return;
-					}
-				else{m_pMap->setValue(i,j,0);}
+
+void Game::cargarEntidadd(GameObject* entidad){
+
+	for(int i=entidad->m_mapPosition2.getX();i<entidad->m_mapPosition2.getX() + entidad->getAncho();i++){
+				for(int j=entidad->m_mapPosition2.getY();j<entidad->m_mapPosition2.getY()+ entidad->getAlto();j++){
+					if(m_pMap->getValue(i,j) == 0)
+						{
+							LOG("TILE OCUPADO, NO ES POSIBLE UBICAR");
+							return;
+						}
+					else{m_pMap->setValue(i,j,0);}
+			}
 		}
-	}
+
+	cantDeEntidades += 1;
+
+	entidades.resize(cantDeEntidades);
+
+	entidades[cantDeEntidades-1] = entidad;
+
+}
+
+/////////////////// PROVISORIO ////////////////////////////
+
+void Game::cargarRecurso(GameObject* entidad){
+
+	for(int i=entidad->m_mapPosition2.getX();i<entidad->m_mapPosition2.getX() + entidad->getAncho();i++){
+				for(int j=entidad->m_mapPosition2.getY();j<entidad->m_mapPosition2.getY()+ entidad->getAlto();j++){
+					if(m_pMap->getValue(i,j) == 0)
+						{
+							LOG("TILE OCUPADO, NO ES POSIBLE UBICAR");
+							return;
+						}
+					else{m_pMap->setValue(i,j,3);}
+			}
+		}
 
 	cantDeEntidades += 1;
 	entidades.resize(cantDeEntidades);
-	//rposx += 1;posy +=1; //por alguna razon esta corrida un espacio (chequear)
-	float possx = posx * TILE_WIDTH/2;
-	float possy = posy * TILE_HEIGHT;
-	Vector2D* vec = new Vector2D(0,0);
-	vec->setX(possx);
-	vec->setY(possy);
-	vec->toIsometric();
-	// Cuando cargo la imagen, en la posicion y le resto la mitad de la altura para que dibuje desde abajo del sprite
 
-	entidades[cantDeEntidades -1] = new GameObject();
-	entidades[cantDeEntidades -1]->load(vec->getX(),vec->getY(),width,height,destWidth,destHeight,numFrames,nombre);
-	entidades[cantDeEntidades -1]->setRow(row);
-	entidades[cantDeEntidades -1]->m_mapPosition2.setX(posx);
-	entidades[cantDeEntidades -1]->m_mapPosition2.setY(posy);
-	entidades[cantDeEntidades -1]->setFrame(frame);
-	entidades[cantDeEntidades -1]->setOffset(offsetX,offsetY);
+	entidades[cantDeEntidades -1] = entidad;
 
-	delete vec;
 }
 
-void Game::restart() //Con Q
+void Game::tomarRecurso(int x, int y) {
+
+	for(uint i = 0; i < entidades.size(); i++){
+	    	if (entidades [i])
+	    	{
+	    		Vector2D vector = entidades[i]->m_mapPosition2;
+	    		if ((vector.m_x == x) && (vector.m_y == y)){
+	    			GameObject* objeto = entidades[i];
+	    		    if (entidades[i])
+				    {
+				    	entidades[i]->m_mapPosition2.setX(-100);
+				    	entidades[i]->m_mapPosition2.setY(-100);
+				    	entidades[i]->m_mapPosition.setX(-100);
+				    	entidades[i]->m_mapPosition.setY(-100);
+
+				    	m_pMap->m_mapGrid[x][y] = 1;
+				    	m_pMap->m_mapGrid2[x][y] = 1;
+
+				    	m_pBarra->addRecurso(objeto->name.c_str(),objeto->cantidad);
+
+
+				    }
+	    		}
+	    	}
+
+	  }
+
+}
+
+
+/////////////////////////////////////////////////////////////////
+
+void Game::restart() //Con R
 {
 	m_bQuiting = true;
 	//LIMPIA EL ESTADO DEL JUEGO
+
    m_pAldeano_test->clean();
    m_pMap->clean();
-   for(int i=0;i < cantDeEntidades ;i++){
+   m_pPantalla->clean();
+   m_pBarra->clean();
+   for(uint i=0;i < entidades.size() ;i++){
 	   if (entidades[i])
 	   {
 			entidades[i]->clean();
 			delete entidades[i];
 	   }
 	}
-    entidades.clear();
-	delete m_pAldeano_test;
+	entidades.clear();
+	cantDeEntidades = 0;
+
+	//delete m_pAldeano_test;
 	delete m_pMap;
+	delete m_pPantalla;
+	delete m_pBarra;
 	SDL_DestroyWindow(m_pWindow);
 	SDL_DestroyRenderer(m_pRenderer);
 
@@ -330,8 +487,30 @@ void Game::restart() //Con Q
 	init("TP of Empires", 400, 150, TheParser::Instance()->configGame.pantalla.ancho, TheParser::Instance()->configGame.pantalla.alto, 0);
 	TheInputHandler::Instance()->reset();
 	TheCamera::Instance()->reset();
+	TheCamera::Instance()->centerAt(m_pAldeano_test->getScreenPosition());
 	m_bQuiting = false;
 }
 
+void Game::changeMapGrid(int x, int y, int value)
+{
+	if ((x < 0) || (x > getMapWidth()) || (y < 0) || (y > getMapHeight()))
+		return;
+	m_pMap->m_mapGrid[x][y] = value;
+	m_pMap->m_mapGrid2[x][y] = value;
+}
 
+void Game::declick(){
+	for(uint i=0;i<entidades.size();i++){
+		entidades[i]->m_isClicked = false;
+	}
+}
+
+bool Game::unitVision(int x,int y){
+	bool atSight=false;
+	for(uint i=0;i<entidades.size();i++){
+		if(entidades[i]->positionAtSight(x,y))
+			atSight = true;
+	}
+	return atSight;
+}
 

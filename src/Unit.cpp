@@ -66,13 +66,8 @@ void Unit::update(){
 	{
 		if (((m_mapPosition.getX() != m_destination.getX()) || (m_mapPosition.getY() != m_destination.getY())))
 		{
-			//actualiza la ultima posicion
-			m_lastMapPosition.setX(m_mapPosition.getX());
-			m_lastMapPosition.setY(m_mapPosition.getY());
-
 			//se mueve hacia el destino
 			moveTo(m_destination);
-
 		}
 		else
 		{
@@ -85,9 +80,12 @@ void Unit::update(){
 			{
 				m_bMoving = false;
 				astarsearch.FreeSolutionNodes();
-				//astarsearch.EnsureMemoryFreed();
 				return;
 			}
+			//actualiza la ultima posicion
+			m_lastMapPosition.setX(m_mapPosition.getX());
+			m_lastMapPosition.setY(m_mapPosition.getY());
+
 			m_destination.setX(m_node->x);
 			m_destination.setY(m_node->y);
 			//cout << "Next node = ( " << (int) m_node->x << " , " << (int)m_node->y << " ) \n";
@@ -243,11 +241,16 @@ void Unit::handleInput()
 			if (pathFound)
 			{
 				m_node = astarsearch.GetSolutionStart();
+				//actualiza la ultima posicion
+				TheGame::Instance()->changeMapGrid(m_lastMapPosition.getX(), m_lastMapPosition.getY(), 1);
+				//cout << "Liberada = ( " << (int) m_lastMapPosition.m_x << " , " << (int)m_lastMapPosition.m_y  << " ) \n";
+				m_lastMapPosition.setX(m_mapPosition.getX());
+				m_lastMapPosition.setY(m_mapPosition.getY());
+
 				if (!m_node)
 				{
 					m_bMoving = false;
 					astarsearch.FreeSolutionNodes();
-					//astarsearch.EnsureMemoryFreed();
 					return;
 				}
 				//cout << "First node = ( " << (int) m_node->x << " , " << (int)m_node->y << " ) \n";
@@ -400,5 +403,7 @@ void Unit::occupyTile(const Vector2D& newPosition)
 {
 	TheGame::Instance()->changeMapGrid(m_lastMapPosition.getX(), m_lastMapPosition.getY(), 1);
 	TheGame::Instance()->changeMapGrid(newPosition.m_x, newPosition.m_y, 0);
+	//cout << "Liberada = ( " << (int) m_lastMapPosition.m_x << " , " << (int)m_lastMapPosition.m_y  << " ) \n";
+	//cout << "Ocupada = ( " << (int) newPosition.m_x << " , " << (int)newPosition.m_y  << " ) \n";
 
 }
