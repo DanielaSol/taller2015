@@ -91,6 +91,8 @@ private:
     //GameObject* m_pAldeano_test; // será un Unit,
 
     std::vector<GameObject*> entidades;
+    std::vector<GameObject*> entidadesAAgregar;
+   // std::vector<GameObject*> entidadesADestruir;
 
     SDL_Window* m_pWindow;
     SDL_Renderer* m_pRenderer;
@@ -106,6 +108,8 @@ private:
 
 	bool initGame();
 	void orderGameObjects();
+	void agregarEntidadesAcumuladas();
+	void destruirEntidadesObsoletas();
 
 	struct CompareGameObject
 	{

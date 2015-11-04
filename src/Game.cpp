@@ -71,7 +71,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
         if(m_pWindow != 0) // window init success
         {
             cout << "window creation success\n";
-            m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_ACCELERATED);
+            m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_SOFTWARE);
 
             if(m_pRenderer != 0) // renderer init success
             {
@@ -269,7 +269,7 @@ void Game::render()
 {
 	if (m_bQuiting)
 		return;
-
+	agregarEntidadesAcumuladas();
 	SDL_RenderClear(m_pRenderer);
 
 	m_pPantalla->draw(m_pRenderer,m_pMap,entidades);
@@ -296,8 +296,8 @@ void Game::update()
 
 
 	//PROVISORIO
-	srand(time(NULL));
-	int randomX = rand() % 3000 ;
+	//srand(time(NULL));
+	int randomX = rand() % 300  ;
 	int randomY;
 	int randomItem;
 	if (randomX < 100){
@@ -436,11 +436,11 @@ void Game::cargarRecurso(GameObject* entidad){
 					else{m_pMap->setValue(i,j,3);}
 			}
 	}
+	entidadesAAgregar.push_back(entidad);
+	//cantDeEntidades += 1;
+	//entidades.resize(cantDeEntidades);
 
-	cantDeEntidades += 1;
-	entidades.resize(cantDeEntidades);
-
-	entidades[cantDeEntidades -1] = entidad;
+	//ntidades[cantDeEntidades -1] = entidad;
 
 }
 
@@ -547,3 +547,28 @@ bool Game::isTileAvailable(int x, int y)
 	return true;
 }
 
+void Game::agregarEntidadesAcumuladas()
+{
+
+	 for (uint i=0;i<entidadesAAgregar.size();i++){
+		 if (entidadesAAgregar[i])
+		 {
+				cantDeEntidades += 1;
+				//entidades.resize(cantDeEntidades);
+				entidades.push_back(entidadesAAgregar.back());
+				entidadesAAgregar.pop_back();
+		 }
+	}
+}
+
+/*void Game::destruirEntidadesObsoletas()
+{
+	 for (uint i=0;i<entidadesADestruir.size();i++)
+	 {
+		 if (entidadesADestruir[i])
+		 {
+			 delete entidadesADestruir[i];
+			 cantDeEntidades -= 1;
+		 }
+	}
+}*/
