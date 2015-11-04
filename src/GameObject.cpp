@@ -29,6 +29,7 @@ void GameObject::load(int screenX, int screenY, int width, int height,int destWi
 
 	m_currentRow = 1;
 	m_currentFrame = 1;
+	name = "Default";
 }
 
 void GameObject::draw()
@@ -38,6 +39,7 @@ void GameObject::draw()
 	TheTextureManager::Instance()->drawFrame(m_textureID, m_mapPosition.getX() - TheCamera::Instance()->offsetX - offsetX,
 			m_mapPosition.getY()  - TheCamera::Instance()->offsetY - offsetY,
 			m_width, m_height,m_destWidth,m_destHeight, m_currentRow, m_currentFrame, TheGame::Instance()->getRenderer());
+
 }
 
 void GameObject::update()
@@ -55,9 +57,8 @@ void GameObject::update()
 		}
 	}
 
-
-
 	isClicked();
+
 }
 
 void GameObject::handleInput()
@@ -145,4 +146,24 @@ void GameObject::isClicked(){
 	}
 	delete vec;
 }
+
+void GameObject::drawSelected()
+{
+
+	float posX = m_mapPosition.m_x *62/2;
+	float posY = m_mapPosition.m_y *32;
+
+	Vector2D isometricCord2;
+	isometricCord2.m_x=posX;
+	isometricCord2.m_y=posY;
+	isometricCord2.toIsometric();
+
+
+	TheTextureManager::Instance()->draw("grassSelected", isometricCord2.getX()- TheCamera::Instance()->offsetX , isometricCord2.getY() - TheCamera::Instance()->offsetY,
+				100, 50, TheGame::Instance()->getRenderer());
+
+
+}
+
+
 

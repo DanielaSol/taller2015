@@ -18,6 +18,7 @@ void TileHandler::loadTiles()
 {
 	TheTextureManager::Instance()->load("assets/Tiles/Grass.png","grassTile", TheGame::Instance()->getRenderer());
 	TheTextureManager::Instance()->load("assets/Tiles/GrassSeen.png","grassSeen", TheGame::Instance()->getRenderer());
+	TheTextureManager::Instance()->load("assets/Tiles/GrassSelected.png","grassSelected", TheGame::Instance()->getRenderer());
 }
 
 void TileHandler::drawTile(int tileID, int isoX, int isoY)

@@ -423,12 +423,13 @@ void Game::cargarRecurso(GameObject* entidad){
 
 void Game::tomarRecurso(int x, int y) {
 
+	list<int> listaEliminar;
 	for(uint i = 0; i < entidades.size(); i++){
 	    	if (entidades [i])
 	    	{
 	    		Vector2D vector = entidades[i]->m_mapPosition2;
 	    		if ((vector.m_x == x) && (vector.m_y == y)){
-	    			GameObject* objeto = entidades[i];
+
 	    		    if (entidades[i])
 				    {
 				    	entidades[i]->m_mapPosition2.setX(-100);
@@ -439,7 +440,8 @@ void Game::tomarRecurso(int x, int y) {
 				    	m_pMap->m_mapGrid[x][y] = 1;
 				    	m_pMap->m_mapGrid2[x][y] = 1;
 
-				    	m_pBarra->addRecurso(objeto->name.c_str(),objeto->cantidad);
+				    	listaEliminar.push_back(i);
+				    	m_pBarra->addRecurso(entidades[i]->name.c_str(),entidades[i]->cantidad);
 
 
 				    }

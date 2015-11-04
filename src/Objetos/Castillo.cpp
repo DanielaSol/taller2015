@@ -38,6 +38,7 @@ Castillo::Castillo(int x,int y){
 	GameObject::setRow(row);
 	GameObject::setAlto(TheParser::Instance()->configGame.objetos.at("castillo").alto);
 	GameObject::setAncho(TheParser::Instance()->configGame.objetos.at("castillo").ancho);
+	name = "Castillo";
 	delete vec;
 }
 

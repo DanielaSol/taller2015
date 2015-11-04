@@ -128,8 +128,14 @@ void Pantalla::draw(SDL_Renderer* m_pRenderer, Map* m_pMap ,vector<GameObject*> 
 
 	 //primero dibuja entidades, luego el personaje (siempre aparece por arriba de las cosas
 	for (uint i=0;i<entidades.size();i++){
+		if (entidades[i]->m_isClicked){
+			cout << "clickeado " << entidades[i]->name<< " " << entidades[i]->m_mapPosition.m_x<< endl;
+			entidades[i]->drawSelected();
+		}
+
 		if (entidades[i] && (entidades[i]->m_atSight || entidades[i]->m_wasSeen))
 			entidades[i]->draw();
+
 	}
 
 	SDL_RenderPresent(m_pRenderer);
@@ -149,6 +155,7 @@ void Pantalla::init(SDL_Renderer* m_pRenderer) {
 	TheTextureManager::Instance()->load("assets/puntoVerde.png","puntoVerde", m_pRenderer);
 	TheTextureManager::Instance()->load("assets/puntoRojo.png","puntoRojo", m_pRenderer);
 	TheTextureManager::Instance()->load("assets/puntoAmarillo.png","puntoAmarillo", m_pRenderer);
+	TheTextureManager::Instance()->load("assets/Tiles/GrassSelected.png","sueloSeleccionado", m_pRenderer);
 
 }
 

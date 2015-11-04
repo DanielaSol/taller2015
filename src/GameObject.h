@@ -109,6 +109,8 @@ public:
     string name;
     int cantidad;
 
+    void drawSelected();
+
 protected:
 
     // "Age" Variables

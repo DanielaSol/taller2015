@@ -31,6 +31,7 @@ Molino::Molino(int x,int y){
 	GameObject::setRow(row);
 	GameObject::setAlto(TheParser::Instance()->configGame.objetos.at("molino").alto);
 	GameObject::setAncho(TheParser::Instance()->configGame.objetos.at("molino").ancho);
+	name = "Molino";
 	delete vec;
 
 }

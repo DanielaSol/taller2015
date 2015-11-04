@@ -20,6 +20,7 @@ m_direction(0,0),
 m_bChangingDestination(false),
 m_bMoving(false),
 m_vision(3)
+
 {
 }
 
@@ -98,38 +99,10 @@ void Unit::update(){
 	}
 
 	int tileValue1 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()][m_mapPosition.getY()];
-	/*int tileValue2 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()+1][m_mapPosition.getY()];
-	int tileValue3 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()+1][m_mapPosition.getY()+1];
-	int tileValue4 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()][m_mapPosition.getY()+1];
-	int tileValue5 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()-1][m_mapPosition.getY()];
-	int tileValue6 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()-1][m_mapPosition.getY()-1];
-	int tileValue7 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()][m_mapPosition.getY()-1];*/
 
 	if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue1))  {
 		TheGame::Instance()->tomarRecurso(m_mapPosition.getX(),m_mapPosition.getY());
-
 	}
-	/*else if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue2))  {
-		TheGame::Instance()->tomarRecurso(m_mapPosition.getX()+1,m_mapPosition.getY());
-	}
-	if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue3))  {
-		TheGame::Instance()->tomarRecurso(m_mapPosition.getX()+1,m_mapPosition.getY()+1);
-
-	}
-	else if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue4))  {
-		TheGame::Instance()->tomarRecurso(m_mapPosition.getX(),m_mapPosition.getY()+1);
-	}
-	if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue5))  {
-		TheGame::Instance()->tomarRecurso(m_mapPosition.getX()-1,m_mapPosition.getY());
-
-	}
-	else if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue6))  {
-		TheGame::Instance()->tomarRecurso(m_mapPosition.getX()-1,m_mapPosition.getY()-1);
-	}
-	if ( TheGame::Instance()->m_pMap->m_pTileHandler->isGetable(tileValue7))  {
-		TheGame::Instance()->tomarRecurso(m_mapPosition.getX(),m_mapPosition.getY()-1);
-
-	}*/
 }
 
 void Unit::moveTo(const Vector2D& position)
