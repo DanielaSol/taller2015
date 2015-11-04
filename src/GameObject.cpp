@@ -39,9 +39,12 @@ void GameObject::draw()
 {
 	//Agrega offset de camera y offset de objeto a dibujar
 
-	TheTextureManager::Instance()->drawFrame(m_textureID, m_mapPosition.getX() - TheCamera::Instance()->offsetX - offsetX,
-			m_mapPosition.getY()  - TheCamera::Instance()->offsetY - offsetY,
-			m_width, m_height,m_destWidth,m_destHeight, m_currentRow, m_currentFrame, TheGame::Instance()->getRenderer());
+	if (TheCamera::Instance()->isVisible(m_mapPosition2.getX(), m_mapPosition2.getY()))
+	{
+		TheTextureManager::Instance()->drawFrame(m_textureID, m_mapPosition.getX() - TheCamera::Instance()->offsetX - offsetX,
+				m_mapPosition.getY()  - TheCamera::Instance()->offsetY - offsetY,
+				m_width, m_height,m_destWidth,m_destHeight, m_currentRow, m_currentFrame, TheGame::Instance()->getRenderer());
+	}
 
 }
 
@@ -152,7 +155,7 @@ void GameObject::isClicked(){
 
 void GameObject::drawSelected()
 {
-	float posX = m_mapPosition2.m_x *62/2;
+	float posX = m_mapPosition2.m_x *64/2;
 	float posY = m_mapPosition2.m_y *32;
 
 	Vector2D isometricCord2;

@@ -297,11 +297,11 @@ void Game::update()
 
 	//PROVISORIO
 	//srand(time(NULL));
-	int randomX = rand() % 300  ;
+	int randomX = rand() % 2500  ;
 	int randomY;
 	int randomItem;
 	if (randomX < 100){
-		randomY = rand() % 3000 ;
+		randomY = rand() % 2500 ;
 		if (randomY < 100){
 			randomItem = (rand() % 3) + 1;
 			cout <<"random: "<<  randomX << " " << randomY << " item: " << randomItem<< endl;
