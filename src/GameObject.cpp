@@ -150,8 +150,8 @@ void GameObject::isClicked(){
 void GameObject::drawSelected()
 {
 
-	float posX = m_mapPosition.m_x *62/2;
-	float posY = m_mapPosition.m_y *32;
+	float posX = m_mapPosition2.m_x *62/2;
+	float posY = m_mapPosition2.m_y *32;
 
 	Vector2D isometricCord2;
 	isometricCord2.m_x=posX;

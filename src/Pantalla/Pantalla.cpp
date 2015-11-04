@@ -129,7 +129,7 @@ void Pantalla::draw(SDL_Renderer* m_pRenderer, Map* m_pMap ,vector<GameObject*> 
 	 //primero dibuja entidades, luego el personaje (siempre aparece por arriba de las cosas
 	for (uint i=0;i<entidades.size();i++){
 		if (entidades[i]->m_isClicked){
-			cout << "clickeado " << entidades[i]->name<< " " << entidades[i]->m_mapPosition.m_x<< endl;
+			cout << "clickeado " << entidades[i]->name<< " " << entidades[i]->m_mapPosition2.m_x<< endl;
 			entidades[i]->drawSelected();
 		}
 
