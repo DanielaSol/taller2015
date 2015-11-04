@@ -109,9 +109,9 @@ void Pantalla::draw(SDL_Renderer* m_pRenderer, Map* m_pMap ,vector<GameObject*> 
 	}
 	//////////////////////////////////////////////////////////////////
 	sector = sectores.at("minimapa");
-	TheTextureManager::Instance()->drawArea("minimapa",sector,m_pRenderer);
+	//TheTextureManager::Instance()->drawArea("minimapa",sector,m_pRenderer);
 
-
+	SDL_RenderSetViewport( m_pRenderer, &sector );
 	for(int i = 0 ; i <  m_pMap->getMapSize().getX(); i++) {
 		for(int j = 0 ; j < m_pMap->getMapSize().getY() ; j++) {
 			if (m_pMap->getVisionMapValue(i,j) == 1 || m_pMap->getVisionMapValue(i,j) == 2) {
