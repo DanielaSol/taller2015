@@ -17,8 +17,9 @@ Arbolit::Arbolit() {
 
 Arbolit::Arbolit(int x,int y){
 
-	TheTextureManager::Instance()->load("assets/terrainSeen.png","arbolSeen", TheGame::Instance()->getRenderer());
-
+	if (TheTextureManager::Instance()->getTextureMap().count("arbolSeen") == 0) {
+		TheTextureManager::Instance()->load("assets/terrainSeen.png","arbolSeen", TheGame::Instance()->getRenderer());
+	}
 
 	float possx = (x+1) * TheGame::TILE_WIDTH/2;
 	float possy = (y+1) * TheGame::TILE_HEIGHT;

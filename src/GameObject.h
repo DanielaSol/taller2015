@@ -109,7 +109,7 @@ public:
     string name;
     int cantidad;
 
-    void drawSelected();
+    virtual void drawSelected();
 
 protected:
 

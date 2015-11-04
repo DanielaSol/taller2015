@@ -86,8 +86,8 @@ void Pantalla::draw(SDL_Renderer* m_pRenderer, Map* m_pMap ,vector<GameObject*> 
 	}
 
 	//////////////////////////////////////////////////////////////////
-	sector = sectores.at("barra_bajo");
-	TheTextureManager::Instance()->drawArea("barra_bajo",sector,m_pRenderer);
+	/*sector = sectores.at("barra_bajo");
+	TheTextureManager::Instance()->drawArea("barra_bajo",sector,m_pRenderer);*/
 	//////////////////////////////////////////////////////////////////
 	sector = sectores.at("minimapa");
 	TheTextureManager::Instance()->drawArea("minimapa",sector,m_pRenderer);
@@ -129,8 +129,15 @@ void Pantalla::draw(SDL_Renderer* m_pRenderer, Map* m_pMap ,vector<GameObject*> 
 	 //primero dibuja entidades, luego el personaje (siempre aparece por arriba de las cosas
 	for (uint i=0;i<entidades.size();i++){
 		if (entidades[i]->m_isClicked){
-			cout << "clickeado " << entidades[i]->name<< " " << entidades[i]->m_mapPosition2.m_x<< endl;
 			entidades[i]->drawSelected();
+			SDL_Rect subSector = sectores.at("barra_bajo");
+			/*SDL_Rect subSector;
+			subSector.x=100;
+			subSector.y=100;*/
+			SDL_Color textColor = { 255, 255, 255 };
+
+			string text = "hola";
+			TheTextureManager::Instance()->drawText(text,textColor,subSector,m_pRenderer);
 		}
 
 		if (entidades[i] && (entidades[i]->m_atSight || entidades[i]->m_wasSeen))

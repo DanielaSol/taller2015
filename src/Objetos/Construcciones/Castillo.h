@@ -8,7 +8,7 @@
 #ifndef CASTILLO_H_
 #define CASTILLO_H_
 
-#include "../GameObject.h"
+#include "../../GameObject.h"
 
 class Castillo: public GameObject {
 public:
@@ -16,7 +16,9 @@ public:
 	Castillo(int x,int y);
 	virtual ~Castillo();
 
-	virtual void update();
+	void update();
+
+	void drawSelected();
 
 	const int width = 192;
 	const int height = 224;

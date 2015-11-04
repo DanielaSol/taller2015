@@ -84,6 +84,7 @@ escenario:
         - {x: 9, y: 21, tipo: arbol}
 
 
+
 protagonista: 
      tipo: juana_de_arco
      x: 8

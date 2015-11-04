@@ -29,7 +29,8 @@ void GameObject::load(int screenX, int screenY, int width, int height,int destWi
 
 	m_currentRow = 1;
 	m_currentFrame = 1;
-	name = "Default";
+
+	m_isClicked = false;
 }
 
 void GameObject::draw()
@@ -142,14 +143,17 @@ void GameObject::isClicked(){
 	if((m_mapPosition2.getX() == vec->getX())&& (m_mapPosition2.getY() == vec->getY()) && TheInputHandler::Instance()->getMouseButtonState(LEFT)){
 		TheGame::Instance()->declick();
 		cout << "is clicked" << endl;
+
+		cout << vec->getX() << endl;
+		cout << vec->getY() << endl;
 		m_isClicked = true;
 	}
 	delete vec;
+
 }
 
 void GameObject::drawSelected()
 {
-
 	float posX = m_mapPosition2.m_x *62/2;
 	float posY = m_mapPosition2.m_y *32;
 
@@ -161,6 +165,8 @@ void GameObject::drawSelected()
 
 	TheTextureManager::Instance()->draw("grassSelected", isometricCord2.getX()- TheCamera::Instance()->offsetX , isometricCord2.getY() - TheCamera::Instance()->offsetY,
 				100, 50, TheGame::Instance()->getRenderer());
+
+
 
 
 }
