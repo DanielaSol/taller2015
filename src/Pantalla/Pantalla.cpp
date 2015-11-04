@@ -158,14 +158,6 @@ void Pantalla::draw(SDL_Renderer* m_pRenderer, Map* m_pMap ,vector<GameObject*> 
 
 	}
 
-	vector<GameObject*> recursos = TheGame::Instance()->entidadesAAgregar;
-	for (uint i=0;i<recursos.size();i++){
-
-		if (recursos[i] && (recursos[i]->m_atSight || recursos[i]->m_wasSeen))
-			recursos[i]->draw();
-
-	}
-
 	SDL_RenderPresent(m_pRenderer);
 
 	//////////////////////////////////////////////////////////////////
