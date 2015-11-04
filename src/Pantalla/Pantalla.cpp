@@ -88,6 +88,25 @@ void Pantalla::draw(SDL_Renderer* m_pRenderer, Map* m_pMap ,vector<GameObject*> 
 	//////////////////////////////////////////////////////////////////
 	sector = sectores.at("barra_bajo");
 	TheTextureManager::Instance()->drawArea("barra_bajo",sector,m_pRenderer);
+
+	textColor = { 0, 0, 0 };
+	for (uint i=0;i<entidades.size();i++){
+		if (entidades[i]->m_isClicked){
+
+			string text = "NOMBRE: " + entidades[i]->name;
+			sector.x = 20;
+			sector.y= 30;
+
+			TheTextureManager::Instance()->drawText(text,textColor,sector,m_pRenderer);
+
+			text = "DESCRIPCION: " + entidades[i]->descripcion;
+			sector.x = 20;
+			sector.y += 30;
+
+			TheTextureManager::Instance()->drawText(text,textColor,sector,m_pRenderer);
+
+		}
+	}
 	//////////////////////////////////////////////////////////////////
 	sector = sectores.at("minimapa");
 	TheTextureManager::Instance()->drawArea("minimapa",sector,m_pRenderer);
@@ -130,15 +149,10 @@ void Pantalla::draw(SDL_Renderer* m_pRenderer, Map* m_pMap ,vector<GameObject*> 
 	for (uint i=0;i<entidades.size();i++){
 		if (entidades[i]->m_isClicked){
 			entidades[i]->drawSelected();
-			SDL_Rect subSector = sectores.at("barra_bajo");
-			subSector.x=100;
-			subSector.y=100;
-			SDL_Color textColor = { 255, 255, 255 };
 
-			string text = "hola";
-			TheTextureManager::Instance()->drawText(text,textColor,subSector,m_pRenderer);
 		}
 
+		//SDL_RenderSetViewport( m_pRenderer, &sector );
 		if (entidades[i] && (entidades[i]->m_atSight || entidades[i]->m_wasSeen))
 			entidades[i]->draw();
 
@@ -147,8 +161,6 @@ void Pantalla::draw(SDL_Renderer* m_pRenderer, Map* m_pMap ,vector<GameObject*> 
 	SDL_RenderPresent(m_pRenderer);
 
 	//////////////////////////////////////////////////////////////////
-
-
 
 
 }

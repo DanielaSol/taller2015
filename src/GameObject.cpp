@@ -31,7 +31,8 @@ void GameObject::load(int screenX, int screenY, int width, int height,int destWi
 	m_currentRow = 1;
 	m_currentFrame = 1;
 
-	m_isClicked = false;
+	name = "DEFAULT";
+	descripcion = " ";
 }
 
 void GameObject::draw()

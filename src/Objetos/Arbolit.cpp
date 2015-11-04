@@ -35,7 +35,8 @@ Arbolit::Arbolit(int x,int y){
 	GameObject::setRow(row);
 	GameObject::setAlto(TheParser::Instance()->configGame.objetos.at("arbol").alto);
 	GameObject::setAncho(TheParser::Instance()->configGame.objetos.at("arbol").ancho);
-	name="Árbol";
+	name="ARBOL";
+	descripcion = "LOS ARBOLES SON OBSTACULOS EN EL JUEGO";
 	delete vec;
 }
 

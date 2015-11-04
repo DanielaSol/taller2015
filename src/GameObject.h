@@ -107,6 +107,7 @@ public:
     //PROVISORIO Hay que pasarlo a protected
     bool recurso;
     string name;
+    string descripcion;
     int cantidad;
 
     virtual void drawSelected();

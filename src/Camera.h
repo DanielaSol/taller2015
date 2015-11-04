@@ -41,8 +41,8 @@ public:
     const Vector2D getDirection() const {return m_direction;}
     const Vector2D TranslateToWorldCoordinates(int screenX, int screenY);//NO USAR, ME ESTABA DANDO MAL Y LA ABANDONE
 
-    float offsetX;
-    float offsetY;
+    float offsetX = 0;
+    float offsetY = 0;
 
 private:
 
