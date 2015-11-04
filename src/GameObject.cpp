@@ -26,6 +26,7 @@ void GameObject::load(int screenX, int screenY, int width, int height,int destWi
 	m_textureID = textureID;
 	m_atSight = visibility;
 	m_wasSeen = visibility;
+	m_isClicked = false;
 
 	m_currentRow = 1;
 	m_currentFrame = 1;
@@ -143,7 +144,10 @@ void GameObject::isClicked(){
 	if((m_mapPosition2.getX() == vec->getX())&& (m_mapPosition2.getY() == vec->getY()) && TheInputHandler::Instance()->getMouseButtonState(LEFT)){
 		TheGame::Instance()->declick();
 		cout << "is clicked" << endl;
+<<<<<<< HEAD
 
+=======
+>>>>>>> b6b993b07fb9fa3f1252bb70fb28bbe5808894c4
 		cout << vec->getX() << endl;
 		cout << vec->getY() << endl;
 		m_isClicked = true;
