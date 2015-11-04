@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <string>
 #include <iostream>
+#include <time.h>
 
 using namespace std;
 
@@ -70,7 +71,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
         if(m_pWindow != 0) // window init success
         {
             cout << "window creation success\n";
-            m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_ACCELERATED);
+            m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_SOFTWARE);
 
             if(m_pRenderer != 0) // renderer init success
             {
@@ -172,8 +173,6 @@ bool Game::initGame()
     m_pMap = new Map();
     m_pMap->load();
 
-
-
     //////////////////////////////////////////////////////////
     // PROVISORIO, RECURSOS
 
@@ -200,17 +199,21 @@ bool Game::initGame()
 
 
 	Vector2D* vec = new Vector2D(0,0);
-	vec->setX(TheParser::Instance()->configGame.protagonista.x);
-	vec->setY(TheParser::Instance()->configGame.protagonista.y);
+	generateRandomPosition(vec);
+	int randX = (int)vec->getX();
+	int randY = (int)vec->getY();
+	//vec->setX(TheParser::Instance()->configGame.protagonista.x);
+	//vec->setY(TheParser::Instance()->configGame.protagonista.y);
 	vec->toIsometric();
+
 	m_pAldeano_test = new Unit();
 	m_pAldeano_test->load(vec->getX(),
 						vec->getY(),
 						125, 168, 		 //125 y 168 son el ancho y alto de la imagen a cortar
 						40,	54.76f,			// 40 y 54.76 son el ancho y alto de la imagen a dibujar
 						5, "animate",true);   // y el 5 corresponde a la cantidad de Frames
-	m_pAldeano_test->m_mapPosition2.setX(TheParser::Instance()->configGame.protagonista.x);
-	m_pAldeano_test->m_mapPosition2.setY(TheParser::Instance()->configGame.protagonista.y);
+	m_pAldeano_test->m_mapPosition2.setX(randX);
+	m_pAldeano_test->m_mapPosition2.setY(randY);
 	delete vec;
 
 	Vector2D* vec2 = new Vector2D(0,0);
@@ -236,12 +239,31 @@ bool Game::initGame()
    	cargarEntidadd(objetoACargar);
    	entidades.push_back(anotherUnit);
    	entidades.push_back(m_pAldeano_test);
+
+   	TheCamera::Instance()->centerAt(m_pAldeano_test->getScreenPosition());
+   	m_pAldeano_test->m_isClicked = true;
    }
 
    return true;
 
 }
 
+void Game::generateRandomPosition(Vector2D* placeholder)
+{
+    srand(time(NULL));
+    bool positionGenerated = false;
+    int randX;
+	int randY;
+	while (positionGenerated == false)
+	{
+		randX = rand() % 100;
+		randY = rand() % 100;
+		if (TheGame::Instance()->isTileAvailable(randX, randY))
+			positionGenerated = true;
+	}
+	placeholder->setX(randX);
+	placeholder->setY(randY);
+}
 
 void Game::render()
 {
@@ -274,6 +296,7 @@ void Game::update()
 
 
 	//PROVISORIO
+	srand(time(NULL));
 	int randomX = rand() % 3000 ;
 	int randomY;
 	int randomItem;
@@ -412,7 +435,7 @@ void Game::cargarRecurso(GameObject* entidad){
 						}
 					else{m_pMap->setValue(i,j,3);}
 			}
-		}
+	}
 
 	cantDeEntidades += 1;
 	entidades.resize(cantDeEntidades);
@@ -514,5 +537,13 @@ bool Game::unitVision(int x,int y){
 			atSight = true;
 	}
 	return atSight;
+}
+
+bool Game::isTileAvailable(int x, int y)
+{
+	int tileValue = m_pMap->m_mapGrid[x][y];
+	if ((tileValue == 0) || (tileValue == 3))
+		return false;
+	return true;
 }
 

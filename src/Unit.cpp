@@ -7,6 +7,8 @@
 
 #include <iostream>
 #include <math.h>
+#include <stdlib.h>
+#include <time.h>
 
 #include "Astar/MapSearchNode.h"
 #include "Astar/stlastar.h"
@@ -27,15 +29,21 @@ m_vision(3)
 void Unit::load(int x, int y, int width, int height,int destWidth, int destHeight, int numFrames, std::string textureID,bool visibility)
 {
     GameObject::load(x, y, width, height, destWidth, destHeight, numFrames, textureID,visibility);
+
 	m_mapPosition.setX(m_screenPosition.getX() - TheGame::Instance()->TILE_WIDTH/2);
 	m_mapPosition.setY(m_screenPosition.getY() - TheGame::Instance()->TILE_HEIGHT/2);
-	m_mapPosition.screenToWorld();
+	m_mapPosition.screenToWorld(); //IMPLEMENTACION ANTERIOR, NO ALEATORIA
 
 	m_lastMapPosition.setX(m_mapPosition.getX());
 	m_lastMapPosition.setY(m_mapPosition.getY());
 	TheGame::Instance()->changeMapGrid(m_lastMapPosition.getX(), m_lastMapPosition.getY(), 0);
 
-	TheCamera::Instance()->centerAt(m_screenPosition);
+	m_atSight = true;
+	m_wasSeen = true;
+	m_isClicked = false;
+
+	//TheCamera::Instance()->centerAt(m_screenPosition);
+
     //
 	//m_destination.setX(m_screenPosition.getX());
 	//m_destination.setY(m_screenPosition.getY());

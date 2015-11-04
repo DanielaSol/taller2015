@@ -57,7 +57,10 @@ public:
     void tomarRecurso(int x, int y);
     void changeMapGrid(int x, int y, int value);
     void declick();
+    void generateRandomPosition(Vector2D* placeholder);
+
     bool unitVision(int x,int y);
+    bool isTileAvailable(int x, int y);
 
     SDL_Renderer* getRenderer() const { return m_pRenderer; }
     SDL_Window* getWindow() const { return m_pWindow; }
