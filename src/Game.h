@@ -84,6 +84,8 @@ public:
     GameObject* m_pAldeano_test;
 
     TTF_Font* gFont;
+
+    std::vector<GameObject*> entidadesAAgregar;
 private:
 
     //variable temporal, más avanzado en el diseño, la deberiamos mover a otra clase.
@@ -91,7 +93,6 @@ private:
     //GameObject* m_pAldeano_test; // será un Unit,
 
     std::vector<GameObject*> entidades;
-    std::vector<GameObject*> entidadesAAgregar;
    // std::vector<GameObject*> entidadesADestruir;
 
     SDL_Window* m_pWindow;
