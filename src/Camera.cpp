@@ -10,12 +10,12 @@
 #include "Vector2D.h"
 #include "SDL2/SDL.h"
 #include "InputHandler.h"
-#include "Parser.h"
+#include "Utilitarios/Parser.h"
 
 //Camera* Camera::s_pCamera = new Camera();
 Camera* Camera::s_pCamera;
 
-Camera::Camera() : m_scrollSpeed(30,30),m_scrollMargin(TheParser::Instance()->configGame.configuracion.margen_scroll), m_direction(0,0), offsetX(0.0f), offsetY(0.0f)
+Camera::Camera() : m_scrollSpeed(20,20),m_scrollMargin(TheParser::Instance()->configGame.configuracion.margen_scroll), m_direction(0,0), offsetX(0.0f), offsetY(0.0f)
 {
 	// CAMBIAR TMB EN RESET m_scrollMargin = TheParser::Instance()->configGame.configuracion.margen_scroll;
   //  cout << TheParser::Instance()->configGame.configuracion.margen_scroll << endl;
@@ -24,6 +24,7 @@ Camera::Camera() : m_scrollSpeed(30,30),m_scrollMargin(TheParser::Instance()->co
 
 void Camera::init()
 {
+	m_scrollMargin = TheParser::Instance()->configGame.configuracion.margen_scroll;
 	//por yaml
 	MAX_SCROLLSPEED.setX(15);
 	MAX_SCROLLSPEED.setY(15);
@@ -115,28 +116,23 @@ void Camera::handleInput()
 	m_direction.setX(0.0f);
 	m_direction.setY(0.0f);
 
-	if (mouseX <= m_scrollMargin)
-	{
+	SDL_Rect sector = TheGame::Instance()->m_pPantalla->sectores.at("mapa");
+
+	if (mouseX <= m_scrollMargin && mouseX > 0)	{
 		m_direction.setX(-1.0f);
 		m_scrollSpeed.setX ( MAX_SCROLLSPEED.getX() - (SLOPE_X * mouseX));
 	}
-
-	if (mouseX >= (TheGame::Instance()->getGameWidth() - m_scrollMargin))
-	{
+	if ((mouseX >= (TheGame::Instance()->getGameWidth() - m_scrollMargin)) && (mouseX < TheGame::Instance()->getGameWidth() ))	{
 		m_direction.setX(1.0f);
 		m_scrollSpeed.setX ( MAX_SCROLLSPEED.getX() - (SLOPE_X * (TheGame::Instance()->getGameWidth() - mouseX)));
 	}
-
-	if (mouseY <= m_scrollMargin)
-	{
+	if ((mouseY <= sector.y + m_scrollMargin) && (mouseY > sector.y)){
 		m_direction.setY(-1.0f);
-		m_scrollSpeed.setY ( MAX_SCROLLSPEED.getY() - (SLOPE_Y * mouseY));
+		m_scrollSpeed.setY ( MAX_SCROLLSPEED.getY() - (SLOPE_Y * (mouseY - sector.y )));
 	}
-
-	if (mouseY >= (TheGame::Instance()->getGameHeight() - m_scrollMargin))
-	{
+	if ((mouseY >= (sector.y + TheGame::Instance()->getGameHeight() - m_scrollMargin)) && (mouseY <sector.y + TheGame::Instance()->getGameHeight() )) {
 		m_direction.setY(1.0f);
-		m_scrollSpeed.setY ( MAX_SCROLLSPEED.getY() - (SLOPE_Y * (TheGame::Instance()->getGameHeight() - mouseY)));
+		m_scrollSpeed.setY ( MAX_SCROLLSPEED.getY() - (SLOPE_Y * (sector.y + TheGame::Instance()->getGameHeight() - mouseY)));
 	}
 
 	m_direction.normalize();
@@ -155,6 +151,7 @@ const Vector2D Camera::TranslateToWorldCoordinates(int screenX, int screenY) //N
 	return buffer;
 }
 
+
 void Camera::reset()
 {
 	offsetX = 0;
@@ -162,6 +159,12 @@ void Camera::reset()
 	//por yaml
 	init();
 	//m_scrollMargin = TheParser::Instance()->configGame.configuracion.margen_scroll;
+}
+
+void Camera::centerAt(const Vector2D& screenPosition)
+{
+	offsetX = screenPosition.m_x - (TheGame::Instance()->getGameWidth()/2);
+	offsetY = screenPosition.m_y - (TheGame::Instance()->getGameHeight()/2);
 }
 
 void Camera::clean()
