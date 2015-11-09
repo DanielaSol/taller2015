@@ -17,6 +17,7 @@ public:
 	virtual ~Madera();
 
 	virtual void update();
+	virtual void draw();
 
 	const int width = 32;
 	const int height = 32;

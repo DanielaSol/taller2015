@@ -164,7 +164,7 @@ void GameObject::drawSelected()
 	isometricCord2.toIsometric();
 
 	TheTextureManager::Instance()->draw("grassSelected", isometricCord2.getX()- TheCamera::Instance()->offsetX , isometricCord2.getY() - TheCamera::Instance()->offsetY,
-				100, 50, TheGame::Instance()->getRenderer());
+				64, 32, TheGame::Instance()->getRenderer());
 
 }
 

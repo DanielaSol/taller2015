@@ -15,7 +15,8 @@ public:
 	Comida();
 	Comida(int x, int y);
 	virtual ~Comida();
-	void update();
+	virtual void update();
+	virtual void draw();
 
 	const int width = 32;
 	const int height = 32;

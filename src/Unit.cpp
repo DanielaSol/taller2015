@@ -166,6 +166,13 @@ void Unit::handleInput()
 	// deberia checkear tambien si la unidad está seleccionada. La variable isSelected la puse en GameObject, ya que consideré que
 	// se puede apretar en cualquier objeto, como en el age.
 
+	//TEMPORAL, DEBUG TP 2 ///////////////////////////////////////////
+	if (TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_SPACE) && m_isClicked)
+	{
+		TheCamera::Instance()->centerAt(m_screenPosition);
+	}
+	////////////////////////////////////////////////////////////////////
+
 	if (TheInputHandler::Instance()->getMouseButtonState(RIGHT) && m_isClicked)
 	{
 		if (!m_bChangingDestination)

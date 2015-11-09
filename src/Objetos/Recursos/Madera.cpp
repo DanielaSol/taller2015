@@ -6,6 +6,7 @@
  */
 
 #include "Madera.h"
+#include "../../Camera.h"
 #include "../../TextureManager.h"
 #include "../../Game.h"
 #include "../../Utilitarios/Parser.h"
@@ -51,6 +52,15 @@ void Madera::update(){
 		setTexture("madera");
 	}else{
 		setTexture("madera");
+	}
+}
+
+void Madera::draw(){
+	if (TheCamera::Instance()->isVisible(m_mapPosition2.getX(), m_mapPosition2.getY()))
+	{
+		TheTextureManager::Instance()->drawFrame(m_textureID, m_mapPosition.getX() - TheCamera::Instance()->offsetX - offsetX + 15,
+				m_mapPosition.getY()  - TheCamera::Instance()->offsetY - offsetY,
+				m_width, m_height,m_destWidth,m_destHeight, m_currentRow, m_currentFrame, TheGame::Instance()->getRenderer());
 	}
 }
 

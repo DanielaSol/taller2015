@@ -6,6 +6,7 @@
  */
 
 #include "Oro.h"
+#include "../../Camera.h"
 #include "../../TextureManager.h"
 #include "../../Game.h"
 #include "../../Utilitarios/Parser.h"
@@ -47,6 +48,14 @@ void Oro::update(){
 	}
 }
 
+void Oro::draw(){
+	if (TheCamera::Instance()->isVisible(m_mapPosition2.getX(), m_mapPosition2.getY()))
+	{
+		TheTextureManager::Instance()->drawFrame(m_textureID, m_mapPosition.getX() - TheCamera::Instance()->offsetX - offsetX + 15,
+				m_mapPosition.getY()  - TheCamera::Instance()->offsetY - offsetY - 5,
+				m_width, m_height,m_destWidth,m_destHeight, m_currentRow, m_currentFrame, TheGame::Instance()->getRenderer());
+	}
+}
 
 Oro::~Oro() {
 	// TODO Auto-generated destructor stub
