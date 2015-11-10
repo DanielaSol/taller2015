@@ -143,6 +143,8 @@ private:
 
     Game(const Game&);
 	Game& operator=(const Game&);
+
+	void generateRandomRecurso();
 };
 
 typedef Game TheGame;

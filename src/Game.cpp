@@ -265,6 +265,9 @@ void Game::generateRandomPosition(Vector2D* placeholder)
 	placeholder->setY(randY);
 }
 
+
+
+
 void Game::render()
 {
 	if (m_bQuiting)
@@ -295,36 +298,7 @@ void Game::update()
 	m_pMap->update();
 
 
-	//PROVISORIO
-	//srand(time(NULL));
-	int randomX = rand() % 2500  ;
-	int randomY;
-	int randomItem;
-	if (randomX < 100){
-		randomY = rand() % 2500 ;
-		if (randomY < 100){
-			randomItem = (rand() % 3) + 1;
-			cout <<"random: "<<  randomX << " " << randomY << " item: " << randomItem<< endl;
-			switch (randomItem) {
-				case 1: {
-					GameObject* recurso = TheObjectFactory::Instance()->crear("madera", randomX, randomY);
-					cargarRecurso(recurso);
-					break;
-				}
-				case 2: {
-					GameObject* recurso2 = TheObjectFactory::Instance()->crear("oro", randomX, randomY);
-					cargarRecurso(recurso2);
-					break;
-				}
-				case 3: {
-					 GameObject* recurso3 = TheObjectFactory::Instance()->crear("comida", randomX, randomY);
-					 cargarRecurso(recurso3);
-					 break;
-				}
-
-			}
-		}
-	}
+	generateRandomRecurso();
 }
 
 void Game::handleEvents()
@@ -472,6 +446,40 @@ void Game::agregarEntidadesAcumuladas()
 				entidades.push_back(entidadesAAgregar.back());
 				entidadesAAgregar.pop_back();
 		 }
+	}
+}
+
+
+void Game::generateRandomRecurso() {
+
+	//srand(time(NULL));
+	int randomX = rand() % 2500  ;
+	int randomY;
+	int randomItem;
+	if (randomX < 100){
+		randomY = rand() % 2500 ;
+		if (randomY < 100){
+			randomItem = (rand() % 3) + 1;
+			cout <<"random: "<<  randomX << " " << randomY << " item: " << randomItem<< endl;
+			switch (randomItem) {
+				case 1: {
+					GameObject* recurso = TheObjectFactory::Instance()->crear("madera", randomX, randomY);
+					cargarRecurso(recurso);
+					break;
+				}
+				case 2: {
+					GameObject* recurso2 = TheObjectFactory::Instance()->crear("oro", randomX, randomY);
+					cargarRecurso(recurso2);
+					break;
+				}
+				case 3: {
+					 GameObject* recurso3 = TheObjectFactory::Instance()->crear("comida", randomX, randomY);
+					 cargarRecurso(recurso3);
+					 break;
+				}
+
+			}
+		}
 	}
 }
 
