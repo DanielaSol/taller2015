@@ -420,12 +420,13 @@ void Game::tomarRecurso(int x, int y) {
 			Vector2D vector = entidad->m_mapPosition2;
 			if ((vector.m_x == x) && (vector.m_y == y) && entidad->recurso){
 				if (entidad){
-
 					m_pBarra->addRecurso(entidad->name.c_str(),entidad->cantidad);
-
+					//cout << "voy a eliminar un: " << entidades[cont]->name << endl;
 					entidades.erase(entidades.begin()+ cont);
 					m_pMap->m_mapGrid[x][y] = 1;
 					m_pMap->m_mapGrid2[x][y] = 1;
+					//cuando elimino una entidad del vector, tengo que restar 1 al contador
+					cont -=1;
 
 				}
 			}
@@ -453,11 +454,11 @@ void Game::agregarEntidadesAcumuladas()
 void Game::generateRandomRecurso() {
 
 	//srand(time(NULL));
-	int randomX = rand() % 2500  ;
+	int randomX = rand() % 5000  ;
 	int randomY;
 	int randomItem;
 	if (randomX < 100){
-		randomY = rand() % 2500 ;
+		randomY = rand() % 5000 ;
 		if (randomY < 100){
 			randomItem = (rand() % 3) + 1;
 			cout <<"random: "<<  randomX << " " << randomY << " item: " << randomItem<< endl;
