@@ -39,8 +39,7 @@ Game::Game():
 m_pWindow(0),
 m_pRenderer(0),
 m_bRunning(false),
-m_bQuiting(false),
-cantDeEntidades(0)
+m_bQuiting(false)
 {
 }
 
@@ -232,17 +231,18 @@ bool Game::initGame()
 
 
    for(uint i =0; i< TheParser::Instance()->configGame.escenario.entidades.size();i++){
-   	GameObject* objetoACargar = TheObjectFactory::Instance()->crear(
-   										TheParser::Instance()->configGame.escenario.entidades[i].tipo,
-   										TheParser::Instance()->configGame.escenario.entidades[i].x,
-   										TheParser::Instance()->configGame.escenario.entidades[i].y);
-   	cargarEntidadd(objetoACargar);
+		GameObject* objetoACargar = TheObjectFactory::Instance()->crear(
+											TheParser::Instance()->configGame.escenario.entidades[i].tipo,
+											TheParser::Instance()->configGame.escenario.entidades[i].x,
+											TheParser::Instance()->configGame.escenario.entidades[i].y);
+		cargarEntidadd(objetoACargar);
+   }
    	entidades.push_back(anotherUnit);
    	entidades.push_back(m_pAldeano_test);
 
    	TheCamera::Instance()->centerAt(m_pAldeano_test->getScreenPosition());
    	m_pAldeano_test->m_isClicked = true;
-   }
+
 
    return true;
 
@@ -410,19 +410,14 @@ void Game::cargarEntidadd(GameObject* entidad){
 							LOG("TILE OCUPADO, NO ES POSIBLE UBICAR");
 							return;
 						}
-					else{m_pMap->setValue(i,j,0);}
+					else{m_pMap->setValue(i,j,0);
+					entidades.push_back(entidad);
+					}
 			}
 		}
-
-	cantDeEntidades += 1;
-
-	entidades.resize(cantDeEntidades);
-
-	entidades[cantDeEntidades-1] = entidad;
-
 }
 
-/////////////////// PROVISORIO ////////////////////////////
+/////////////////// RECURSOS ////////////////////////////
 
 void Game::cargarRecurso(GameObject* entidad){
 
@@ -433,47 +428,55 @@ void Game::cargarRecurso(GameObject* entidad){
 							LOG("TILE OCUPADO, NO ES POSIBLE UBICAR");
 							return;
 						}
-					else{m_pMap->setValue(i,j,3);}
+					else{
+						m_pMap->setValue(i,j,3);
+						entidadesAAgregar.push_back(entidad);
+					}
 			}
 	}
-	entidadesAAgregar.push_back(entidad);
-	//cantDeEntidades += 1;
-	//entidades.resize(cantDeEntidades);
 
-	//ntidades[cantDeEntidades -1] = entidad;
 
 }
 
 void Game::tomarRecurso(int x, int y) {
 
-	list<int> listaEliminar;
-	for(uint i = 0; i < entidades.size(); i++){
-	    	if (entidades [i])
-	    	{
-	    		Vector2D vector = entidades[i]->m_mapPosition2;
-	    		if ((vector.m_x == x) && (vector.m_y == y)){
+	int cont = 0;
+	for (GameObject* entidad : entidades){
+		if (entidad){
+			Vector2D vector = entidad->m_mapPosition2;
+			if ((vector.m_x == x) && (vector.m_y == y) && entidad->recurso){
+				if (entidad){
 
-	    		    if (entidades[i])
-				    {
-				    	entidades[i]->m_mapPosition2.setX(-100);
-				    	entidades[i]->m_mapPosition2.setY(-100);
-				    	entidades[i]->m_mapPosition.setX(-100);
-				    	entidades[i]->m_mapPosition.setY(-100);
+					m_pBarra->addRecurso(entidad->name.c_str(),entidad->cantidad);
 
-				    	m_pMap->m_mapGrid[x][y] = 1;
-				    	m_pMap->m_mapGrid2[x][y] = 1;
+					entidades.erase(entidades.begin()+ cont);
+					m_pMap->m_mapGrid[x][y] = 1;
+					m_pMap->m_mapGrid2[x][y] = 1;
 
-				    	listaEliminar.push_back(i);
-				    	m_pBarra->addRecurso(entidades[i]->name.c_str(),entidades[i]->cantidad);
+				}
+			}
+		}
+		cont ++;
 
-
-				    }
-	    		}
-	    	}
-
-	  }
+	}
 
 }
+
+
+void Game::agregarEntidadesAcumuladas()
+{
+
+	 for (uint i=0;i<entidadesAAgregar.size();i++){
+		 if (entidadesAAgregar[i])
+		 {
+				entidades.push_back(entidadesAAgregar.back());
+				entidadesAAgregar.pop_back();
+		 }
+	}
+}
+
+
+/////////////////// FIN RECURSOS ///////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////
@@ -495,7 +498,6 @@ void Game::restart() //Con R
 	   }
 	}
 	entidades.clear();
-	cantDeEntidades = 0;
 
 	//delete m_pAldeano_test;
 	delete m_pMap;
@@ -546,29 +548,3 @@ bool Game::isTileAvailable(int x, int y)
 		return false;
 	return true;
 }
-
-void Game::agregarEntidadesAcumuladas()
-{
-
-	 for (uint i=0;i<entidadesAAgregar.size();i++){
-		 if (entidadesAAgregar[i])
-		 {
-				cantDeEntidades += 1;
-				//entidades.resize(cantDeEntidades);
-				entidades.push_back(entidadesAAgregar.back());
-				entidadesAAgregar.pop_back();
-		 }
-	}
-}
-
-/*void Game::destruirEntidadesObsoletas()
-{
-	 for (uint i=0;i<entidadesADestruir.size();i++)
-	 {
-		 if (entidadesADestruir[i])
-		 {
-			 delete entidadesADestruir[i];
-			 cantDeEntidades -= 1;
-		 }
-	}
-}*/

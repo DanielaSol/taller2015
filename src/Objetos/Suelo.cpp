@@ -30,6 +30,8 @@ Suelo::Suelo(int x,int y,std::string tipo){
 	GameObject::setRow(row);
 	GameObject::setAlto(TheParser::Instance()->configGame.objetos.at(tipo).alto);
 	GameObject::setAncho(TheParser::Instance()->configGame.objetos.at(tipo).ancho);
+
+	name = "Suelo" ;
 	delete vec;
 }
 

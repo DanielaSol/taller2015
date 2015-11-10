@@ -33,6 +33,8 @@ void GameObject::load(int screenX, int screenY, int width, int height,int destWi
 
 	name = "DEFAULT";
 	descripcion = " ";
+
+	soyUnidad = false;
 }
 
 void GameObject::draw()

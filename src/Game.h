@@ -104,8 +104,6 @@ private:
 
     int m_gameWidth;
     int m_gameHeight;
-    int cantDeEntidades;
-
 
 	bool initGame();
 	void orderGameObjects();

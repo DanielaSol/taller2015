@@ -44,6 +44,7 @@ void Unit::load(int x, int y, int width, int height,int destWidth, int destHeigh
 
 	descripcion = "LOS JUGADORES PUEDEN JUNTAR RECURSOS";
 
+	soyUnidad = true;
 	//TheCamera::Instance()->centerAt(m_screenPosition);
 
     //

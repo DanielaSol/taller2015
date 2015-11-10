@@ -59,14 +59,5 @@ GameObject* ObjectFactory::crear(string tipo, int x, int y) {
 
 }
 
-GameObject* ObjectFactory::crear(string tipo, int x, int y, int cant) {
-	GameObject* objetoACargar = NULL;
-
-
-
-
-	return objetoACargar;
-
-}
 
 

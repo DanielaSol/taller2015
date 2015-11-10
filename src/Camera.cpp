@@ -12,7 +12,6 @@
 #include "InputHandler.h"
 #include "Utilitarios/Parser.h"
 
-//Camera* Camera::s_pCamera = new Camera();
 Camera* Camera::s_pCamera;
 
 Camera::Camera() : m_scrollSpeed(20,20),m_scrollMargin(TheParser::Instance()->configGame.configuracion.margen_scroll), m_direction(0,0), offsetX(0.0f), offsetY(0.0f)

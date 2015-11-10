@@ -109,6 +109,7 @@ public:
     string name;
     string descripcion;
     int cantidad;
+    bool soyUnidad;
 
     virtual void drawSelected();
 
