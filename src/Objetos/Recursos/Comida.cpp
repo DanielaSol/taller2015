@@ -31,10 +31,10 @@ Comida::Comida(int x,int y) {
 	GameObject::setAlto(1);
 	GameObject::setAncho(1);
 
-	this->soyRecurso = true;
+	interactionID = 1;
 	this->name = "Comida";
 	this->cantidad = 100;
-	this->recurso = "Comida";
+	this->resource = "Comida";
 
 	delete vec;
 }

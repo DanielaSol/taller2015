@@ -36,10 +36,10 @@ Arbolit::Arbolit(int x,int y){
 	GameObject::setAlto(TheParser::Instance()->configGame.objetos.at("arbol").alto);
 	GameObject::setAncho(TheParser::Instance()->configGame.objetos.at("arbol").ancho);
 	name="ARBOL";
-	descripcion = "LOS ARBOLES SON OBSTACULOS EN EL JUEGO";
-	interactuable = true;
+	description = "LOS ARBOLES SON OBSTACULOS EN EL JUEGO";
+	interactionID = 1;
 	cantidad = 100;
-	recurso ="Madera";
+	resource ="Madera";
 	delete vec;
 
 }

@@ -32,9 +32,8 @@ void GameObject::load(int screenX, int screenY, int width, int height,int destWi
 	m_currentFrame = 1;
 
 	name = "DEFAULT";
-	descripcion = " ";
-
-	interactuable = false;
+	description = " ";
+	interactionID = 0;
 }
 
 void GameObject::draw()
@@ -170,5 +169,23 @@ void GameObject::drawSelected()
 
 }
 
+bool GameObject::isInteractuable() {
+	switch (interactionID) {
+		case 0: return false;
+		default: return true;
+	}
+}
 
+bool GameObject::isGettable() {
+	switch (interactionID) {
+		case 1: return true;
+		default: return false;
+	}
+}
 
+bool GameObject::isAttackable() {
+	switch (interactionID) {
+		case 2: return true;
+		default: return false;
+	}
+}

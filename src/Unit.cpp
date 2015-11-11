@@ -42,9 +42,8 @@ void Unit::load(int x, int y, int width, int height,int destWidth, int destHeigh
 	m_wasSeen = true;
 	m_isClicked = false;
 
-	descripcion = "LOS JUGADORES PUEDEN JUNTAR RECURSOS";
+	description = "LOS JUGADORES PUEDEN JUNTAR RECURSOS";
 
-	soyUnidad = true;
 	teniaQueInteractuar = false;
 
 	//TheCamera::Instance()->centerAt(m_screenPosition);

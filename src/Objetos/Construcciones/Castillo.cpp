@@ -63,7 +63,7 @@ Castillo::Castillo(int x,int y){
 	GameObject::setAlto(TheParser::Instance()->configGame.objetos.at("castillo").alto);
 	GameObject::setAncho(TheParser::Instance()->configGame.objetos.at("castillo").ancho);
 	name = "CASA";
-	descripcion= "UNA CASA ES UNA CONSTRUCCION";
+	description= "UNA CASA ES UNA CONSTRUCCION";
 	delete vec;
 }
 

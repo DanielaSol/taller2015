@@ -32,10 +32,10 @@ Oro::Oro(int x,int y) {
 	GameObject::setAlto(1);
 	GameObject::setAncho(1);
 
-	this->soyRecurso = true;
+	interactionID = 1;
 	this->name = "Oro";
 	this->cantidad = 100;
-	this->recurso = "Oro";
+	this->resource = "Oro";
 
 	delete vec;
 }

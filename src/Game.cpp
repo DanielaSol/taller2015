@@ -388,11 +388,10 @@ void Game::cargarEntidadd(GameObject* entidad){
 							return;
 						}
 					else{
-						if (entidad->interactuable){
+						if (entidad->isInteractuable()){
 							m_pMap->setValue(i,j,4);
 						}
 						else {
-							cout << entidad->name << endl;
 							m_pMap->setValue(i,j,0);
 						}
 
@@ -429,9 +428,9 @@ void Game::tomarRecurso(int x, int y) {
 	for (GameObject* entidad : entidades){
 		if (entidad){
 			Vector2D vector = entidad->m_mapPosition2;
-			if ((vector.m_x == x) && (vector.m_y == y) && entidad->soyRecurso){
+			if ((vector.m_x == x) && (vector.m_y == y) && entidad->isGettable()){
 				if (entidad){
-					m_pBarra->addRecurso(entidad->name.c_str(),entidad->cantidad);
+					m_pBarra->addRecurso(entidad->getName().c_str(),entidad->getCantidad());
 					//cout << "voy a eliminar un: " << entidades[cont]->name << endl;
 					entidades.erase(entidades.begin()+ cont);
 					m_pMap->m_mapGrid[x][y] = 1;
@@ -443,9 +442,7 @@ void Game::tomarRecurso(int x, int y) {
 			}
 		}
 		cont ++;
-
 	}
-
 }
 
 
@@ -455,12 +452,12 @@ void Game::tomarRecursoBIS(int x, int y) {
 	for (GameObject* entidad : entidades){
 		if (entidad){
 			Vector2D vector = entidad->m_mapPosition2;
-			if ((vector.m_x == x) && (vector.m_y == y) && entidad->interactuable){
+			if ((vector.m_x == x) && (vector.m_y == y) && entidad->isGettable()){
 				if (entidad){
-					m_pBarra->addRecurso(entidad->recurso,1);
+					m_pBarra->addRecurso(entidad->getResourceName(),1);
 					//cout << "voy a eliminar un: " << entidades[cont]->name << endl;
-					entidad->cantidad -= 1;
-					if (entidad->cantidad == 0) {
+					entidad->removeResource(1);
+					if (entidad->getCantidad() == 0) {
 						entidades.erase(entidades.begin()+ cont);
 						m_pMap->m_mapGrid[x][y] = 1;
 						m_pMap->m_mapGrid2[x][y] = 1;
@@ -471,9 +468,7 @@ void Game::tomarRecursoBIS(int x, int y) {
 			}
 		}
 		cont ++;
-
 	}
-
 }
 
 

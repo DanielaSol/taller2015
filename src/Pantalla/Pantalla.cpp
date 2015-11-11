@@ -93,13 +93,13 @@ void Pantalla::draw(SDL_Renderer* m_pRenderer, Map* m_pMap ,vector<GameObject*> 
 	for (uint i=0;i<entidades.size();i++){
 		if (entidades[i]->m_isClicked){
 
-			string text = "NOMBRE: " + entidades[i]->name;
+			string text = "NOMBRE: " + entidades[i]->getName();
 			sector.x = 20;
 			sector.y= 30;
 
 			TheTextureManager::Instance()->drawText(text,textColor,sector,m_pRenderer);
 
-			text = "DESCRIPCION: " + entidades[i]->descripcion;
+			text = "DESCRIPCION: " + entidades[i]->getDescription();
 			sector.x = 20;
 			sector.y += 30;
 

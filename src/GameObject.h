@@ -31,13 +31,9 @@ public:
 					m_atSight(false),
 					m_wasSeen(false),
 					m_isClicked(false),
-                    m_bUpdating(false),/*,
+                    m_bUpdating(false)/*,
                     m_angle(0),
                     m_alpha(255)*/
-    				interactuable(false),
-    				soyRecurso(false)
-
-
     {
     }
 
@@ -108,16 +104,18 @@ public:
 
     bool m_isClicked;
 
-    //PROVISORIO Hay que pasarlo a protected
-    bool soyRecurso;
-    string name;
-    string descripcion;
-    string recurso;
-    int cantidad;
-    bool soyUnidad;
-    bool interactuable;
+    bool isInteractuable();
+    bool isGettable();
+    bool isAttackable();
 
     virtual void drawSelected();
+
+    string getName() { return name; }
+    string getDescription() { return description; }
+    string getResourceName() { return resource; }
+    void removeResource (int cant ) { cantidad -= cant; }
+    bool getCantidad () { return cantidad; }
+
 
 protected:
 
@@ -160,6 +158,18 @@ protected:
     int m_alpha;*/
 
 
+	string name;
+	string description;
+	string resource;
+	int cantidad;
+
+	/* Interacciones posibles
+	 * 0 = Sin Interacción
+	 * 1 = Interacción: Obtener recursos
+	 * 2 = Interacción: Atacar
+	 * etc
+	 */
+	int interactionID;
 
 };
 
