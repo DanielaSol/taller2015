@@ -230,6 +230,8 @@ bool Game::initGame()
 						5, "animate",true);   // y el 5 corresponde a la cantidad de Frames
 	anotherUnit->m_mapPosition2.setX(9);
 	anotherUnit->m_mapPosition2.setY(2);
+
+	m_pMap->setValue(vec2->getX(),vec2->getY(),2);
 	delete vec2;
 
 
@@ -240,8 +242,10 @@ bool Game::initGame()
 											TheParser::Instance()->configGame.escenario.entidades[i].y);
 		cargarEntidadd(objetoACargar);
    }
-   	entidades.push_back(anotherUnit);
-   	entidades.push_back(m_pAldeano_test);
+   entidades.push_back(anotherUnit);
+
+
+   entidades.push_back(m_pAldeano_test);
 
    	TheCamera::Instance()->centerAt(m_pAldeano_test->getScreenPosition());
    	m_pAldeano_test->m_isClicked = true;
@@ -445,7 +449,7 @@ void Game::tomarRecurso(int x, int y) {
 	}
 }
 
-
+/*
 void Game::tomarRecursoBIS(int x, int y) {
 
 	int cont = 0;
@@ -471,7 +475,7 @@ void Game::tomarRecursoBIS(int x, int y) {
 	}
 }
 
-
+*/
 
 
 void Game::agregarEntidadesAcumuladas()
@@ -523,6 +527,36 @@ void Game::generateRandomRecurso() {
 
 /////////////////// FIN RECURSOS ///////////////////////////////
 
+void Game::interactWith (int x, int y) {
+
+	int cont = 0;
+		for (GameObject* entidad : entidades){
+			if (entidad){
+				Vector2D vector = entidad->m_mapPosition2;
+				if ((vector.m_x == x) && (vector.m_y == y) ){
+					if (entidad->isGettable()) {
+						m_pBarra->addRecurso(entidad->getResourceName(),1);
+						//cout << "voy a eliminar un: " << entidades[cont]->name << endl;
+						entidad->removeResource(1);
+					}
+					else if (entidad->isAttackable()) {
+						cout << "hay que atacarlo" << endl;
+						entidad->removeResource(10);
+					}
+
+					if (entidad->getCantidad() == 0) {
+						entidades.erase(entidades.begin()+ cont);
+						m_pMap->m_mapGrid[x][y] = 1;
+						m_pMap->m_mapGrid2[x][y] = 1;
+						//cuando elimino una entidad del vector, tengo que restar 1 al contador
+						cont -=1;
+					}
+				}
+			}
+			cont ++;
+		}
+
+}
 
 /////////////////////////////////////////////////////////////////
 

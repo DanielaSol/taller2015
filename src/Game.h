@@ -88,6 +88,7 @@ public:
     TTF_Font* gFont;
 
     std::vector<GameObject*> entidadesAAgregar;
+	void interactWith (int x, int y);
 private:
 
     //variable temporal, más avanzado en el diseño, la deberiamos mover a otra clase.

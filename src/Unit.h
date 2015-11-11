@@ -41,6 +41,7 @@ protected:
 	bool teniaQueInteractuar;
 	Vector2D interactuarCon;
 
+
 private:
 
 	Vector2D m_direction;

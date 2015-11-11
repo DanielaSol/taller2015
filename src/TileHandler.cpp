@@ -119,6 +119,7 @@ bool TileHandler::isInteractuable(int tileID)
 	switch (tileID)
 	{
 	case 4: return true;
+	case 2: return true;
 	default: return false;
 	}
 }

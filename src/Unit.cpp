@@ -36,7 +36,9 @@ void Unit::load(int x, int y, int width, int height,int destWidth, int destHeigh
 
 	m_lastMapPosition.setX(m_mapPosition.getX());
 	m_lastMapPosition.setY(m_mapPosition.getY());
-	TheGame::Instance()->changeMapGrid(m_lastMapPosition.getX(), m_lastMapPosition.getY(), 0);
+
+	//cambio a 2 para que el tile tenga un item atacable
+	TheGame::Instance()->changeMapGrid(m_lastMapPosition.getX(), m_lastMapPosition.getY(), 2);
 
 	m_atSight = true;
 	m_wasSeen = true;
@@ -45,6 +47,9 @@ void Unit::load(int x, int y, int width, int height,int destWidth, int destHeigh
 	description = "LOS JUGADORES PUEDEN JUNTAR RECURSOS";
 
 	teniaQueInteractuar = false;
+	interactionID = 2;
+	// vida = cantidad
+	cantidad = 100;
 
 	//TheCamera::Instance()->centerAt(m_screenPosition);
 
@@ -111,13 +116,11 @@ void Unit::update(){
 
 		////////////// INTERACCION /////////////////////////
 
-
-
 		if (teniaQueInteractuar) {
 			int tileValue1 = TheGame::Instance()->m_pMap->m_mapGrid[interactuarCon.m_x ][interactuarCon.m_y];
 			if ( TheGame::Instance()->m_pMap->m_pTileHandler->isInteractuable(tileValue1))  {
 				cout << "tengo que interactuar con " << interactuarCon.m_x << " " << interactuarCon.m_y << endl;
-				TheGame::Instance()->tomarRecursoBIS(interactuarCon.m_x,interactuarCon.m_y);
+				TheGame::Instance()->interactWith(interactuarCon.m_x,interactuarCon.m_y);
 			}
 			else {
 				cout << "recurso agotado " << endl;
@@ -441,3 +444,4 @@ void Unit::occupyTile(const Vector2D& newPosition)
 	//cout << "Ocupada = ( " << (int) newPosition.m_x << " , " << (int)newPosition.m_y  << " ) \n";
 
 }
+
