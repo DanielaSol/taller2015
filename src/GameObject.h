@@ -34,7 +34,8 @@ public:
                     m_bUpdating(false),/*,
                     m_angle(0),
                     m_alpha(255)*/
-    				interactuable(false)
+    				interactuable(false),
+    				soyRecurso(false)
 
 
     {
@@ -108,9 +109,10 @@ public:
     bool m_isClicked;
 
     //PROVISORIO Hay que pasarlo a protected
-    bool recurso;
+    bool soyRecurso;
     string name;
     string descripcion;
+    string recurso;
     int cantidad;
     bool soyUnidad;
     bool interactuable;

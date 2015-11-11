@@ -429,7 +429,7 @@ void Game::tomarRecurso(int x, int y) {
 	for (GameObject* entidad : entidades){
 		if (entidad){
 			Vector2D vector = entidad->m_mapPosition2;
-			if ((vector.m_x == x) && (vector.m_y == y) && entidad->recurso){
+			if ((vector.m_x == x) && (vector.m_y == y) && entidad->soyRecurso){
 				if (entidad){
 					m_pBarra->addRecurso(entidad->name.c_str(),entidad->cantidad);
 					//cout << "voy a eliminar un: " << entidades[cont]->name << endl;
@@ -457,7 +457,7 @@ void Game::tomarRecursoBIS(int x, int y) {
 			Vector2D vector = entidad->m_mapPosition2;
 			if ((vector.m_x == x) && (vector.m_y == y) && entidad->interactuable){
 				if (entidad){
-					m_pBarra->addRecurso("Madera",1);
+					m_pBarra->addRecurso(entidad->recurso,1);
 					//cout << "voy a eliminar un: " << entidades[cont]->name << endl;
 					entidad->cantidad -= 1;
 					if (entidad->cantidad == 0) {

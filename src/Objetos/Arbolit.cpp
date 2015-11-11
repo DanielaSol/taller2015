@@ -39,6 +39,7 @@ Arbolit::Arbolit(int x,int y){
 	descripcion = "LOS ARBOLES SON OBSTACULOS EN EL JUEGO";
 	interactuable = true;
 	cantidad = 100;
+	recurso ="Madera";
 	delete vec;
 
 }

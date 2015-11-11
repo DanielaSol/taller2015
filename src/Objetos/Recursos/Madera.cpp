@@ -35,9 +35,10 @@ Madera::Madera(int x,int y) {
 	GameObject::setAlto(1);
 	GameObject::setAncho(1);
 
-	this->recurso = true;
+	this->soyRecurso = true;
 	this->name = "Madera";
 	this->cantidad = 100;
+	this->recurso = "Madera";
 
 	delete vec;
 }

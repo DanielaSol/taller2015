@@ -31,9 +31,10 @@ Comida::Comida(int x,int y) {
 	GameObject::setAlto(1);
 	GameObject::setAncho(1);
 
-	this->recurso = true;
+	this->soyRecurso = true;
 	this->name = "Comida";
 	this->cantidad = 100;
+	this->recurso = "Comida";
 
 	delete vec;
 }
