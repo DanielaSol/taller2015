@@ -45,6 +45,8 @@ void Unit::load(int x, int y, int width, int height,int destWidth, int destHeigh
 	descripcion = "LOS JUGADORES PUEDEN JUNTAR RECURSOS";
 
 	soyUnidad = true;
+	teniaQueInteractuar = false;
+
 	//TheCamera::Instance()->centerAt(m_screenPosition);
 
     //
@@ -107,6 +109,23 @@ void Unit::update(){
 	else
 	{
 		m_bMoving = false;
+
+		////////////// INTERACCION /////////////////////////
+
+
+
+		if (teniaQueInteractuar) {
+			int tileValue1 = TheGame::Instance()->m_pMap->m_mapGrid[interactuarCon.m_x ][interactuarCon.m_y];
+			if ( TheGame::Instance()->m_pMap->m_pTileHandler->isInteractuable(tileValue1))  {
+				cout << "tengo que interactuar con " << interactuarCon.m_x << " " << interactuarCon.m_y << endl;
+				TheGame::Instance()->tomarRecursoBIS(interactuarCon.m_x,interactuarCon.m_y);
+			}
+			else {
+				cout << "recurso agotado " << endl;
+				teniaQueInteractuar = false;
+			}
+
+		}
 	}
 
 	int tileValue1 = TheGame::Instance()->m_pMap->m_mapGrid[m_mapPosition.getX()][m_mapPosition.getY()];
@@ -205,8 +224,9 @@ void Unit::handleInput()
 			cout << "Tile clicked = ( " << (int) goalDestination->m_x << " , " << (int)goalDestination->m_y << " ) \n";
 			//cout << "Screen pos clicked = ( " << (int) coordX << " , " << (int)coordY << " ) \n";
 
-			if (((m_mapPosition.getX() == goalDestination->getX()) && (m_mapPosition.getY() == goalDestination->getY())))
+			if (((m_mapPosition.getX() == goalDestination->getX()) && (m_mapPosition.getY() == goalDestination->getY()))){
 				return;
+			}
 
 			//analiza que no se cliquee fuera de los bordes
 			if ((goalDestination->getX() >= TheGame::Instance()->getMapWidth()) ||
@@ -224,6 +244,30 @@ void Unit::handleInput()
 
 				return;
 			}
+
+			/////////////////////////////////////////////////////////////////////////////////
+			// Si en la posición hay un item interactuable, entonces
+
+			int tileValue1 = TheGame::Instance()->m_pMap->m_mapGrid[goalDestination->m_x ][goalDestination->m_y];
+
+			if ( TheGame::Instance()->m_pMap->m_pTileHandler->isInteractuable(tileValue1))  {
+				cout << "hay un item, tengo que llegar a un tile cercano " << endl;
+				// pongo que al final el pj tenga que interactuar
+				teniaQueInteractuar = true;
+				interactuarCon.m_x = goalDestination->m_x;
+				interactuarCon.m_y = goalDestination->m_y;
+				tileValue1 = TheGame::Instance()->m_pMap->m_mapGrid[goalDestination->m_x +1][goalDestination->m_y];
+				if (tileValue1 == 1) {
+					cout << "puedo moverlo cerca" << endl;
+					goalDestination->m_x += 1;
+				}
+				//quizás hay que chequear todas las direcciones, lo dejo así por ahora
+			}
+
+			cout << "pasa" <<tileValue1 << endl;
+
+
+			///////////////////////////////////////////////////////////
 			//Si pasa las condiciones, calcula el path
 			m_bChangingDestination = true;
 			bool pathFound = calculatePath(*goalDestination);

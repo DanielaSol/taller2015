@@ -38,6 +38,9 @@ protected:
 	Vector2D m_destination;
 	Vector2D m_lastMapPosition;
 
+	bool teniaQueInteractuar;
+	Vector2D interactuarCon;
+
 private:
 
 	Vector2D m_direction;

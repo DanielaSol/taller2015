@@ -37,7 +37,7 @@ Madera::Madera(int x,int y) {
 
 	this->recurso = true;
 	this->name = "Madera";
-	this->cantidad = 1;
+	this->cantidad = 100;
 
 	delete vec;
 }

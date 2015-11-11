@@ -33,7 +33,7 @@ Comida::Comida(int x,int y) {
 
 	this->recurso = true;
 	this->name = "Comida";
-	this->cantidad = 1;
+	this->cantidad = 100;
 
 	delete vec;
 }

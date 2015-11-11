@@ -16,6 +16,7 @@ public:
 	bool isGetable(int tileID);
 	int getWalkCost (int tileID);
 	std::string getTileID (int tileID);
+	bool isInteractuable(int tileID);
 
 private:
 	int m_tileWidth;

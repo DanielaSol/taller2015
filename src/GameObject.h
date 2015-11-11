@@ -31,9 +31,12 @@ public:
 					m_atSight(false),
 					m_wasSeen(false),
 					m_isClicked(false),
-                    m_bUpdating(false)/*,
+                    m_bUpdating(false),/*,
                     m_angle(0),
                     m_alpha(255)*/
+    				interactuable(false)
+
+
     {
     }
 
@@ -110,6 +113,7 @@ public:
     string descripcion;
     int cantidad;
     bool soyUnidad;
+    bool interactuable;
 
     virtual void drawSelected();
 

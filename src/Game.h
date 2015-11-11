@@ -55,7 +55,9 @@ public:
     void cargarEntidadd(GameObject*);
     void cargarRecurso(GameObject* entidad);
     void tomarRecurso(int x, int y);
-    void changeMapGrid(int x, int y, int value);
+	void tomarRecursoBIS(int x, int y);
+
+	void changeMapGrid(int x, int y, int value);
     void declick();
     void generateRandomPosition(Vector2D* placeholder);
 
@@ -145,6 +147,7 @@ private:
 	Game& operator=(const Game&);
 
 	void generateRandomRecurso();
+
 };
 
 typedef Game TheGame;

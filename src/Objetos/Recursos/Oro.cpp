@@ -34,7 +34,7 @@ Oro::Oro(int x,int y) {
 
 	this->recurso = true;
 	this->name = "Oro";
-	this->cantidad = 1;
+	this->cantidad = 100;
 
 	delete vec;
 }

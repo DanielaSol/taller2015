@@ -37,9 +37,11 @@ Arbolit::Arbolit(int x,int y){
 	GameObject::setAncho(TheParser::Instance()->configGame.objetos.at("arbol").ancho);
 	name="ARBOL";
 	descripcion = "LOS ARBOLES SON OBSTACULOS EN EL JUEGO";
+	interactuable = true;
+	cantidad = 100;
 	delete vec;
-}
 
+}
 
 Arbolit::~Arbolit() {
 	// TODO Auto-generated destructor stub

@@ -7,6 +7,22 @@
  *  4 = AGUA PROFUNDA
  *  etcetera, se entiende la idea
  */
+
+
+//Dani: Creo que hay que actualizar los tiles ID:
+/* TILES ID
+ *  0 = OCUPADA PASTO
+ *  1 = OCUPADO CON ALGO
+ *  2 =
+ *  3 = Recurso: Es walkable y gettable
+ *  4 = Recurso2: No es walkable y es interactuable
+ *
+ *
+ */
+
+
+
+
 #include "TileHandler.h"
 #include <string>
 #include "Game.h"
@@ -97,6 +113,17 @@ bool TileHandler::isGetable(int tileID)
 	default: return false;
 	}
 }
+
+bool TileHandler::isInteractuable(int tileID)
+{
+	switch (tileID)
+	{
+	case 4: return true;
+	default: return false;
+	}
+}
+
+
 
 
 

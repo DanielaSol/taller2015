@@ -198,7 +198,10 @@ bool Game::initGame()
 
 
 	Vector2D* vec = new Vector2D(0,0);
-	generateRandomPosition(vec);
+	/* dejo comentado esto para poder hacer las pruebas
+	generateRandomPosition(vec); */
+	vec->m_x = 2;
+	vec->m_y = 2;
 	int randX = (int)vec->getX();
 	int randY = (int)vec->getY();
 	//vec->setX(TheParser::Instance()->configGame.protagonista.x);
@@ -384,8 +387,16 @@ void Game::cargarEntidadd(GameObject* entidad){
 							LOG("TILE OCUPADO, NO ES POSIBLE UBICAR");
 							return;
 						}
-					else{m_pMap->setValue(i,j,0);
-					entidades.push_back(entidad);
+					else{
+						if (entidad->interactuable){
+							m_pMap->setValue(i,j,4);
+						}
+						else {
+							cout << entidad->name << endl;
+							m_pMap->setValue(i,j,0);
+						}
+
+						entidades.push_back(entidad);
 					}
 			}
 		}
@@ -436,6 +447,36 @@ void Game::tomarRecurso(int x, int y) {
 	}
 
 }
+
+
+void Game::tomarRecursoBIS(int x, int y) {
+
+	int cont = 0;
+	for (GameObject* entidad : entidades){
+		if (entidad){
+			Vector2D vector = entidad->m_mapPosition2;
+			if ((vector.m_x == x) && (vector.m_y == y) && entidad->interactuable){
+				if (entidad){
+					m_pBarra->addRecurso("Madera",1);
+					//cout << "voy a eliminar un: " << entidades[cont]->name << endl;
+					entidad->cantidad -= 1;
+					if (entidad->cantidad == 0) {
+						entidades.erase(entidades.begin()+ cont);
+						m_pMap->m_mapGrid[x][y] = 1;
+						m_pMap->m_mapGrid2[x][y] = 1;
+						//cuando elimino una entidad del vector, tengo que restar 1 al contador
+						cont -=1;
+					}
+				}
+			}
+		}
+		cont ++;
+
+	}
+
+}
+
+
 
 
 void Game::agregarEntidadesAcumuladas()
